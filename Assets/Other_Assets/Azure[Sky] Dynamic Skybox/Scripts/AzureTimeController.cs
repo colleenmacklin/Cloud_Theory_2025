@@ -180,6 +180,9 @@ namespace UnityEngine.AzureSky
 
         private void Update()
         {
+            // Add timeline debug output at the start of Update
+            Debug.Log($"Current Timeline: {m_timeline:F2}");
+
             // Only in gameplay
             if (Application.isPlaying)
             {
@@ -244,9 +247,12 @@ namespace UnityEngine.AzureSky
 
             // Editor only
             // Computes the celestial coordinates and light rotation in edit mode.
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (!Application.isPlaying)
             {
+                // Add timeline debug output in editor mode too
+                Debug.Log($"Current Timeline (Editor): {m_timeline:F2}");
+
                 // Evaluates the time of day
                 EvaluateTimeOfDay();
                 // Sets the sun, moon and planets position
@@ -256,7 +262,7 @@ namespace UnityEngine.AzureSky
                 // Sets the directional light rotation
                 SetDirectionalLightRotation();
             }
-            #endif
+#endif
         }
 
         private void FixedUpdate()
