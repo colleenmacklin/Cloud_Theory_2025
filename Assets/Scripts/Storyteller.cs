@@ -13,6 +13,8 @@ using Crosstales.RTVoice.Model;
 using System;
 using Random = UnityEngine.Random;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
+using LLMUnity;
+using LLMUnitySamples;
 
 /*
 
@@ -52,16 +54,8 @@ Major changes from Dialogue Manager:
 [RequireComponent((typeof(DialogueManager)))]
 public class Storyteller : MonoBehaviour
 {
-    //[SerializeField]
-    //NarratorSO narrator;
-    //public Speaker speaker;
     public GameState GameState; //3 states: Intro, GameLoop, Ending
     public event Action OnIntroComplete;
-    [SerializeField]
-    CloudMusingSO muse;
-
-    [SerializeField]
-    public TextAsset storyFile;
 
     [SerializeField]
     public RectTransform credits;
@@ -79,20 +73,10 @@ public class Storyteller : MonoBehaviour
     [SerializeField] TextBoxController textBoxController;
     [SerializeField] List<string> viewedShapes = new List<string>();//the shapes we've viewed so far
 
-    [Header("Model Name")]
-    public string model_name;
-
-    [Header("HuggingFace Model URL")]
-    public string model_url;
-
-    [Header("HuggingFace Key API")]
-    public string hf_api_key;
-
-    [SerializeField]
-    private GlowButterfly _butterfly;
-
-    [Header("model storyfile")]
-    public TextAsset story_file;
+    [Header("LLM")]
+    public GameObject llm;
+    public LLMCharacter llmCharacter;
+    public bool warmUpDone = true;
 
     int timer = 20;
 
@@ -116,55 +100,6 @@ public class Storyteller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        model_url = ModelInfo.modelURL;
-        hf_api_key = ModelInfo.hf_api_key;
-        model_name = ModelInfo.ModelName;
-
-
-        /*
-        switch (model_name)
-        {
-            case "philosopher":
-
-                muse.storyFile = storyFile;
-                break;
-
-            case "comedian":
-                muse.storyFile = null;
-                break;
-
-            case "sentient_earth":
-                muse.storyFile = null;
-                break;
-        }
-        story_file = ModelInfo.storyFile;
-        */
-        //check to see that the modelURL was passed on from the opening, and if so, assign public vars
-        if (string.IsNullOrEmpty(ModelInfo.modelURL)|| string.IsNullOrEmpty(ModelInfo.ModelName))
-        {
-            Debug.Log("No model URL or name, defaulting to Philosopher");
-            ModelInfo.ModelName = "philosopher";
-            ModelInfo.modelURL = "https://api-inference.huggingface.co/models/Triangles/fantastic_philosopher_124_4000";
-            ModelInfo.hf_api_key = "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";
-
-            model_name = ModelInfo.ModelName;
-            model_url = ModelInfo.modelURL;
-            hf_api_key = ModelInfo.hf_api_key;
-        }
-
-        string filename = "Text/" + model_name + "_storiesbound";
-        Debug.Log("filename: " + filename);
-
-        //Load texture from disk
-        //TextAsset model_storyFile = Resources.Load(filename) as TextAsset;
-
-        TextAsset model_storyFile = Resources.Load<TextAsset>(filename);
-        Debug.Log("storyFile: " + model_storyFile.name);
-        storyFile = model_storyFile;
-
-        muse.storyFile = model_storyFile;
-
-        Debug.Log("muse.CloudData Count: " + muse.CloudData.Count);
 
         //speaker.SpeakNative("RT Voice is speaking");
         prompts.Add("That cloud reminds me of __");
@@ -180,11 +115,7 @@ public class Storyteller : MonoBehaviour
         bindingPrompts.Add("Did you know that __ and -- in the same day predicts");
         bindingPrompts.Add("I’ve never seen __ with --, but now I see they are connected by");
 
-        //.ProcessNarratorFile();
-        muse.ProcessNarratorFile();
-        //Debug.Log(muse.CloudData[5].Bindings[0].Content[1]);
         EventManager.TriggerEvent("Cutscene");
-        //EventManager.TriggerEvent("Intro");
         SetupStory();
         EventManager.TriggerEvent("Setup"); //tell clouds to get ready
                                             //access pattern for the narrator story content
@@ -192,25 +123,27 @@ public class Storyteller : MonoBehaviour
                                             //Debug.Log(narrator.StoryData[0].Name);
                                             //Debug.Log(narrator.StoryData[0].Content["entertainer"][0]);
 
+
+        //_ = llmCharacter.Warmup(WarmUpCallback);
+    }
+
+    public void WarmUpCallback()
+    {
+        warmUpDone = true;
+        //inputBubble.SetPlaceHolderText("Message me");
+        //AllowInput();
     }
 
     //Pick one of the narrator's random stories
     void SetupStory()
     {
-        //int storyIndex = 0;
-        //if (ChooseRandomStory)
-        //{
-        //    storyIndex = Random.Range(0, narrator.StoryData.Count);
-        //}
-
-        //chosenStory = narrator.StoryData[storyIndex]; //picked story
 
         //Send the story opening to the dialogue manager
-
-        //TODO INDIECADE: make openings random.
-        SendMusing(muse.CloudData[0].Content);
+        sendPrompt("tell me what you think about these clouds");
+        //SendMusing(muse.CloudData[0].Content);
         GameState.Intro = true;
 
+        //DEBUG RTVOICE
         //string speakText = "Hi how are you";
         //speaker.Speak(speakText);
         //Debug.Log(speaker.VoiceForCulture("en"));
@@ -218,16 +151,20 @@ public class Storyteller : MonoBehaviour
 
     //Send a musing to the text controller
 
-
-    string[] fakeMusing = { "hi i don't have anything to say", "i still don't have anything to say ", "hi i'm still out" };
-    void SendMusing(string[] musing)
+    void sendPrompt(string prompt)
     {
-        Debug.Log("sendMusing: "+musing[0]);
-//TODO: INdieCADE Build - fix problem when musing is empty - check to see if it is null, and if so, say something else and release camera lock
-//
+        string[] response = { };
+        response[0] = llmCharacter.prompt = prompt;
+        string[] fakeMusing = { "hi i don't have anything to say", "sorry." };
 
-        //if (musing.Length > 0)
-        if (musing[0].Length >0) //checking to see if there's a character at all in the string, since it's possible that there's a list of empty strings...
+        SendMusing(response);
+    }
+
+
+    void SendMusing(string [] musing)
+    {
+
+        if (musing.Length >0) //checking to see if there's a character at all in the string, since it's possible that there's a list of empty strings...
 
             {
                 textBoxController.ReadNewLines(musing);
@@ -235,13 +172,14 @@ public class Storyteller : MonoBehaviour
         }
         else
         {
-            textBoxController.ReadNewLines(fakeMusing);
+            textBoxController.ReadNewLines(musing);
         }
         //for (int i = 0; i < musing.Length; i++)
         //{
         //    speaker.Speak(musing[i]);
         //}
     }
+
 
     void NextMusing(string key)
     {
@@ -287,7 +225,7 @@ public class Storyteller : MonoBehaviour
         
 
         timer = 20;
-        StartCoroutine(LiveMusing(fullPrompt, key));
+        //StartCoroutine(LiveMusing(fullPrompt, key)); //CM commented out 2025
 
         //increase musings
         musingsGiven += 1;
@@ -375,48 +313,26 @@ public class Storyteller : MonoBehaviour
 
         //TODO IndieCade: fix integer in CloudData to conform to correct one for model - this is hardcoded to philosopher.
 
-        Debug.Log("muse.CloudData: " + muse.CloudData);
         //int index = muse.CloudData.IndexOf(Musing.Name);
 
         //WARNING: HACK
         int dataIndex;
 
-        switch (model_name)
-        {
-            case "philosopher":
-                dataIndex = 31;
-                break;
-            case "comedian":
-                dataIndex = 21;
-                break;
-            case "primordial_earth":
-                dataIndex = 20;
-                break;
-            default:
-                dataIndex = 31; //philosopher
-                break;
-        }
 
-
-
-        foreach (string line in muse.CloudData[dataIndex].Content)
-        {
-            string adjustedLine = line.Replace("<CLOUD_LIST>", chosenList);
-            adjustedLines.Add(adjustedLine);
-        }
-
-        //create the list of chosen items.
-        SendMusing(adjustedLines.ToArray());
         textBoxController.PlayingEnding = true;
 
-        _butterfly.DestroyButterfly();
     }
 
     //This is where the webrequests are made - but it's buggy. Sometimes the connection fails, and when that happens, the game gets stuck.
     //need to release the camera when this gets stuck. --Colleen
     //
-    public IEnumerator LiveMusing(string prompt, string key)
-    {
+
+    
+    //public IEnumerator LiveMusing(string prompt, string key)
+    //{
+        //string _prompt = prompt;
+        //string _key = key;
+        /*
         // Form the JSON
         var form = new Dictionary<string, object>();
         //var attributes = new Dictionary<string, object>();
@@ -487,10 +403,10 @@ public class Storyteller : MonoBehaviour
             //generativeStory.Add(ProcessResult(data)); //may want 
 
         }
-
+        
         request.Dispose(); //Colleen added to manage a memory leak. See documentation here: https://answers.unity.com/questions/1904005/a-native-collection-has-not-been-disposed-resultin-1.html
-
-    }
+        */
+    //}
 
 
     string[] ProcessResult(string result, string prompt)
@@ -527,18 +443,9 @@ public class Storyteller : MonoBehaviour
 
         }
 
-        //for (int i = 0; i < numberOfSentences; i++) //TODO: Returns an out of index error --cm
-        //{
-        //sentenceList.Add(sentences[i]);
-        //}
 
         return ChooseSentences(sentenceList, prompt).ToArray();
 
-        //sentenceList.RemoveAt(sentenceList.Count - 1);
-        //Debug.Log("sentence 1: " + sentenceList[0] + " sentence2: " + sentenceList[1]);
-        //int s_num = num_sentences;
-        //while (s_num)
-        //return sentenceList.ToArray();
     }
 
     List<string> ChooseSentences(List<string> sentenceList, string prompt)
@@ -603,7 +510,7 @@ public class Storyteller : MonoBehaviour
         return tempSentenceList;
     }
 
-
+    
     public int GetNumberOfMusings()
     {
         return numberOfMusings;

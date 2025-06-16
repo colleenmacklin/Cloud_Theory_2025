@@ -30,3 +30,6 @@ Cloud_Theory.sln filter=lfs diff=lfs merge=lfs -text
 mono_crash.0.1.json filter=lfs diff=lfs merge=lfs -text
 UserSettings filter=lfs diff=lfs merge=lfs -text
 VFXGraph.OutputEventHandlers.csproj filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
