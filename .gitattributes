@@ -1,2 +1,32 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+Assembly-CSharp-Editor.csproj filter=lfs diff=lfs merge=lfs -text
+Packages filter=lfs diff=lfs merge=lfs -text
+Assembly-CSharp-firstpass.csproj filter=lfs diff=lfs merge=lfs -text
+Cloud_Theory_2024.sln filter=lfs diff=lfs merge=lfs -text
+primordial_shape_responses filter=lfs diff=lfs merge=lfs -text
+Heureka_GlobalAssemblyDefinition.csproj filter=lfs diff=lfs merge=lfs -text
+HeurekaGames.Utils.csproj filter=lfs diff=lfs merge=lfs -text
+obj filter=lfs diff=lfs merge=lfs -text
+Assembly-CSharp.csproj filter=lfs diff=lfs merge=lfs -text
+HeurekaGames.AssetHunterPRO.Editor.csproj filter=lfs diff=lfs merge=lfs -text
+ProjectSettings filter=lfs diff=lfs merge=lfs -text
+Heureka.Upgrade.csproj filter=lfs diff=lfs merge=lfs -text
+mono_crash.0.0.json filter=lfs diff=lfs merge=lfs -text
+mono_crash.392705d0e.0.json filter=lfs diff=lfs merge=lfs -text
+packages.config filter=lfs diff=lfs merge=lfs -text
+README.md filter=lfs diff=lfs merge=lfs -text
+AH_AssemblyDefinition.csproj filter=lfs diff=lfs merge=lfs -text
+bin filter=lfs diff=lfs merge=lfs -text
+Library filter=lfs diff=lfs merge=lfs -text
+Temp filter=lfs diff=lfs merge=lfs -text
+Assembly-CSharp-Editor-firstpass.csproj filter=lfs diff=lfs merge=lfs -text
+Cloud_Theory_2025.sln filter=lfs diff=lfs merge=lfs -text
+Logs filter=lfs diff=lfs merge=lfs -text
+screenshots filter=lfs diff=lfs merge=lfs -text
+SerializedBuildInfo filter=lfs diff=lfs merge=lfs -text
+VFXGraph.OutputEventHandlers.Editor.csproj filter=lfs diff=lfs merge=lfs -text
+Cloud_Theory.sln filter=lfs diff=lfs merge=lfs -text
+mono_crash.0.1.json filter=lfs diff=lfs merge=lfs -text
+UserSettings filter=lfs diff=lfs merge=lfs -text
+VFXGraph.OutputEventHandlers.csproj filter=lfs diff=lfs merge=lfs -text
