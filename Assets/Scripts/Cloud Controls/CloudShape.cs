@@ -74,9 +74,12 @@ public class CloudShape : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening("StopClouds", StopCloud);
-        EventManager.StartListening("ClarifyClouds", ClarifyCloud);
-        EventManager.StartListening("SlowDownClouds", SlowDownCloud);
+        //EventManager.StartListening("StopClouds", StopCloud);
+        //EventManager.StartListening("ClarifyClouds", ClarifyCloud);
+        //EventManager.StartListening("SlowDownClouds", SlowDownCloud);
+        Actions.ClarifyClouds += ClarifyCloud;
+        Actions.SlowdownClouds += SlowDownCloud;
+        Actions.StopClouds += StopCloud;
         Actions.SharpenCloud += SharpenCloud;
         Actions.BlurCloud += BlurCloud;
         Actions.OnHoverOverTargetCloud += GlowCloud;
@@ -87,9 +90,12 @@ public class CloudShape : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.StopListening("StopClouds", StopCloud);
-        EventManager.StopListening("ClarifyClouds", ClarifyCloud);
-        EventManager.StopListening("SlowDownClouds", SlowDownCloud);
+        //EventManager.StopListening("StopClouds", StopCloud);
+        //EventManager.StopListening("ClarifyClouds", ClarifyCloud);
+        //EventManager.StopListening("SlowDownClouds", SlowDownCloud);
+        Actions.ClarifyClouds -= ClarifyCloud;
+        Actions.SlowdownClouds -= SlowDownCloud;
+        Actions.StopClouds -= StopCloud;
         Actions.SharpenCloud -= SharpenCloud;
         Actions.BlurCloud -= BlurCloud;
         Actions.OnHoverOverTargetCloud -= GlowCloud;
@@ -103,6 +109,7 @@ public class CloudShape : MonoBehaviour
     private void Awake()
     {
         psShape = ps.shape; // do not forget to set this first! will throw null reference exception
+        currentShape = ps.shape.texture;
         cloudCollider = GetComponent<BoxCollider>();
         _fadeObject = GetComponent<FadeObjectInOut>();
 

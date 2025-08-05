@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PoissonDisc;
-using System.Linq;
 using UnityEngine.UIElements;
 using TMPro;
 
@@ -96,12 +95,16 @@ public class CloudManager : MonoBehaviour
 
     void OnEnable()
     {
-        //EventManager.StartListening("Setup", GenerateNewClouds); //from Storyteller Start()
-        EventManager.StartListening("Setup", GenerateClouds); //from Storyteller Start()
-        EventManager.StartListening("IntroDone", SetNextShapes); //from Storyteller finishIntro
+        //EventManager.StartListening("Setup", GenerateClouds); //from Storyteller Start()
+        //EventManager.StartListening("IntroDone", SetNextShapes); //from Storyteller finishIntro
+        Actions.IntroDone += SetNextShapes;
 
         //EventManager.StartListening("DoneReading", SetNextShapes); //should only apply to the cloud that was being remarked upon - use an Action
-        EventManager.StartListening("DoneReading", SeenCloud);
+        //EventManager.StartListening("DoneReading", SeenCloud);
+        Actions.DoneReading += SeenCloud;
+
+        Actions.Setup += GenerateClouds;
+
         Actions.GetClickedCloud += GetClickedCloud;
         Actions.CloudIsReady += ReadyCloud;
         Actions.FadeInCloud += FadeInCloud;
@@ -113,11 +116,15 @@ public class CloudManager : MonoBehaviour
     void OnDisable()
     {
         //EventManager.StopListening("Setup", GenerateNewClouds);
-        EventManager.StopListening("Setup", GenerateClouds);
-        EventManager.StopListening("IntroDone", SetNextShapes); //from Storyteller finishIntro
-        EventManager.StopListening("DoneReading", SeenCloud); //should only apply to the cloud that was being remarked upon - use an Action
+        //EventManager.StopListening("Setup", GenerateClouds);
+        //EventManager.StopListening("IntroDone", SetNextShapes); //from Storyteller finishIntro
+        Actions.IntroDone -= SetNextShapes;
+
+        //EventManager.StopListening("DoneReading", SeenCloud); //should only apply to the cloud that was being remarked upon - use an Action
+        Actions.DoneReading -= SeenCloud;
 
         //EventManager.StopListening("DoneReading", SetNextShapes); //should only apply to the cloud that was being remarked upon - use an Action
+        Actions.Setup -= GenerateClouds;
         Actions.GetClickedCloud -= GetClickedCloud;
         Actions.CloudIsReady -= ReadyCloud;
         Actions.FadeInCloud -= FadeInCloud;
@@ -128,6 +135,7 @@ public class CloudManager : MonoBehaviour
     }
     void Awake()
     {
+        //FIX - remove this
 
         //check to see that the modelURL was passed on from the opening, and if so, assign public vars
         if (string.IsNullOrEmpty(ModelInfo.ModelName))
@@ -142,15 +150,14 @@ public class CloudManager : MonoBehaviour
 
     void Start()
     {
+        Actions.Setup();
         //Start Act Intro, not the cloud shape
         //        EventManager.TriggerEvent("Introduction");
         //       EventManager.TriggerEvent("SpawnShape");
     }
 
-    void SetTextureArrays(string model) //TODO: I don't think we need this after incorporating zero-shot
-    {//from unity docs
-     // would be how to do it as a List
-     //TODO INDIECADE: load cloudTargets based on model
+    void SetTextureArrays(string model) 
+    {
 
         switch (model)
         {
@@ -172,6 +179,7 @@ public class CloudManager : MonoBehaviour
         cloudGenericsArray = Resources.LoadAll("Cloud_Natural", typeof(Texture2D)).Cast<Texture2D>().ToArray();
     }
 
+   //FIX - remove this
    
     void OnValidate()    //called in the editor only
 
@@ -185,7 +193,7 @@ public class CloudManager : MonoBehaviour
         model_name = ModelInfo.ModelName;
         SetTextureArrays(model_name);
     }
-
+   
 
     ///////////////////////
     //
@@ -200,7 +208,7 @@ public class CloudManager : MonoBehaviour
     //4. Fires a Clouds Generated event
     private void GenerateClouds()
     {
-
+        Debug.Log("generating clouds");
         //generate points first using settings
         List<Vector2> poissonPositions;
         poissonPositions = PoissonDiscSampling.GeneratePoints(poissonRadius, poissonRegionSize, poissonRejectionSamples);
@@ -277,8 +285,8 @@ public class CloudManager : MonoBehaviour
         }
 
 
-        EventManager.TriggerEvent("CloudsGenerated"); //heard by nothing?
-        EventManager.TriggerEvent("SlowDownClouds"); //heard by CloudShape
+        //Actions.CloudsGenerated();
+        Actions.SlowdownClouds();
         //should add some generic shapes here...
         SetCloudsToGenericShapes();
     }
@@ -690,14 +698,16 @@ public class CloudManager : MonoBehaviour
     private IEnumerator PauseBeforeTalking()
     {
 
-        EventManager.TriggerEvent("Talk");
+        //EventManager.TriggerEvent("Talk");
+        Actions.Talk();
         yield return new WaitForSeconds(pauseBetweenText);
 
     }
 
     private void TurnOffCloud()
     {
-        EventManager.TriggerEvent("TurnOffCloud"); //message received on cloud object 
+        //EventManager.TriggerEvent("TurnOffCloud"); //message received on cloud object
+        Actions.TurnOffCloud();
     }
     //for prefab instantiation, see: https://docs.unity3d.com/Manual/InstantiatingPrefabs.html
 

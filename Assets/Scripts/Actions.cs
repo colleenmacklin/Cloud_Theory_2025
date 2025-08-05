@@ -9,6 +9,10 @@ public static class Actions
 
     public static Action SharpenCloud;
     public static Action BlurCloud;
+    public static Action ClarifyClouds;
+    public static Action SlowdownClouds;
+    public static Action Cutscene;
+    public static Action ConversationEnded;
     public static Action<GameObject> GetClickedCloud;
     public static Action<CloudShape> CloudIsReady;
     public static Action<OpeningCloudShape> OpeningCloudIsReady;
@@ -22,5 +26,20 @@ public static class Actions
     public static Action Shake;
     public static Action <GameObject> OnHoverOverTargetCloud;
     public static Action OnHoverExit;
-
+    public static Action Setup;
+    public static Action Respond;
+    public static Action DoneReading;
+    public static Action StopClouds;
+    public static Action IntroDone;
+    public static Action Musing;
+    public static Action Correct;
+    public static Action Sunrise;
+    public static Action Sunset;
+    public static Action EndingConclusion;
+    public static Action CloudsGenerated;
+    public static Action Talk;
+    public static Action TurnOffCloud;
+    public static Action SpawnShape;
+    public static Action FadeInSpace;
+    public static Action FadeOutSpace;
 }

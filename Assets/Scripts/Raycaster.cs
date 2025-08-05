@@ -67,16 +67,26 @@ public class Raycaster : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.StartListening("ConversationEnded", StartGazeTracking);
-        EventManager.StartListening("Musing", StopGazeTracking);
-        EventManager.StartListening("Cutscene", ReadingMode);
+        //EventManager.StartListening("ConversationEnded", StartGazeTracking);
+        //EventManager.StartListening("Musing", StopGazeTracking);
+        //EventManager.StartListening("Cutscene", ReadingMode);
+
+        Actions.ConversationEnded += StartGazeTracking;
+        Actions.Musing += StopGazeTracking;
+        Actions.Cutscene += ReadingMode;
+
     }
 
     void OnDisable()
     {
-        EventManager.StopListening("ConversationEnded", StartGazeTracking);
-        EventManager.StopListening("Musing", StopGazeTracking);
-        EventManager.StopListening("Cutscene", ReadingMode);
+         //EventManager.StopListening("ConversationEnded", StartGazeTracking);
+        //EventManager.StopListening("Musing", StopGazeTracking);
+        //EventManager.StopListening("Cutscene", ReadingMode);
+
+        Actions.ConversationEnded -= StartGazeTracking;
+        Actions.Musing -= StopGazeTracking;
+        Actions.Cutscene -= ReadingMode;
+
     }
 
     void ReadingMode()
@@ -216,7 +226,8 @@ public class Raycaster : MonoBehaviour
 
         Actions.GetClickedCloud(c); //lets cloudmanager know which cloud has been clicked
 
-        EventManager.TriggerEvent("Respond");
+        //EventManager.TriggerEvent("Respond");
+        Actions.Respond();
         state = MouseState.READING;
     }
 

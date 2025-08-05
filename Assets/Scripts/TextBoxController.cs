@@ -33,7 +33,7 @@ public class TextBoxController : MonoBehaviour
     string activeLine;
     public Speaker speaker;
     public Crosstales.RTVoice.Model.Voice voice;
-  public bool isPC = false;//removing this to changeover to marytts voice
+    public bool isPC = false;//removing this to changeover to marytts voice
 
     [SerializeField]
     string currentLine = "";
@@ -94,10 +94,11 @@ public class TextBoxController : MonoBehaviour
 
         dialogueAudio = GetComponent<AudioSource>();
         dialogueAudio.clip = typeSound;
-        for (int i = 0; i < teller.numberOfSentences; i++)
-        {
-            lineBools.Add(false);
-        }
+
+        //for (int i = 0; i < teller.numberOfSentences; i++) //CM removed
+        //{
+            //lineBools.Add(false);
+        //}
     }
 
     //Print out the string over time and play audio
@@ -241,11 +242,9 @@ public class TextBoxController : MonoBehaviour
             complete = true;
             Debug.Log("TEXTBoxCOntroller: voice complete is true");
             textField.text = ""; //clear text because it's the end
-                                 //potentially trigger an event for ending the dialogue
+            Actions.DoneReading();
+
             textFieldBKGD.text = BKGDColor + textField.text + "</mark>";
-
-            EventManager.TriggerEvent("DoneReading");
-
             
 
             if (PlayingEnding)
@@ -267,6 +266,7 @@ public class TextBoxController : MonoBehaviour
         textFieldBKGD.text = BKGDColor + textField.text + "</mark>";
         activeLine = "";
         voiceState = -1;
+
         for (int i = 0; i < lineBools.Count; i++)
         {
             lineBools[i] = false;
@@ -280,7 +280,9 @@ public class TextBoxController : MonoBehaviour
         Reset(); //reset first and then ingest lines
         CopyLines(newLines);
         activeLine = linesList[0]; //set active to first line
-        //Debug.Log("ReadNEwLines: "+ activeLine);
+        Debug.Log("ReadNEwLines 1: "+ activeLine);
+        //Debug.Log("ReadNEwLines 2: " + linesList[1]);
+
         //removing this because setting up mary tts server to have platform consistancy and more voice options 
         if (isPC)
          {
@@ -307,6 +309,7 @@ public class TextBoxController : MonoBehaviour
 
             fadeCoroutine = StartCoroutine(fadeLineInOut());//display the whole line (fadein)
         }
+        Check();
     }
 
     //Set the lines array to the lines list
@@ -318,10 +321,12 @@ public class TextBoxController : MonoBehaviour
 
     void Update()
     {
+
         for (int i = 0; i < lineBools.Count; i++)
         {
-            if(voiceState == i && !lineBools[i])
-            {
+        if(voiceState == i && !lineBools[i])
+        {
+                Debug.Log("linebools");
                 NextLine();
                 lineBools[i] = true;
             }

@@ -172,7 +172,7 @@ MonoBehaviour:
   scale: 0
   currScale: 0
   cloudVisX: -80
-  shapeRenderer: {fileID: 0}
+  shapeRenderer: {fileID: 5648309818082262632}
   isGameLoop: 1
   IsFading: 0
 --- !u!65 &3025029212260664773
@@ -1548,7 +1548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1560,15 +1560,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.52
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 18.56
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 11.85
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1665,7 +1665,7 @@ PrefabInstance:
     - target: {fileID: 7233091011902322578, guid: 58f60aff4d3f9524ba4afc859b1c1e89,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1689,6 +1689,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 0e64e1483c0ee4237958df5c6be2c274, type: 3}
       propertyPath: m_Name
       value: CloudSystem2
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 0e64e1483c0ee4237958df5c6be2c274, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0e64e1483c0ee4237958df5c6be2c274, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1739,6 +1743,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e64e1483c0ee4237958df5c6be2c274, type: 3}
+--- !u!199 &5648309818082262632 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 19900000, guid: 0e64e1483c0ee4237958df5c6be2c274,
+    type: 3}
+  m_PrefabInstance: {fileID: 5648309818097358856}
+  m_PrefabAsset: {fileID: 0}
 --- !u!198 &5648309818082281416 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 19800000, guid: 0e64e1483c0ee4237958df5c6be2c274,

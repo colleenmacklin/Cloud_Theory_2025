@@ -37,7 +37,7 @@ public class Cloud : MonoBehaviour
     private GameObject target;
 
     private UnityAction someListener;
-    private Transform camera;
+    private new Transform camera; //CM added 'new"
 
 
     void Awake()
@@ -47,15 +47,20 @@ public class Cloud : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.StartListening("SpawnShape", SpawnShape);
-        EventManager.StartListening("TurnOffCloud", turnOff);
+        Actions.SpawnShape += SpawnShape;
+        Actions.TurnOffCloud += turnOff;
+        //EventManager.StartListening("SpawnShape", SpawnShape);
+        //EventManager.StartListening("TurnOffCloud", turnOff);
 
     }
 
     void OnDisable()
     {
-        EventManager.StopListening("SpawnShape", SpawnShape);
-        EventManager.StopListening("TurnOffCloud", turnOff);
+        Actions.SpawnShape -= SpawnShape;
+        Actions.TurnOffCloud -= turnOff;
+
+        //EventManager.StopListening("SpawnShape", SpawnShape);
+        //EventManager.StopListening("TurnOffCloud", turnOff);
     }
 
 

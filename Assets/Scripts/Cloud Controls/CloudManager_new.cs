@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PoissonDisc;
-using System.Linq;
  
 
 /*
@@ -129,8 +128,8 @@ public class CloudManager_new : MonoBehaviour
         EventManager.StartListening("IntroDone", SetNextShapes); //from Storyteller finishIntro
 
         //EventManager.StartListening("DoneReading", SetNextShapes); //should only apply to the cloud that was being remarked upon - use an Action
+
         EventManager.StartListening("DoneReading", SeenCloud);
-        Actions.GetClickedCloud += GetClickedCloud;
         Actions.CloudIsReady += ReadyCloud;
         Actions.FadeInCloud += FadeInCloud;
         Actions.FadeOutCloud += FadeOutCloud;
@@ -146,6 +145,7 @@ public class CloudManager_new : MonoBehaviour
         EventManager.StopListening("DoneReading", SeenCloud); //should only apply to the cloud that was being remarked upon - use an Action
 
         //EventManager.StopListening("DoneReading", SetNextShapes); //should only apply to the cloud that was being remarked upon - use an Action
+
         Actions.GetClickedCloud -= GetClickedCloud;
         Actions.CloudIsReady -= ReadyCloud;
         Actions.FadeInCloud -= FadeInCloud;
@@ -577,10 +577,14 @@ public class CloudManager_new : MonoBehaviour
     void SlowDownCloud(CloudShape c)
     {
         c.SlowDownCloud();
+        Debug.Log("slowDownCloud: " + c);
+
     }
     void ClarifyCloud(CloudShape c)
     {
         c.ClarifyCloud();
+        Debug.Log("clarifyCloud: " + c);
+
     }
 
     void SharpenCloud(CloudShape c)
@@ -601,11 +605,15 @@ public class CloudManager_new : MonoBehaviour
     void StopCloud(CloudShape c)
     {
         c.StopCloud();
+        Debug.Log("StopCloud: " + c);
+
     }
 
     void StartCloud(CloudShape c)
     {
         c.StartCloud();
+        Debug.Log("StartCloud: " + c);
+
     }
 
 

@@ -1,20 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
-using Crosstales.RTVoice;
-using SimpleJSON;
-using MiniJSON;
-//using static UnityEditor.Rendering.CameraUI;
-using UnityEngine.Networking;
-using System.Text.RegularExpressions;
-using UnityEngine.Windows;
-using Crosstales.RTVoice.Model;
 using System;
 using Random = UnityEngine.Random;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
 using LLMUnity;
-using LLMUnitySamples;
 
 /*
 
@@ -66,7 +54,7 @@ public class Storyteller : MonoBehaviour
 
     [SerializeField] int numberOfMusings = 3; //total musings for our story
     [SerializeField] int musingsGiven = 0; //how many musings we've done
-    public int numberOfSentences = 3;
+    public int numberOfSentences;
     [SerializeField] List<string> prompts = new List<string>();
     [SerializeField] float bindingProbablility = 0.3f;
     [SerializeField] List<string> bindingPrompts = new List<string>();
@@ -80,18 +68,23 @@ public class Storyteller : MonoBehaviour
 
     int timer = 20;
 
+    private string _prompt;
+    public string data;
+    public event Action<string> HasReceivedResponse; 
+    public bool AIDone = false;
+
 
     //Story chosenStory;//the active story we will use
     private void OnEnable()
     {
-        EventManager.StartListening("ConversationEnded", CheckForCompletion);
+        Actions.ConversationEnded += CheckForCompletion;
         //    EventManager.StopListening("Conclusion", ShowConclusion);
 
     }
     private void OnDisable()
     {
 
-        EventManager.StopListening("ConversationEnded", CheckForCompletion);
+        Actions.ConversationEnded -= CheckForCompletion;
         //    EventManager.StartListening("Conclusion", ShowConclusion);    
     }
 
@@ -115,9 +108,9 @@ public class Storyteller : MonoBehaviour
         bindingPrompts.Add("Did you know that __ and -- in the same day predicts");
         bindingPrompts.Add("I’ve never seen __ with --, but now I see they are connected by");
 
-        EventManager.TriggerEvent("Cutscene");
+        Actions.Cutscene();
         SetupStory();
-        EventManager.TriggerEvent("Setup"); //tell clouds to get ready
+        Actions.Setup();                    // tell clouds to get ready
                                             //access pattern for the narrator story content
                                             //internally the data is kept in a Story structure that has a Name and Content (dictionary of string to string[])
                                             //Debug.Log(narrator.StoryData[0].Name);
@@ -129,18 +122,18 @@ public class Storyteller : MonoBehaviour
 
     public void WarmUpCallback()
     {
+        Debug.Log("warming up LLM");
         warmUpDone = true;
         //inputBubble.SetPlaceHolderText("Message me");
         //AllowInput();
     }
 
-    //Pick one of the narrator's random stories
     void SetupStory()
     {
 
         //Send the story opening to the dialogue manager
+        //FIX: should add variables, etc to make this more unique
         sendPrompt("tell me what you think about these clouds");
-        //SendMusing(muse.CloudData[0].Content);
         GameState.Intro = true;
 
         //DEBUG RTVOICE
@@ -151,29 +144,55 @@ public class Storyteller : MonoBehaviour
 
     //Send a musing to the text controller
 
-    void sendPrompt(string prompt)
+    void sendPrompt(string _prompt)
     {
-        string[] response = { };
-        response[0] = llmCharacter.prompt = prompt;
-        string[] fakeMusing = { "hi i don't have anything to say", "sorry." };
+        Debug.Log("prompting model: " + _prompt); 
+        _ = llmCharacter.Chat(_prompt, HandleReply, AIReplyComplete);
 
-        SendMusing(response);
+        //response[0] = llmCharacter.prompt = _prompt;
+        string[] fakeMusing = { "hi i don't have anything to say", "sorry." };
+        //Debug.Log("RESPONSE: "+response[0]);
+        //SendMusing(response);
+    }
+
+    void HandleReply(string text) //FIX this so that it doesn't keep sending speak command every letter...
+    {
+        // Convert the incoming string to an array of strings by splitting on newline
+        //string[] response = data.Split(new[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+        data = text;
+        // Do something with the reply from the model
+        Debug.Log("data from chatmanager = " + data);
+        //HasReceivedResponse?.Invoke(data);
+        //SendMusing(data);
     }
 
 
-    void SendMusing(string [] musing)
+    public void AIReplyComplete()
     {
+        string[] response = data.Split(new[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+        numberOfSentences = response.Length - 1;
+        Debug.Log("numsentences: " + numberOfSentences);
+        Debug.Log("Saving history:"+ data);
+        llmCharacter.Save("CloudsChatHistory");
+        Debug.Log(Application.persistentDataPath);
+        AIDone = true;
+        SendMusing(response);
 
-        if (musing.Length >0) //checking to see if there's a character at all in the string, since it's possible that there's a list of empty strings...
+        //addData();
+        //playerText.text = "";
+    }
 
-            {
-                textBoxController.ReadNewLines(musing);
+    void SendMusing(string[] t)
+    {
+        string[] musing = t;
 
-        }
-        else
+        //if (musing.Length>0) //checking to see if there's a character at all in the string, since it's possible that there's a list of empty strings...
+        if (AIDone)
         {
+            Debug.Log("AIDONE");
             textBoxController.ReadNewLines(musing);
         }
+        
         //for (int i = 0; i < musing.Length; i++)
         //{
         //    speaker.Speak(musing[i]);
@@ -229,9 +248,12 @@ public class Storyteller : MonoBehaviour
 
         //increase musings
         musingsGiven += 1;
-        EventManager.TriggerEvent("Musing");
+        //EventManager.TriggerEvent("Musing");
+        Actions.Musing();
 
-        EventManager.TriggerEvent("Correct");
+        //EventManager.TriggerEvent("Correct");
+        Actions.Correct();
+
 
     }
 
@@ -255,8 +277,10 @@ public class Storyteller : MonoBehaviour
     {
         if (musingsGiven == numberOfMusings)
         {
-            EventManager.TriggerEvent("Musing");
-            EventManager.TriggerEvent("Cutscene");
+            //EventManager.TriggerEvent("Musing");
+            Actions.Musing();
+            //EventManager.TriggerEvent("Cutscene");
+            Actions.Cutscene();
             // EventManager.TriggerEvent("sunset"); moved this to credits
             EndStory();
             gameover = true;
@@ -265,15 +289,17 @@ public class Storyteller : MonoBehaviour
 
             //Credits();
         }
+
         if (GameState.Intro)
         {
             Debug.Log("introDone");
-            EventManager.TriggerEvent("IntroDone");
+            //EventManager.TriggerEvent("IntroDone");
+            Actions.IntroDone();
             GameState.Intro = false;
             GameState.Gameloop = true;
 
             //TODO TERRY ENTER BUTTERFLY
-            OnIntroComplete?.Invoke();
+            //OnIntroComplete?.Invoke();
         }
 
     }
@@ -316,7 +342,7 @@ public class Storyteller : MonoBehaviour
         //int index = muse.CloudData.IndexOf(Musing.Name);
 
         //WARNING: HACK
-        int dataIndex;
+        //int dataIndex;
 
 
         textBoxController.PlayingEnding = true;

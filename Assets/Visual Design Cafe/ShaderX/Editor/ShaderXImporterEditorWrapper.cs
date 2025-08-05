@@ -28,6 +28,7 @@ namespace VisualDesignCafe.ShaderX.Editor
 
         private ShaderXImporterEditor _editor;
 
+        [System.Obsolete]
         public override void OnInspectorGUI()
         {
             var importer = target as ShaderXImporterWrapper;

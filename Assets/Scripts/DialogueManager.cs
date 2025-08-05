@@ -54,16 +54,23 @@ public class DialogueManager : MonoBehaviour
 
     void OnEnable()
     {
-        EventManager.StartListening("sunset", EndGame);
-        EventManager.StartListening("Respond", Respond);
-        EventManager.StartListening("DoneReading", ConversationalPauseTransition);
+        Actions.Sunset += EndGame;
+        Actions.Respond += Respond;
+        Actions.DoneReading += ConversationalPauseTransition;
+        //EventManager.StartListening("sunset", EndGame);
+        //EventManager.StartListening("Respond", Respond);
+        //EventManager.StartListening("DoneReading", ConversationalPauseTransition);
     }
 
     void OnDisable()
     {
-        EventManager.StopListening("sunset", EndGame);
-        EventManager.StopListening("Respond", Respond);
-        EventManager.StopListening("DoneReading", ConversationalPauseTransition);
+        Actions.Sunset -= EndGame;
+        Actions.Respond -= Respond;
+        Actions.DoneReading -= ConversationalPauseTransition;
+
+        //EventManager.StopListening("sunset", EndGame);
+        //EventManager.StopListening("Respond", Respond);
+        //EventManager.StopListening("DoneReading", ConversationalPauseTransition);
     }
 
     //////////////////////
@@ -79,8 +86,9 @@ public class DialogueManager : MonoBehaviour
 
     public void ShowConclusion()
     {
-        EventManager.TriggerEvent("StopClouds"); //dissolves clouds
-        EventManager.TriggerEvent("sunset");
+        Actions.StopClouds(); //dissolves clouds
+        Actions.Sunset();
+        //EventManager.TriggerEvent("sunset");
     }
 
     void ReadSelection()
@@ -119,14 +127,16 @@ public class DialogueManager : MonoBehaviour
             EndConversation(); //activate the event for ending the convo
         else
         {
-            EventManager.TriggerEvent("EndingConclusion");
-            EventManager.TriggerEvent("");
+            //EventManager.TriggerEvent("EndingConclusion");
+            Actions.EndingConclusion();
+            //EventManager.TriggerEvent(""); //WHY?
         }
     }
 
     void EndConversation()
     {
-        EventManager.TriggerEvent("ConversationEnded"); //this is moved to the text box controller
+        //EventManager.TriggerEvent("ConversationEnded"); //this is moved to the text box controller
+        Actions.ConversationEnded();
     }
 
 }

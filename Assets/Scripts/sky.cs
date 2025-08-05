@@ -35,17 +35,24 @@ namespace UnityEngine.AzureSky
         // Start is called before the first frame update
         void OnEnable()
         {
-            EventManager.StartListening("sunrise", sunrise);
-            EventManager.StartListening("sunset", sunset);
-            EventManager.StartListening("Musing", CatchUpToTimeAtMusing);
+            //EventManager.StartListening("sunrise", sunrise);
+            //EventManager.StartListening("sunset", sunset);
+            //EventManager.StartListening("Musing", CatchUpToTimeAtMusing);
+
+            Actions.Sunrise += sunrise;
+            Actions.Sunset += sunset;
+            Actions.Musing += CatchUpToTimeAtMusing;
 
         }
 
         void OnDisable()
         {
-            EventManager.StopListening("sunrise", sunrise);
-            EventManager.StopListening("sunset", sunset);
-            EventManager.StopListening("Musing", CatchUpToTimeAtMusing);
+            //EventManager.StopListening("sunrise", sunrise);
+            //EventManager.StopListening("sunset", sunset);
+            //EventManager.StopListening("Musing", CatchUpToTimeAtMusing);
+            Actions.Sunrise -= sunrise;
+            Actions.Sunset -= sunset;
+            Actions.Musing -= CatchUpToTimeAtMusing;
 
         }
         private void Awake()
