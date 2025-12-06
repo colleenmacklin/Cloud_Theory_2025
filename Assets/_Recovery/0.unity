@@ -1332,28 +1332,8 @@ PrefabInstance:
       objectReference: {fileID: 1414669667}
     - target: {fileID: 8471398325390620021, guid: 22e6bc33f4d3d4779821b419c9fd7211,
         type: 3}
-      propertyPath: model
-      value: llama-3.2-1b-instruct-q4_k_m.gguf
-      objectReference: {fileID: 0}
-    - target: {fileID: 8471398325390620021, guid: 22e6bc33f4d3d4779821b419c9fd7211,
-        type: 3}
-      propertyPath: chatTemplate
-      value: llama3 chat
-      objectReference: {fileID: 0}
-    - target: {fileID: 8471398325390620021, guid: 22e6bc33f4d3d4779821b419c9fd7211,
-        type: 3}
       propertyPath: advancedOptions
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8471398325390620021, guid: 22e6bc33f4d3d4779821b419c9fd7211,
-        type: 3}
-      propertyPath: embeddingLength
-      value: 2048
-      objectReference: {fileID: 0}
-    - target: {fileID: 8471398325390620021, guid: 22e6bc33f4d3d4779821b419c9fd7211,
-        type: 3}
-      propertyPath: maxContextLength
-      value: 131072
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

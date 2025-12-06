@@ -73,7 +73,8 @@ public class TextBoxController : MonoBehaviour
     void Start()
     {
         //TODO: INdieCade Change voices for each model
-        Debug.Log("telling RTVoice to use this voice: "+ModelInfo.ModelName);
+        Debug.Log("telling RTVoice to use this voice: " + ModelInfo.ModelName);
+        /*
         switch (ModelInfo.ModelName)
         {
             case ("philosopher"):
@@ -91,7 +92,7 @@ public class TextBoxController : MonoBehaviour
                 voice.Name = "Grandma";
                 break;
         }
-
+        */
         dialogueAudio = GetComponent<AudioSource>();
         dialogueAudio.clip = typeSound;
 
@@ -275,7 +276,7 @@ public class TextBoxController : MonoBehaviour
 
     //Take list from any source and create array of lines
     //And read it out.
-    public void ReadNewLines(string[] newLines)
+    public void ReadNewLines(string[] newLines) //called from storyteller
     {
         Reset(); //reset first and then ingest lines
         CopyLines(newLines);
@@ -326,7 +327,7 @@ public class TextBoxController : MonoBehaviour
         {
         if(voiceState == i && !lineBools[i])
         {
-                Debug.Log("linebools");
+                Debug.Log("linebools: "+i);
                 NextLine();
                 lineBools[i] = true;
             }

@@ -92,7 +92,7 @@ public class Raycaster : MonoBehaviour
     void ReadingMode()
     {
         state = MouseState.READING;
-        //StartGazeTracking(); //shouldnt this be stop gazeTracking? //CM COMMENTED OUT 7/31
+        StartGazeTracking(); //shouldnt this be stop gazeTracking? //CM COMMENTED OUT 7/31
     }
 
     //None of the tracking should be doing as many mutations as it is now

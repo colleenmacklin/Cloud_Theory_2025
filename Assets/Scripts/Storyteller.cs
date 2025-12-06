@@ -161,7 +161,7 @@ public class Storyteller : MonoBehaviour
         //string[] response = data.Split(new[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
         data = text;
         // Do something with the reply from the model
-        Debug.Log("data from chatmanager = " + data);
+        //Debug.Log("data from chatmanager = " + data);
         //HasReceivedResponse?.Invoke(data);
         //SendMusing(data);
     }
@@ -174,7 +174,7 @@ public class Storyteller : MonoBehaviour
         Debug.Log("numsentences: " + numberOfSentences);
         Debug.Log("Saving history:"+ data);
         llmCharacter.Save("CloudsChatHistory");
-        Debug.Log(Application.persistentDataPath);
+        //Debug.Log(Application.persistentDataPath);
         AIDone = true;
         SendMusing(response);
 

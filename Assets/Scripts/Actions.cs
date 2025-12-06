@@ -42,4 +42,8 @@ public static class Actions
     public static Action SpawnShape;
     public static Action FadeInSpace;
     public static Action FadeOutSpace;
+    
+    
+    //testscene actions
+    public static Action <string> RespondToShape;
 }
