@@ -7,6 +7,8 @@ using UnityEngine.U2D;
 using LLMUnity;
 using System.IO;
 using System.Threading.Tasks;
+using UnityEngine.UI;
+using UnityEditor.Build.Reporting;
 
 
 public class NewNarrator : MonoBehaviour
@@ -20,6 +22,7 @@ public class NewNarrator : MonoBehaviour
     public LLMCharacter llmCharacter;
     public string Prompt = "...";
     public TextMeshProUGUI NarratorText;
+    public TextMeshProUGUI SummaryText;
     public TextMeshProUGUI PromptText;
     public TextMeshProUGUI RandomWord;
     public TextMeshProUGUI RandomFeeling;
@@ -53,14 +56,16 @@ public class NewNarrator : MonoBehaviour
 
 public void respond_to_shape(string s)
     {
-
         cloudHistory.Add(s);
         Debug.Log("cloudhistory: "+cloudHistory.Last());
 
         var shape = parseName(s);
         Debug.Log("respond to: "+shape);
-        var prompt = CreatePrompt(shape);
-        _ = llmCharacter.Chat(prompt, SetNarrationText, AIReplyComplete);
+        //var prompt = CreatePrompt(shape);
+        //_ = llmCharacter.Chat(prompt, SetNarrationText, AIReplyComplete);
+        var prompt = CreateCompletionPrompt(shape);
+        _ = llmCharacter.Complete(prompt, SetNarrationText, AIReplyComplete);
+
 
         //some more code here
     }
@@ -68,6 +73,11 @@ public void respond_to_shape(string s)
     {
         Debug.Log("setting Narration Text: " + text);
         NarratorText.text = text;
+    }
+    public void SetSummaryText(string text)
+    {
+        Debug.Log("setting Narration Text: " + text);
+        SummaryText.text = text;
     }
 
     // Utilities
@@ -95,16 +105,47 @@ public void respond_to_shape(string s)
         PromptText.text = Prompt;
         return Prompt;
     }
+
+        public string CreateCompletionPrompt(string s)
+    {
+        //flip a coin
+        int num = Random.Range(1,2);
+        string Prompt;
+        if (num == 1 && cloudHistory.Count > 1)
+        {
+            cloudHistory.Shuffle(); 
+            var pastCloud = cloudHistory.Last();
+            Debug.Log("PastCloud: "+pastCloud);
+            Prompt = "I think that cloud looks like a " + s + " which, after seeing a "+pastCloud+" makes me wonder";
+
+        }else 
+        ///need to add null checks
+        //string Prompt = "tell me a story about a cloud shaped like a " + s + ". reference the shape in the story, and also include the word "+RandomWord.text+" in the story. Keep the story to 50 words or less.";
+        Prompt = "That cloud looks like a " + s + " which makes me feel "+RandomFeeling.text;
+        PromptText.text = Prompt;
+        return Prompt;
+    }
+
     public void AIReplyComplete()
     {
         Debug.Log("Saving history");
-        llmCharacter.Save("CloudhatHistory");
+        llmCharacter.Save("CloudChatHistory");
         Debug.Log(Application.persistentDataPath);
-        
         addData();
         //playerText.text = "";
     }
 
+    public string CreateSummaryPrompt(string s)
+    {
+        string summaryPrompt  = "Shorten this story to two sentences: "+s;
+        return summaryPrompt;
+    }
+    public void summarize()
+    {
+        var text = NarratorText.text;
+        var prompt = CreateSummaryPrompt(text);
+        _ = llmCharacter.Chat(prompt, SetSummaryText, AIReplyComplete);
+    }
     public void CancelRequests()
     {
         llmCharacter.CancelRequests();
