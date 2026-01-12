@@ -29,6 +29,6 @@ public class DropDownHandler : MonoBehaviour
 
         //Initialise the Text to say the first value of the Dropdown
         //Debug.Log("dropdown : " + selectedOptionText);
-        Actions.RespondToShape(selectedOptionText);
+        Actions.ChooseCloud(selectedOptionText);
     }
 }

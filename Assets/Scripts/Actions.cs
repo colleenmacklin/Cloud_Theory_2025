@@ -45,5 +45,6 @@ public static class Actions
     
     
     //testscene actions
-    public static Action <string> RespondToShape;
+    public static Action <string> RespondToShape; //may not need this
+    public static Action <string> ChooseCloud; //sends name of cloud to Narrator, etc...
 }

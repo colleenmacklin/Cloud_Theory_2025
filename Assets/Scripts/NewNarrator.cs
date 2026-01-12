@@ -21,24 +21,29 @@ public class NewNarrator : MonoBehaviour
     public LLM llm;
     public LLMCharacter llmCharacter;
     public string Prompt = "...";
-    public TextMeshProUGUI NarratorText;
+    public string chosenCloud;
+    public TextMeshProUGUI ChatText;
+    public TextMeshProUGUI CompleteText;
+    public int wordCount;
+
     public TextMeshProUGUI SummaryText;
     public TextMeshProUGUI PromptText;
     public TextMeshProUGUI RandomWord;
-    public TextMeshProUGUI RandomFeeling;
+    public TextMeshProUGUI Role;
 
     private void OnEnable()
     {
-      Actions.RespondToShape += respond_to_shape;  
+      Actions.ChooseCloud += LookAtCloud;  
     }
 
         private void OnDisable()
     {
-      Actions.RespondToShape -= respond_to_shape;  
+      Actions.ChooseCloud -= LookAtCloud;  
     }
 
     void Start()
     {
+        //populate the dropdown menu
         allClouds.Add("a_person_watering_a_fish");
         allClouds.Add("a_jumping_cat");
         allClouds.Add("Abraham_Lincoln");
@@ -54,29 +59,53 @@ public class NewNarrator : MonoBehaviour
         allcloudNames.AddOptions(allClouds);
     }
 
-public void respond_to_shape(string s)
+    public void LookAtCloud(string s)
     {
         cloudHistory.Add(s);
-        Debug.Log("cloudhistory: "+cloudHistory.Last());
+        //Debug.Log("cloudhistory: "+cloudHistory.Last());
+        chosenCloud = s;
+    }
 
-        var shape = parseName(s);
-        Debug.Log("respond to: "+shape);
+    public void completePrompt(string s)
+    {
+        var shape = parseName(chosenCloud);
+        var prompt = CreateCompletionPrompt(shape);
+        _ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
+
+    }
+
+    public void chatPrompt(string s)
+    {
+        var shape = parseName(chosenCloud);
+        var prompt = CreatePrompt(shape);
+        _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
+    }
+
+    public void respond_to_shape(string s)
+    {
+        var shape = parseName(chosenCloud);
+        //Debug.Log("respond to: "+shape);
         //var prompt = CreatePrompt(shape);
         //_ = llmCharacter.Chat(prompt, SetNarrationText, AIReplyComplete);
         var prompt = CreateCompletionPrompt(shape);
-        _ = llmCharacter.Complete(prompt, SetNarrationText, AIReplyComplete);
-
-
+        _ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
         //some more code here
     }
-    public void SetNarrationText(string text)
+
+    public void SetChatText(string text)
     {
         Debug.Log("setting Narration Text: " + text);
-        NarratorText.text = text;
+        ChatText.text = text;
+    }
+
+    public void SetCompleteText(string text)
+    {
+        Debug.Log("setting Narration Text: " + text);
+        CompleteText.text = text;
     }
     public void SetSummaryText(string text)
     {
-        Debug.Log("setting Narration Text: " + text);
+        //Debug.Log("setting Narration Text: " + text);
         SummaryText.text = text;
     }
 
@@ -91,37 +120,43 @@ public void respond_to_shape(string s)
         //flip a coin
         int num = Random.Range(1,2);
         string Prompt;
+        if (Role.text == "") {Role.text = "the socialist philosopher Bertand Russell";}
         if (num == 1 && cloudHistory.Count > 1)
         {
             cloudHistory.Shuffle(); 
-            var pastCloud = cloudHistory.Last();
-            Debug.Log("PastCloud: "+pastCloud);
-            Prompt = "Tell a hypothetical story about a cloud shaped like a " + s + " and how it is related to "+pastCloud+". Ponder the meaning of seeing these two shapes in one day, and include the shape names in your theory. Stay in the present tense and keep your remarks to 50 words or less.";
-
-        }else 
+            var pc = cloudHistory.Last();
+            string pastCloud = parseName(pc);
+            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly melancholic socialist philosopher. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ s+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen." + "\n"+"2. Weave in philosophical themes like the transience of power (impermanence), the subjectivity of perception, or the nature of 'form.'"+"\n"+"3. Keep the tone contemplative, poetic, and intimate."+"\n"+"4. Do not write Colleen's responses; leave space or use '...' to imply her pauses, but focus on Colleen's spoken words."+"\n"+"5. Connect your comments to the previously seen cloud shape, "+pastCloud+"."+"\n"+"6. End with a question that shifts the focus to a new cloud shape."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
+            //Prompt = "In the style of " +Role.text +" tell a hypothetical story about a cloud shaped like " + s + " and how it is related to "+pastCloud+". Ponder the significance of seeing these two shapes in one day, and include the shape names in your theory. You must include the word "+RandomWord.text+" in your response. Stay in the present tense and keep your remarks to "+wordCount+" words or less.";
+        }else
+        {
+            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly melancholic socialist philosopher. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ s+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen." + "\n"+"2. Weave in philosophical themes like the transience of power (impermanence), the subjectivity of perception, or the nature of 'form.'"+"\n"+"3. Keep the tone contemplative, poetic, and intimate."+"\n"+"4. Do not write Colleen's responses; leave space or use '...' to imply her pauses, but focus on Colleen's spoken words."+"\n"+"5. End with a question that shifts the focus to a new cloud shape."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
+            //Prompt = "In the style of " +Role.text + " remark on a cloud shaped like " + s + ". Ponder the significance of seeing this shape, and include the shape name in your theory. You must include the word "+RandomWord.text+" in your response. Be creative and hypothetical! Stay in the present tense and keep your remarks to "+wordCount+" words or less.";
+        }
         ///need to add null checks
-        //string Prompt = "tell me a story about a cloud shaped like a " + s + ". reference the shape in the story, and also include the word "+RandomWord.text+" in the story. Keep the story to 50 words or less.";
-        Prompt = "Remark on a cloud shaped like a " + s + " and how "+RandomFeeling.text+" it is to see this shape. Ponder the meaning of seeing this shape, and include the shape name in your theory. You must include the word "+RandomWord.text+" in your musing. Be creative and hypothetical! Stay in the present tense and keep your remarks to 50 words or less.";
         PromptText.text = Prompt;
         return Prompt;
     }
 
-        public string CreateCompletionPrompt(string s)
+    public string CreateCompletionPrompt(string s)
     {
         //flip a coin
         int num = Random.Range(1,2);
         string Prompt;
+        //check if the friend has commented on other clouds
         if (num == 1 && cloudHistory.Count > 1)
         {
             cloudHistory.Shuffle(); 
-            var pastCloud = cloudHistory.Last();
-            Debug.Log("PastCloud: "+pastCloud);
-            Prompt = "I think that cloud looks like a " + s + " which, after seeing a "+pastCloud+" makes me wonder";
+            var pc = cloudHistory.Last();
+            string pastCloud = parseName(pc);
+            Prompt = "I think that cloud looks like " + s + " which, after seeing a "+pastCloud+" makes me wonder";
 
-        }else 
+        }else
+        {
+            Prompt = "That cloud looks like " + s + " which makes me wonder ";
+        }
         ///need to add null checks
         //string Prompt = "tell me a story about a cloud shaped like a " + s + ". reference the shape in the story, and also include the word "+RandomWord.text+" in the story. Keep the story to 50 words or less.";
-        Prompt = "That cloud looks like a " + s + " which makes me feel "+RandomFeeling.text;
         PromptText.text = Prompt;
         return Prompt;
     }
@@ -135,16 +170,19 @@ public void respond_to_shape(string s)
         //playerText.text = "";
     }
 
-    public string CreateSummaryPrompt(string s)
-    {
-        string summaryPrompt  = "Shorten this story to two sentences: "+s;
-        return summaryPrompt;
-    }
     public void summarize()
     {
-        var text = NarratorText.text;
-        var prompt = CreateSummaryPrompt(text);
+        var text = CompleteText.text;
+        var preface_prompt = PromptText.text;
+        var prompt = CreateSummaryPrompt(PromptText.text +" "+text);
+        Debug.Log("Summarize: "+prompt);
         _ = llmCharacter.Chat(prompt, SetSummaryText, AIReplyComplete);
+    }
+
+    public string CreateSummaryPrompt(string s)
+    {
+        string summaryPrompt  = "Shorten this story to two sentences: "+s+"\n only respond with the sentences, do not add any commentary. Keep the language simple.";
+        return summaryPrompt;
     }
     public void CancelRequests()
     {
@@ -177,7 +215,7 @@ public void respond_to_shape(string s)
         llmCharacter.Save("outputs.txt");
         //File.AppendAllText(getPath() + "/Assets/", "testing");
 //need to add null checks for adding other text fields
-        File.AppendAllText(getPath() + "/Assets/output.txt", "\n" + "Prompt: "+PromptText.text + "\n" + "words:" + Narration.text);
+        File.AppendAllText(getPath() + "/Assets/output.txt", "\n" + "Prompt: "+PromptText.text + "\n" + "CHAT:" + ChatText.text + "\n" + "COMPLETE:" + CompleteText.text);
         // Following lines refresh the editor and print data
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
