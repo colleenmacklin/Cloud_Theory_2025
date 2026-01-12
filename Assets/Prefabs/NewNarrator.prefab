@@ -54,8 +54,8 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   contextSize: 8192
   batchSize: 512
-  model: llama-3.2-1b-instruct-q4_k_m.gguf
-  chatTemplate: llama3 chat
+  model: gemma-3-1b-it-Q4_K_M.gguf
+  chatTemplate: gemma
   lora: 
   loraWeights: 
   flashAttention: 0
@@ -65,9 +65,9 @@ MonoBehaviour:
   SSLKey: 
   SSLKeyPath: 
   minContextLength: 0
-  maxContextLength: 131072
+  maxContextLength: 32768
   embeddingsOnly: 0
-  embeddingLength: 2048
+  embeddingLength: 1152
 --- !u!1 &3543310067612767486
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,11 +147,9 @@ MonoBehaviour:
   nKeep: -1
   stop: []
   stream: 1
-  playerName: user
-  AIName: assistant
-  prompt: A casual chat between a curious human and an artificial intelligence friend
-    about clouds shaped like different things. The assistant brings up creative and
-    poetic responses to the cloud shapes.
+  playerName: Colleen
+  AIName: Bertrand
+  prompt: 
   setNKeepToPrompt: 1
   chat: []
   grammarString: 
@@ -210,8 +208,11 @@ MonoBehaviour:
   llm: {fileID: 3249873242418833905}
   llmCharacter: {fileID: 696956464633187289}
   Prompt: ...
-  NarratorText: {fileID: 0}
+  chosenCloud: 
+  ChatText: {fileID: 0}
+  CompleteText: {fileID: 0}
   SummaryText: {fileID: 0}
   PromptText: {fileID: 0}
   RandomWord: {fileID: 0}
-  RandomFeeling: {fileID: 0}
+  Role: {fileID: 0}
+  numWords: 50

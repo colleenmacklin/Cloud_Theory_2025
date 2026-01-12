@@ -24,12 +24,12 @@ public class NewNarrator : MonoBehaviour
     public string chosenCloud;
     public TextMeshProUGUI ChatText;
     public TextMeshProUGUI CompleteText;
-    public int wordCount;
 
     public TextMeshProUGUI SummaryText;
     public TextMeshProUGUI PromptText;
     public TextMeshProUGUI RandomWord;
     public TextMeshProUGUI Role;
+    public int numWords;
 
     private void OnEnable()
     {
@@ -105,7 +105,7 @@ public class NewNarrator : MonoBehaviour
     }
     public void SetSummaryText(string text)
     {
-        //Debug.Log("setting Narration Text: " + text);
+        Debug.Log("Summary: " + text);
         SummaryText.text = text;
     }
 
@@ -120,7 +120,7 @@ public class NewNarrator : MonoBehaviour
         //flip a coin
         int num = Random.Range(1,2);
         string Prompt;
-        if (Role.text == "") {Role.text = "the socialist philosopher Bertand Russell";}
+        //if (Role.text == "") {Role.text = "the socialist philosopher Bertand Russell";}
         if (num == 1 && cloudHistory.Count > 1)
         {
             cloudHistory.Shuffle(); 
@@ -130,8 +130,7 @@ public class NewNarrator : MonoBehaviour
             //Prompt = "In the style of " +Role.text +" tell a hypothetical story about a cloud shaped like " + s + " and how it is related to "+pastCloud+". Ponder the significance of seeing these two shapes in one day, and include the shape names in your theory. You must include the word "+RandomWord.text+" in your response. Stay in the present tense and keep your remarks to "+wordCount+" words or less.";
         }else
         {
-            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly melancholic socialist philosopher. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ s+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen." + "\n"+"2. Weave in philosophical themes like the transience of power (impermanence), the subjectivity of perception, or the nature of 'form.'"+"\n"+"3. Keep the tone contemplative, poetic, and intimate."+"\n"+"4. Do not write Colleen's responses; leave space or use '...' to imply her pauses, but focus on Colleen's spoken words."+"\n"+"5. End with a question that shifts the focus to a new cloud shape."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
-            //Prompt = "In the style of " +Role.text + " remark on a cloud shaped like " + s + ". Ponder the significance of seeing this shape, and include the shape name in your theory. You must include the word "+RandomWord.text+" in your response. Be creative and hypothetical! Stay in the present tense and keep your remarks to "+wordCount+" words or less.";
+            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly stoned student of philosophy. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ s+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen" + "\n" + "2. Reference the shape by name"+"("+s+")"+" in the first sentence." + "\n" + "3. Weave in philosophical themes like the nature of consciousness, the subjectivity of perception, or the nature of ‘reality’(metaphysics) and simulation theory."+"\n"+"4. Keep the tone contemplative, poetic, and intimate but don’t be afraid to say something weird."+"\n"+"5. Do not write Colleen's responses; leave space or use '...' to imply their pauses, but focus on Colleen's spoken words."+"\n"+"6. Keep your comments to " + numWords + " words or less."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
         }
         ///need to add null checks
         PromptText.text = Prompt;
