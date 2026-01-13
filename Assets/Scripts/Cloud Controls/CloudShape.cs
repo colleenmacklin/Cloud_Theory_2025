@@ -25,6 +25,7 @@ public class CloudShape : MonoBehaviour
 
     [Header("Control Properties")]
     [SerializeField]
+    public Transform location;
     public Texture2D currentShape;
     public Texture2D incomingShape;
     public string CurrentShapeName;

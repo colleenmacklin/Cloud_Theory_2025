@@ -23,7 +23,7 @@ public class FriendAI : MonoBehaviour
       Actions.ChooseCloud += LookAtCloud;  
     }
 
-        private void OnDisable()
+    private void OnDisable()
     {
       Actions.ChooseCloud -= LookAtCloud;  
     }
