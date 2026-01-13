@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318680783902494731}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &318680783902494730
 MonoBehaviour:
@@ -51,5 +51,6 @@ MonoBehaviour:
   sunrise_end_time_minute: 0
   sunset_start_time: 0
   sunset_end_time: 19.5
+  sunsetTrack: {fileID: 8300000, guid: 02df52ac3f86649c2a7ccea58b38e031, type: 3}
   timeScale: 1
   _storyteller: {fileID: 0}

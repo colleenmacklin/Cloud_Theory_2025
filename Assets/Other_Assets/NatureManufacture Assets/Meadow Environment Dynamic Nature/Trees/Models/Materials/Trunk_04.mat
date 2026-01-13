@@ -2,24 +2,37 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Trunk_04
   m_Shader: {fileID: 4800000, guid: 8a95675767cdff4429e1abe2778a1f30, type: 3}
-  m_ShaderKeywords: _DETALUSEUV3_ON _DISABLE_DBUFFER _HEIGHT_BASED_BLEND _MASKMAP0
-    _MASKMAP1 _NORMALMAP0 _NORMALMAP1 _NORMALMAP_TANGENT_SPACE0 _NORMALMAP_TANGENT_SPACE1
-    _NORMALMAP_TANGENT_SPACE2 _NORMALMAP_TANGENT_SPACE3 _REQUIRE_UV3
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _DETALUSEUV3_ON
+  - _DISABLE_DBUFFER
+  - _HEIGHT_BASED_BLEND
+  - _MASKMAP0
+  - _MASKMAP1
+  - _NORMALMAP0
+  - _NORMALMAP1
+  - _NORMALMAP_TANGENT_SPACE0
+  - _NORMALMAP_TANGENT_SPACE1
+  - _NORMALMAP_TANGENT_SPACE2
+  - _NORMALMAP_TANGENT_SPACE3
+  - _REQUIRE_UV3
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
   stringTagMap:
     MotionVector: User
-  disabledShaderPasses:
-  - MOTIONVECTORS
+  disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -687,3 +700,4 @@ Material:
     - _UVMappingMaskBlendMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1

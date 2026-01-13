@@ -17,15 +17,22 @@ MonoBehaviour:
   m_MaterialReferences: []
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Hazel
   m_Shader: {fileID: 4800000, guid: adce0b63bca75a84e9f786201b7d7b0b, type: 3}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _ALPHATEST_ON _DISABLE_DBUFFER _DOUBLESIDED_ON
-    _MATERIAL_FEATURE_TRANSMISSION _NORMALMAP_TANGENT_SPACE
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _DISABLE_DBUFFER
+  - _DOUBLESIDED_ON
+  - _MATERIAL_FEATURE_TRANSMISSION
+  - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
@@ -34,10 +41,10 @@ Material:
     MotionVector: User
   disabledShaderPasses:
   - DistortionVectors
-  - MOTIONVECTORS
+  - TransparentBackface
   - TransparentDepthPrepass
   - TransparentDepthPostpass
-  - TransparentBackface
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -291,7 +298,8 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfileAsset: {r: -2.5885458e-15, g: -2.3876559e+22, b: 2.1371786e-38, a: -2.5477597e+28}
+    - _DiffusionProfileAsset: {r: -2.5885458e-15, g: -2.3876559e+22, b: 2.1371786e-38,
+        a: -2.5477597e+28}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _DryColor: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
@@ -312,3 +320,4 @@ Material:
     - _VertexNormalMultiply: {r: 0, g: 0, b: 0, a: 0}
     - _WindColorInfluence: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
