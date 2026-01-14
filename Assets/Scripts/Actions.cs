@@ -41,6 +41,7 @@ public static class Actions
     public static Action SpawnShape;
     public static Action FadeInSpace;
     public static Action FadeOutSpace;
+    public static Action<Texture2D> ChangeCloudShape;
     
     
     //testscene actions

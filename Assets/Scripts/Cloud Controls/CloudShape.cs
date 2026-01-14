@@ -18,8 +18,6 @@ using static UnityEngine.ParticleSystem;
 */
 // TO DO
 
-//REMOVE ALL EVENTS FROM INDIVIDUAL CLOUDS
-
 public class CloudShape : MonoBehaviour
 {
 
@@ -50,9 +48,9 @@ public class CloudShape : MonoBehaviour
     public float changeTimeMax;
 
     [Tooltip("default was 10.0f")]
-    public float minScale;
-    public float maxScale;
-    public float scale;
+    public float minScale = 1;
+    public float maxScale = 10;
+    public float scale = 1;
     public float currScale;
 
     [SerializeField]
@@ -75,9 +73,7 @@ public class CloudShape : MonoBehaviour
 
     private void OnEnable()
     {
-        //EventManager.StartListening("StopClouds", StopCloud);
-        //EventManager.StartListening("ClarifyClouds", ClarifyCloud);
-        //EventManager.StartListening("SlowDownClouds", SlowDownCloud);
+        Actions.ChangeCloudShape +=SetShape;
         Actions.ClarifyClouds += ClarifyCloud;
         Actions.SlowdownClouds += SlowDownCloud;
         Actions.StopClouds += StopCloud;
@@ -85,15 +81,12 @@ public class CloudShape : MonoBehaviour
         Actions.BlurCloud += BlurCloud;
         Actions.OnHoverOverTargetCloud += GlowCloud;
         Actions.OnHoverExit += UnGlowCloud;
-
         _fadeObject.ResetCloudPos += ResetCloudPos;
     }
 
     private void OnDisable()
     {
-        //EventManager.StopListening("StopClouds", StopCloud);
-        //EventManager.StopListening("ClarifyClouds", ClarifyCloud);
-        //EventManager.StopListening("SlowDownClouds", SlowDownCloud);
+        Actions.ChangeCloudShape -=SetShape;
         Actions.ClarifyClouds -= ClarifyCloud;
         Actions.SlowdownClouds -= SlowDownCloud;
         Actions.StopClouds -= StopCloud;
@@ -101,7 +94,6 @@ public class CloudShape : MonoBehaviour
         Actions.BlurCloud -= BlurCloud;
         Actions.OnHoverOverTargetCloud -= GlowCloud;
         Actions.OnHoverExit -= UnGlowCloud;
-
         _fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
 
@@ -122,7 +114,8 @@ public class CloudShape : MonoBehaviour
     {
         //rotate to look at the camera 
        _camTransform = Camera.main.transform;
-     //   transform.LookAt(camera, Vector3.back);
+        //transform.LookAt(camera, Vector3.back);
+        adjustScaleRatio();
 
     
     }
@@ -201,7 +194,6 @@ public class CloudShape : MonoBehaviour
     public void TurnOffCollider()
     {
         //Debug.Log("...........turning off Collider..............");
-
         cloudCollider.enabled = false;
     }
 
@@ -211,42 +203,27 @@ public class CloudShape : MonoBehaviour
     //this also sets the collider size to update with it
     public void SetShape(Texture2D shapeTexture)
     {
-        //var srcWidth = shapeTexture.width;
-        //var srcHeight = shapeTexture.height;
-
-        //Calculate texture adjustment factor - no longer needed
-        //Vector3 textureScaleAdjustment = CalculateSquareScaleRatio(srcWidth, srcHeight);
-
-        //Set the object's shape reference to the shapeTexture for easy reference
-
-        //save shapeTexture to incomingShape
-        //Debug.Log("My Shape is: " + shapeTexture);
         incomingShape = shapeTexture;
-
-
-        //adjust the shape of the cloud and its collider based on the aspect ratio of the shape
-        //TODO: we might need to move this into cloudManager for greater control, and also for different contexts like the Opening
-        //for now, I have a check to see if we're in the Gameloop, and if not, the scale is set elsewhere.
-        var srcWidth = incomingShape.width;
-        var srcHeight = incomingShape.height;
-        Vector3 textureScaleAdjustment = CalculateSquareScaleRatio(srcWidth, srcHeight);
-
-
-        //Set the object's shape reference to the shapeTexture for easy reference
         currentShape = incomingShape;
 
         //Set the scale and texture value in the particle system shape module
-        psShape.scale = textureScaleAdjustment;
-        psShape.texture = incomingShape;
+        psShape.texture = currentShape;
+        adjustScaleRatio();
 
-        //modify the StartSize of the particle system so that it scales with the size of the cloud (ensures there's no gaps between parrticles)
-        //StartSize is a range, and the base setting is 3 to 7
+        //CurrentShapeName = currentShape.name;
+        StartCoroutine(TimeToChange());
+    }
+    private void adjustScaleRatio()
+    {
+        var srcWidth = currentShape.width;
+        var srcHeight = currentShape.height;
+        Vector3 textureScaleAdjustment = CalculateSquareScaleRatio(srcWidth, srcHeight);
+        psShape.scale = textureScaleAdjustment;
+
         var psMain = ps.main;
-        //psMain.startSizeMultiplier = currScale/2;
         psMain.startSizeMultiplier = scale / 2;
 
-
-        //Set the scale *of the collider* that represents the shape
+                //Set the scale *of the collider* that represents the shape
         //Collider is rotated, so the values are x and y.
         //And the 7f arbbitrarily for "best fit"
         Vector3 colliderSize = new Vector3(
@@ -255,12 +232,8 @@ public class CloudShape : MonoBehaviour
             2f
         );
         cloudCollider.size = colliderSize;
-
         CurrentShapeName = currentShape.name;
-        StartCoroutine(TimeToChange());
-
     }
-
     IEnumerator TimeToChange()
     {
         //Start a variable timer countdown to signal when the cloud is ready to change

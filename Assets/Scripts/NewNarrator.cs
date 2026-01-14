@@ -34,7 +34,7 @@ public class NewNarrator : MonoBehaviour
       Actions.ChooseCloud += LookAtCloud;  
     }
 
-        private void OnDisable()
+    private void OnDisable()
     {
       Actions.ChooseCloud -= LookAtCloud;  
     }
@@ -46,6 +46,7 @@ public class NewNarrator : MonoBehaviour
         cloudHistory.Add(s);
         //Debug.Log("cloudhistory: "+cloudHistory.Last());
         chosenCloud = s;
+        chatPrompt(s);
     }
 
     public void completePrompt(string s)
