@@ -21,12 +21,12 @@ public class ScrollCredits : MonoBehaviour
 
     private void OnEnable()
     {
-        TextBoxController.OnEndingDialogueComplete += StartCredits;
+        //TextBoxController.OnEndingDialogueComplete += StartCredits;
     }
 
     private void OnDisable()
     {
-        TextBoxController.OnEndingDialogueComplete -= StartCredits;
+        //TextBoxController.OnEndingDialogueComplete -= StartCredits;
     }
 
     private void Awake()

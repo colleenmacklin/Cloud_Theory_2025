@@ -52,7 +52,7 @@ public class NewNarrator : MonoBehaviour
     {
         var shape = parseName(chosenCloud);
         var prompt = CreateCompletionPrompt(shape);
-        _ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
+        //_ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
 
     }
 
@@ -70,7 +70,7 @@ public class NewNarrator : MonoBehaviour
         //var prompt = CreatePrompt(shape);
         //_ = llmCharacter.Chat(prompt, SetNarrationText, AIReplyComplete);
         var prompt = CreateCompletionPrompt(shape);
-        _ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
+        //_ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
         //some more code here
     }
 
@@ -145,9 +145,9 @@ public class NewNarrator : MonoBehaviour
     public void AIReplyComplete()
     {
         Debug.Log("Saving history");
-        llmCharacter.Save("CloudChatHistory");
-        Debug.Log(Application.persistentDataPath);
-        addData();
+        //llmCharacter.Save("CloudChatHistory");
+        //Debug.Log(Application.persistentDataPath);
+        //addData();
         //playerText.text = "";
     }
 
@@ -171,6 +171,7 @@ public class NewNarrator : MonoBehaviour
         AIReplyComplete();
     }
     bool onValidateWarning = true;
+    /*
     void OnValidate()
     {
         if (onValidateWarning && !llmCharacter.remote && llmCharacter.llm != null && llmCharacter.llm.model == "")
@@ -193,7 +194,7 @@ public class NewNarrator : MonoBehaviour
     public async Task addData()
     {
         // Following line adds data to CSV file
-        llmCharacter.Save("outputs.txt");
+        //llmCharacter.Save("outputs.txt");
         //File.AppendAllText(getPath() + "/Assets/", "testing");
 //need to add null checks for adding other text fields
         File.AppendAllText(getPath() + "/Assets/output.txt", "\n" + "Prompt: "+PromptText.text + "\n" + "CHAT:" + ChatText.text + "\n" + "COMPLETE:" + CompleteText.text);
@@ -224,6 +225,6 @@ return Application.dataPath;// +"/"+ fileName;
         return path + "/Documents";
     }
 
-
+*/
 
 }

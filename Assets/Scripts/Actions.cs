@@ -15,7 +15,6 @@ public static class Actions
     public static Action ConversationEnded;
     public static Action<GameObject> GetClickedCloud;
     public static Action<CloudShape> CloudIsReady;
-    public static Action<OpeningCloudShape> OpeningCloudIsReady;
     public static Action<GameObject> FadeInCloud;
     public static Action<GameObject> FadeOutCloud;
     public static Action<String> GetModel;
