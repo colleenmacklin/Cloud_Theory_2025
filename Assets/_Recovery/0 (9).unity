@@ -321,7 +321,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 1
   contextSize: 8192
   batchSize: 512
-  model: gemma-3-4b-it-Q4_K_M.gguf
+  model: gemma-3-1b-it-Q4_K_M.gguf
   chatTemplate: gemma
   lora: 
   loraWeights: 
@@ -332,9 +332,9 @@ MonoBehaviour:
   SSLKey: 
   SSLKeyPath: 
   minContextLength: 0
-  maxContextLength: 131072
+  maxContextLength: 32768
   embeddingsOnly: 0
-  embeddingLength: 2560
+  embeddingLength: 1152
 --- !u!1 &66434284
 GameObject:
   m_ObjectHideFlags: 0
