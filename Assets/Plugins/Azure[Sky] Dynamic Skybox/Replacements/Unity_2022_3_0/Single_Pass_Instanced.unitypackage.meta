@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d383017f5627a924da1e6cc80e2744c4
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 36050
+  packageName: Azure[Sky] Dynamic Skybox
+  packageVersion: 8.0.6
+  assetPath: Assets/Plugins/Azure[Sky] Dynamic Skybox/Replacements/Unity_2022_3_0/Single_Pass_Instanced.unitypackage
+  uploadId: 830942

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 41f5cca1a6ded4949b0e0b7c0d45b3fe
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 36050
+  packageName: Azure[Sky] Dynamic Skybox
+  packageVersion: 8.0.6
+  assetPath: Assets/Plugins/Azure[Sky] Dynamic Skybox/Replacements/Unity_6_0_0/URP_17_0_3.unitypackage
+  uploadId: 830942

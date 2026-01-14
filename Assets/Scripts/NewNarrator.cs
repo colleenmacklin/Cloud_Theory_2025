@@ -13,11 +13,9 @@ using UnityEditor.Build.Reporting;
 
 public class NewNarrator : MonoBehaviour
 {
-    public TMP_Dropdown allcloudNames;
     public TMP_Text Narration;
     public List<string> cloudHistory;
     public List<string> targetClouds;
-    public List<string> allClouds;
     public LLM llm;
     public LLMCharacter llmCharacter;
     public string Prompt = "...";
@@ -27,8 +25,8 @@ public class NewNarrator : MonoBehaviour
 
     public TextMeshProUGUI SummaryText;
     public TextMeshProUGUI PromptText;
-    public TextMeshProUGUI RandomWord;
-    public TextMeshProUGUI Role;
+    //public TextMeshProUGUI RandomWord;
+    //public TextMeshProUGUI Role;
     public int numWords;
 
     private void OnEnable()
@@ -41,23 +39,7 @@ public class NewNarrator : MonoBehaviour
       Actions.ChooseCloud -= LookAtCloud;  
     }
 
-    void Start()
-    {
-        //populate the dropdown menu
-        allClouds.Add("a_person_watering_a_fish");
-        allClouds.Add("a_jumping_cat");
-        allClouds.Add("Abraham_Lincoln");
-        allClouds.Add("a_person_playing_saxophone");
-        allClouds.Add("a_businesswoman");
-        allClouds.Add("a_bucket");
-        allClouds.Add("a_walrus_with_a_tophat");
-        allClouds.Add("a_poodle");
-        allClouds.Add("a_cigarette_butt");
-        allClouds.Add("a_telephone");
-        allClouds.Add("a_unicorn");
-        allClouds.Add("a_cloud");
-        allcloudNames.AddOptions(allClouds);
-    }
+   
 
     public void LookAtCloud(string s)
     {
