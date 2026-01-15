@@ -18,6 +18,10 @@ namespace Crosstales.Common.Util
       private static string[] _args = null;
 
       private static int _androidAPILevel = 0;
+#if UNITY_EDITOR
+      private static bool _isIl2cppSet;
+      private static bool _isIl2cpp;
+#endif
 
       #endregion
 
@@ -52,14 +56,21 @@ namespace Crosstales.Common.Util
          get
          {
 #if UNITY_EDITOR
-            UnityEditor.BuildTarget target = UnityEditor.EditorUserBuildSettings.activeBuildTarget;
-            UnityEditor.BuildTargetGroup group = UnityEditor.BuildPipeline.GetBuildTargetGroup(target);
+            if (!_isIl2cppSet) //prevent problems if called from threads
+            {
+               _isIl2cppSet = true;
+
+               UnityEditor.BuildTarget target = UnityEditor.EditorUserBuildSettings.activeBuildTarget;
+               UnityEditor.BuildTargetGroup group = UnityEditor.BuildPipeline.GetBuildTargetGroup(target);
 #if UNITY_2023_1_OR_NEWER
-            UnityEditor.Build.NamedBuildTarget nbt = UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group);
-            return UnityEditor.PlayerSettings.GetScriptingBackend(nbt) == UnityEditor.ScriptingImplementation.IL2CPP;
+               UnityEditor.Build.NamedBuildTarget nbt = UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(group);
+               _isIl2cpp = UnityEditor.PlayerSettings.GetScriptingBackend(nbt) == UnityEditor.ScriptingImplementation.IL2CPP;
 #else
-            return UnityEditor.PlayerSettings.GetScriptingBackend(group) == UnityEditor.ScriptingImplementation.IL2CPP;
+               _isIl2cpp = UnityEditor.PlayerSettings.GetScriptingBackend(group) == UnityEditor.ScriptingImplementation.IL2CPP;
 #endif
+            }
+
+            return _isIl2cpp;
 #else
 #if ENABLE_IL2CPP
             return true;
@@ -797,13 +808,15 @@ namespace Crosstales.Common.Util
          return SystemLanguage.English;
       }
 
-      /// <summary>Invokes a public static method on a full qualified class.</summary>
+      /// <summary>Invokes a method on a full qualified class.</summary>
       /// <param name="className">Full qualified name of the class</param>
       /// <param name="methodName">Public static method of the class to execute</param>
+      /// <param name="flags">Binding flags for the method (optional, default: static/public)</param>
       /// <param name="parameters">Parameters for the method (optional)</param>
-      public static object InvokeMethod(string className, string methodName, params object[] parameters)
+      public static object InvokeMethod(string className, string methodName, System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public, params object[] parameters)
       {
 #if UNITY_WSA
+         Debug.LogWarning("UWP (WSA) is not supported!");
          return null;
 #else
          if (string.IsNullOrEmpty(className))
@@ -818,20 +831,25 @@ namespace Crosstales.Common.Util
             return null;
          }
 
-         foreach (System.Type type in System.AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(assembly => assembly.GetTypes()))
+         foreach (System.Type type in System.AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()))
          {
             try
             {
                if (type.FullName?.Equals(className) == true)
                   if (type.IsClass)
-                     return type.GetMethod(methodName, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)?.Invoke(null, parameters);
+                  {
+                     var method = type.GetMethod(methodName, flags);
+                     if (method != null)
+                        return method.Invoke(null, parameters);
+                  }
             }
             catch (System.Exception ex)
             {
-               Debug.LogWarning($"Could not execute method call: {ex}");
+               Debug.LogWarning($"Could not execute method call '{methodName}' for '{className}': {ex}");
             }
          }
+
+         Debug.LogWarning($"Could not find class ' {className}' or method '{methodName}'");
 
          return null;
 #endif
@@ -877,6 +895,67 @@ namespace Crosstales.Common.Util
          }
 
          return _args;
+      }
+
+      /// <summary>
+      /// Parses a given JSON into a dictionary with key and values
+      /// Note: this is a very basic implementation for simple JSON-strings - don't expect it to work with complex (e.g. nested) JSONs
+      /// </summary>
+      /// <param name="json">JSON-string to parse</param>
+      /// <returns>Dictionary with key and values from the JSON-string</returns>
+      public static System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> ParseJSON(string json) //TODO move to Common?
+      {
+         System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>> jsonDict = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.List<string>>();
+
+         if (string.IsNullOrEmpty(json))
+            return jsonDict;
+
+         string jsonString = json.Trim();
+
+         int remove = 0;
+
+         if (jsonString.StartsWith("{"))
+         {
+            remove = 1;
+         }
+         else if (jsonString.StartsWith("[{"))
+         {
+            remove = 2;
+         }
+         else
+         {
+            return jsonDict; //not a valid JSON
+         }
+
+         // Remove the curly braces from the start and end of the JSON string
+         jsonString = jsonString.Substring(remove, jsonString.Length - 2 * remove);
+
+         string[] keyValuePairs = jsonString.Split(',');
+
+         foreach (string pair in keyValuePairs)
+         {
+            if (!pair.Contains(":"))
+               continue;
+
+            string[] keyValuePair = pair.Split(':');
+
+            string key = keyValuePair[0].Trim(' ', '\"').Trim();
+            string value = keyValuePair[1].Trim(' ', '\"').Trim();
+
+            System.Collections.Generic.List<string> list = new System.Collections.Generic.List<string>();
+            if (jsonDict.ContainsKey(key))
+            {
+               list = jsonDict[key];
+            }
+            else
+            {
+               jsonDict.Add(key, list);
+            }
+
+            list.Add(value);
+         }
+
+         return jsonDict;
       }
 
 /*
@@ -981,4 +1060,4 @@ namespace Crosstales.Common.Util
       */
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

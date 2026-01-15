@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 65bbf5b9f4573e244ad4355710b02ed8
+timeCreated: 1468017982
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/RTVoice/Scripts/Editor/Util/EditorHelper.cs
+  uploadId: 650789

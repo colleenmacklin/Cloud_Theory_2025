@@ -43,8 +43,8 @@ namespace Crosstales.RTVoice.Provider
 
       public override AudioType AudioFileType => AudioType.WAV;
 
-      public override string DefaultVoiceName => "Microsoft David Desktop";
-
+      //public override string DefaultVoiceName => "Microsoft Zira Desktop";
+    
       public override bool isWorkingInEditor => Crosstales.RTVoice.Util.Helper.isWindowsEditor;
 
       public override bool isWorkingInPlaymode => Crosstales.RTVoice.Util.Helper.isWindowsEditor;
@@ -138,7 +138,7 @@ namespace Crosstales.RTVoice.Provider
                                 $" -text \"{prepareText(wrapper)}\"" +
                                 $" -rate {calculatedRate}" +
                                 $" -volume {calculatedVolume}" +
-                                $" -voice \"{voiceName.Replace('"', '\'')}\"";
+                                (string.IsNullOrEmpty(voiceName) ? string.Empty : $" -voice \"{voiceName.Replace('"', '\'')}\"");
 
                   if (Crosstales.RTVoice.Util.Config.DEBUG)
                      Debug.Log("Process arguments: " + args);
@@ -294,7 +294,7 @@ namespace Crosstales.RTVoice.Provider
                                    $" -file \"{outputFile.Replace('"', '\'')}\"" +
                                    $" -rate {calculatedRate}" +
                                    $" -volume {calculatedVolume}" +
-                                   $" -voice \"{voiceName.Replace('"', '\'')}\"";
+                                   (string.IsNullOrEmpty(voiceName) ? string.Empty : $" -voice \"{voiceName.Replace('"', '\'')}\"");
 
                      if (Crosstales.RTVoice.Util.Config.DEBUG)
                         Debug.Log("Process arguments: " + args);
@@ -386,7 +386,7 @@ namespace Crosstales.RTVoice.Provider
                                 $" -file \"{outputFile.Replace('"', '\'')}\"" +
                                 $" -rate {calculatedRate}" +
                                 $" -volume {calculatedVolume}" +
-                                $" -voice \"{voiceName.Replace('"', '\'')}\"";
+                                (string.IsNullOrEmpty(voiceName) ? string.Empty : $" -voice \"{voiceName.Replace('"', '\'')}\"");
 
                   if (Crosstales.RTVoice.Util.Config.DEBUG)
                      Debug.Log("Process arguments: " + args);
@@ -875,7 +875,7 @@ namespace Crosstales.RTVoice.Provider
                                 $" -file \"{outputFile.Replace('"', '\'')}\"" +
                                 $" -rate {calculatedRate}" +
                                 $" -volume {calculatedVolume}" +
-                                $" -voice \"{voiceName.Replace('"', '\'')}\"";
+                                (string.IsNullOrEmpty(voiceName) ? string.Empty : $" -voice \"{voiceName.Replace('"', '\'')}\"");
 
                   if (Crosstales.RTVoice.Util.Config.DEBUG)
                      Debug.Log("Process arguments: " + args);
@@ -950,7 +950,7 @@ namespace Crosstales.RTVoice.Provider
                                 $" -text \"{prepareText(wrapper)}\"" +
                                 $" -rate {calculatedRate}" +
                                 $" -volume {calculatedVolume}" +
-                                $" -voice \"{voiceName.Replace('"', '\'')}\"";
+                                (string.IsNullOrEmpty(voiceName) ? string.Empty : $" -voice \"{voiceName.Replace('"', '\'')}\"");
 
                   if (Crosstales.RTVoice.Util.Config.DEBUG)
                      Debug.Log("Process arguments: " + args);
@@ -979,7 +979,7 @@ namespace Crosstales.RTVoice.Provider
                         }
                      } while (worker.IsAlive || !process.HasExited);
 #if ENABLE_IL2CPP
-                  if (process.ExitCode == 0 || process.ExitCode == 123456) //123456 = Killed
+                     if (process.ExitCode == 0 || process.ExitCode == 123456) //123456 = Killed
 #else
                      if (process.ExitCode == 0 || process.ExitCode == -1) //-1 = Killed
 #endif
@@ -1108,4 +1108,4 @@ namespace Crosstales.RTVoice.Provider
    }
 }
 #endif
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

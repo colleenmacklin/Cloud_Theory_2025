@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 53010979ed68b0a44b5d5c595765001f
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/RTVoice/Extras/SAPI Unity.unitypackage
+  uploadId: 650789

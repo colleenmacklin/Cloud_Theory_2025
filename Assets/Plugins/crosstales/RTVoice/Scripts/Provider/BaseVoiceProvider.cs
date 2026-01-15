@@ -99,7 +99,7 @@ namespace Crosstales.RTVoice.Provider
 
       public abstract AudioType AudioFileType { get; }
 
-      public abstract string DefaultVoiceName { get; }
+      public virtual string DefaultVoiceName => string.Empty;
 
       public virtual System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice> Voices => cachedVoices;
 
@@ -681,4 +681,4 @@ namespace Crosstales.RTVoice.Provider
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

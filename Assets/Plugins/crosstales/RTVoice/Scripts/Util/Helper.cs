@@ -183,79 +183,6 @@ namespace Crosstales.RTVoice.Util
          "Zhiwei"
       };
 
-      private static readonly string[] androidMales =
-      {
-         "ar-xa-x-ard-local",
-         "ar-xa-x-are-local",
-         "bn-BD-language",
-         "bn-bd-x-ban-local",
-         "bn-in-x-bin-local",
-         "bn-in-x-bnm-local",
-         "cmn-cn-x-ccd-local",
-         "cmn-cn-x-cce-local",
-         "cmn-tw-x-ctd-local",
-         "cmn-tw-x-cte-local",
-         "da-dk-x-nmm-local",
-         "de-de-x-deb-local",
-         "de-de-x-deg-local",
-         "en-au-x-aub-local",
-         "en-au-x-aud-local",
-         "en-gb-x-gbb-local",
-         "en-gb-x-gbd-local",
-         "en-gb-x-rjs-local",
-         "en-in-x-end-local",
-         "en-in-x-ene-local",
-         "en-us-x-iol-local",
-         "en-us-x-iom-local",
-         "en-us-x-tpd-local",
-         "es-es-x-eed-local",
-         "es-es-x-eef-local",
-         "es-us-x-esd-local",
-         "es-us-x-esf-local",
-         "et-EE-language",
-         "et-ee-x-tms-local",
-         "fil-ph-x-fid-local",
-         "fil-ph-x-fie-local",
-         "fr-ca-x-cab-local",
-         "fr-ca-x-cad-local",
-         "fr-fr-x-frb-local",
-         "fr-fr-x-frd-local",
-         "gu-in-x-gum-local",
-         "hi-in-x-hid-local",
-         "hi-in-x-hie-local",
-         "id-id-x-idd-local",
-         "id-id-x-ide-local",
-         "it-it-x-itc-local",
-         "it-it-x-itd-local",
-         "ja-jp-x-jac-local",
-         "ja-jp-x-jad-local",
-         "kn-in-x-knm-local",
-         "ko-kr-x-koc-local",
-         "ko-kr-x-kod-local",
-         "ml-in-x-mlm-local",
-         "ms-my-x-msd-local",
-         "ms-my-x-msg-local",
-         "nb-no-x-cmj-local",
-         "nb-no-x-tmg-local",
-         "nl-nl-x-bmh-local",
-         "nl-nl-x-dma-local",
-         "pl-pl-x-bmg-local",
-         "pl-pl-x-jmk-local",
-         "pt-pt-x-jmn-local",
-         "pt-pt-x-pmj-local",
-         "ru-ru-x-rud-local",
-         "ru-ru-x-ruf-local",
-         "ta-in-x-tag-local",
-         "te-in-x-tem-local",
-         "tr-tr-x-ama-local",
-         "tr-tr-x-tmc-local",
-         "ur-pk-x-urm-local",
-         "vi-vn-x-vid-local",
-         "vi-vn-x-vif-local",
-         "yue-hk-x-yud-local",
-         "yue-hk-x-yuf-local"
-      };
-
       public static readonly System.Collections.Generic.Dictionary<int, string> LocaleCodes = new System.Collections.Generic.Dictionary<int, string>(161);
 
       #endregion
@@ -519,36 +446,6 @@ namespace Crosstales.RTVoice.Util
          return Crosstales.RTVoice.Model.Enum.Gender.UNKNOWN;
       }
 
-
-      /// <summary>Converts an Android voice name to a Gender.</summary>
-      /// <param name="voiceName">Voice name.</param>
-      /// <returns>Gender from the given Android voice name.</returns>
-      public static Crosstales.RTVoice.Model.Enum.Gender AndroidVoiceNameToGender(string voiceName)
-      {
-         Crosstales.RTVoice.Model.Enum.Gender gender = Crosstales.RTVoice.Model.Enum.Gender.UNKNOWN;
-         if (!string.IsNullOrEmpty(voiceName))
-         {
-            if (voiceName.CTContains("#male"))
-            {
-               gender = Crosstales.RTVoice.Model.Enum.Gender.MALE;
-            }
-            else if (voiceName.CTContains("#female"))
-            {
-               gender = Crosstales.RTVoice.Model.Enum.Gender.FEMALE;
-            }
-
-            if (gender == Crosstales.RTVoice.Model.Enum.Gender.UNKNOWN)
-            {
-               gender = Crosstales.RTVoice.Model.Enum.Gender.FEMALE; //fallback, 2/3 of the Google TTS under Android 11 are female
-
-               if (androidMales.Any(male => voiceName.CTContains(male)))
-                  return Crosstales.RTVoice.Model.Enum.Gender.MALE;
-            }
-         }
-
-         return gender;
-      }
-
       /// <summary>Cleans a given text to contain only letters or digits.</summary>
       /// <param name="text">Text to clean.</param>
       /// <param name="removeTags">Removes tags from text (default: true, optional).</param>
@@ -623,4 +520,4 @@ namespace Crosstales.RTVoice.Util
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

@@ -14,8 +14,8 @@ namespace Crosstales.Common.Util
       private static string _applicationDataPath;
       private static string _applicationTempPath;
       private static string _applicationPersistentPath;
-      private static char[] _invalidFilenameChars;
-      private static char[] _invalidPathChars;
+      private static char[] _invalidFilenameChars = new char[0];
+      private static char[] _invalidPathChars = new char[0];
 
 #if CT_RTFB && UNITY_ANDROID
       private static readonly System.Collections.Generic.List<string> _fileList = new System.Collections.Generic.List<string>();
@@ -118,14 +118,14 @@ namespace Crosstales.Common.Util
 
          _invalidPathChars = invalidPathChars.ToArray();
 
-/*
-         if (!isEditorMode)
-         {
-            GameObject go = new GameObject("_HelperCT");
-            go.AddComponent<HelperCT>();
-            GameObject.DontDestroyOnLoad(go);
-         }
-*/
+         /*
+                  if (!isEditorMode)
+                  {
+                     GameObject go = new GameObject("_HelperCT");
+                     go.AddComponent<HelperCT>();
+                     GameObject.DontDestroyOnLoad(go);
+                  }
+         */
       }
 
       #endregion
@@ -204,8 +204,8 @@ namespace Crosstales.Common.Util
                result += BaseConstants.PATH_DELIMITER_UNIX;
          }
 
-         if (removeInvalidChars)
-            return string.Join(string.Empty, result.Split(_invalidPathChars));
+         if (removeInvalidChars && HasPathInvalidChars(result))
+            result = string.Join(string.Empty, result.Split(_invalidPathChars));
 
          return result;
       }
@@ -225,7 +225,7 @@ namespace Crosstales.Common.Util
          bool isWin = isWindowsPath(path);
          bool isUNC = isUNCPath(path);
 
-         string result = ValidatePath(path, false, removeInvalidChars);
+         string result = ValidatePath(path, false, true, removeInvalidChars);
 
          if (result.EndsWith(BaseConstants.PATH_DELIMITER_WINDOWS) ||
              result.EndsWith(BaseConstants.PATH_DELIMITER_UNIX))
@@ -241,17 +241,17 @@ namespace Crosstales.Common.Util
             fileName = result.Substring(result.CTLastIndexOf(BaseConstants.PATH_DELIMITER_UNIX) + 1);
          }
 
-         string newName = string.Empty;
+         string newName = fileName;
 
-         if (removeInvalidChars)
-         {
+         if (removeInvalidChars && HasFileInvalidChars(fileName))
             newName = string.Join(string.Empty, fileName.Split(_invalidFilenameChars)); //.Replace(BaseConstants.PATH_DELIMITER_WINDOWS, string.Empty).Replace(BaseConstants.PATH_DELIMITER_UNIX, string.Empty);
 
-            if ((isWin || isUNC) && newName.EndsWith(".")) //file under Windows/UNC can not end with .
-               newName = newName.Substring(0, fileName.Length - 1);
-         }
+         if ((isWin || isUNC) && newName.EndsWith(".")) //file under Windows/UNC can not end with .
+            newName = newName.Substring(0, fileName.Length - 1);
 
-         return result.Substring(0, result.Length - fileName.Length) + newName; //this is correct!
+         result = result.Substring(0, result.Length - fileName.Length) + newName; //this is correct!
+
+         return result;
       }
 
       /// <summary>
@@ -522,8 +522,9 @@ namespace Crosstales.Common.Util
       /// <param name="sourceDir">Source directory path</param>
       /// <param name="destDir">Destination directory path</param>
       /// <param name="move">Move directory instead of copy (optional, default: false)</param>
+      /// <param name="moveSafe">Moves a directory in a safe, but slower way (optional, default: true)</param>
       /// <returns>True if the operation was successful</returns>
-      public static bool CopyDirectory(string sourceDir, string destDir, bool move = false) //NUnit
+      public static bool CopyDirectory(string sourceDir, string destDir, bool move = false, bool moveSafe = true) //NUnit
       {
          if (string.IsNullOrEmpty(destDir))
             return false;
@@ -568,7 +569,16 @@ namespace Crosstales.Common.Util
 #else
                   if (move)
                   {
-                     System.IO.Directory.Move(src, dest);
+                     if (moveSafe)
+                     {
+                        copyAll(new System.IO.DirectoryInfo(src), new System.IO.DirectoryInfo(dest));
+
+                        DeleteDirectory(src);
+                     }
+                     else
+                     {
+                        System.IO.Directory.Move(src, dest); //System.IO.Directory.Move sometimes fails, therefor the "moveSafe"-option is way better
+                     }
                   }
                   else
                   {
@@ -593,8 +603,9 @@ namespace Crosstales.Common.Util
       /// <param name="sourceFile">Source file path</param>
       /// <param name="destFile">Destination file path</param>
       /// <param name="move">Move file instead of copy (optional, default: false)</param>
+      /// <param name="moveSafe">Moves a file in a safe, but slower way (optional, default: true)</param>
       /// <returns>True if the operation was successful</returns>
-      public static bool CopyFile(string sourceFile, string destFile, bool move = false) //NUnit
+      public static bool CopyFile(string sourceFile, string destFile, bool move = false, bool moveSafe = true) //NUnit
       {
          if (string.IsNullOrEmpty(destFile))
             return false;
@@ -641,7 +652,15 @@ namespace Crosstales.Common.Util
                   if (move)
                   {
 #if UNITY_STANDALONE || UNITY_EDITOR
-                     System.IO.File.Move(sourceFile, dest);
+                     if (moveSafe)
+                     {
+                        System.IO.File.Copy(sourceFile, dest);
+                        System.IO.File.Delete(sourceFile);
+                     }
+                     else
+                     {
+                        System.IO.File.Move(sourceFile, dest);
+                     }
 #else
                      System.IO.File.Copy(sourceFile, dest);
                      System.IO.File.Delete(sourceFile);
@@ -1080,6 +1099,14 @@ namespace Crosstales.Common.Util
          return !string.IsNullOrEmpty(path) && !isDirectory(path, checkForExtensions);
       }
 
+      /// <summary>Checks if the path is the root.</summary>
+      /// <param name="path">Possible root</param>
+      /// <returns>True if the path is the root</returns>
+      public static bool isRoot(string path) //NUnit
+      {
+         return !string.IsNullOrEmpty(path) && (path.Equals("/") || (path.Length > 1 && path.Length < 4 && BaseConstants.REGEX_DRIVE_LETTERS.IsMatch(path)));
+      }
+
       /// <summary>Returns the file name for the path.</summary>
       /// <param name="path">Path to the file</param>
       /// <param name="removeInvalidChars">Removes invalid characters in the file name (optional, default: true)</param>
@@ -1153,7 +1180,8 @@ namespace Crosstales.Common.Util
                   dname = _path.Substring(_path.CTLastIndexOf(BaseConstants.PATH_DELIMITER_UNIX) + 1);
                }
 
-               dname = string.Join(string.Empty, dname.Split(_invalidPathChars));
+               if (HasPathInvalidChars(dname))
+                  dname = string.Join(string.Empty, dname.Split(_invalidPathChars));
             }
          }
 
@@ -1845,4 +1873,4 @@ namespace Crosstales.Common.Util
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

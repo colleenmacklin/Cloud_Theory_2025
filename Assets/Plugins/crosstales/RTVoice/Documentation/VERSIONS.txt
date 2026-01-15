@@ -1,4 +1,28 @@
-﻿# RT-Voice PRO - Release notes
+# RT-Voice PRO - Release notes
+
+## 2024.1.1 - 16.03.2024
+* Support for Unity Cloud Build improved
+* Updated to Common 2024.1.1
+
+## 2024.1.0 - 27.01.2024
+* iOS: fix for default voice
+* Updated to Common 2024.1.0
+
+## 2023.2.3 - 15.12.2023
+* Default voice is now the system voice on all platforms
+* CustomProviderController: ParentProvider added
+* Demo scene for "SAPI Unity" improved
+
+## 2023.2.2 - 20.11.2023
+* Provider for Mimic (Mycroft AI) added
+* MaryTTS improved for local installations
+* Most providers improved
+* Support for Unity Cloud Build
+* Updated to Common 2023.3.1
+
+## 2023.2.1 - 20.07.2023
+* UI of the demo scenes is working better in world space (AR/VR)
+* Updated to Common 2023.2.3
 
 ## 2023.2.0 - 30.06.2023
 * macOS/iOS: genders for new voices added

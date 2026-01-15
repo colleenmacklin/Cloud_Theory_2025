@@ -37,7 +37,7 @@ namespace Crosstales.RTVoice.Provider
 
       public override AudioType AudioFileType => AudioType.WAV;
 
-      public override string DefaultVoiceName => "en";
+      //public override string DefaultVoiceName => "en";
 
       public override bool isWorkingInEditor => true;
 
@@ -735,4 +735,4 @@ namespace Crosstales.RTVoice.Provider
    }
 }
 #endif
-// © 2018-2023 crosstales LLC (https://www.crosstales.com)
+// © 2018-2024 crosstales LLC (https://www.crosstales.com)

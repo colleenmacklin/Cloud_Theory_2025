@@ -1,10 +1,10 @@
 //
 //  RTVoiceIOSBridge.mm
-//  Version 2022.2.1
+//  Version 2023.2.4
 //
 //  Acts as a handler for all TTS functions called by RT-Voice on iOS.
 //
-//  © 2016-2022 crosstales LLC (https://www.crosstales.com)
+//  © 2016-2024 crosstales LLC (https://www.crosstales.com)
 //
 #import "RTVoiceIOSBridge.h"
 #import <AVFoundation/AVFoundation.h>
@@ -62,23 +62,25 @@ static NSArray *_voices;
 			[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil]; 
 			[[AVAudioSession sharedInstance] setActive:YES error:nil];
 			//[[AVAudioSession sharedInstance] setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-	
-            AVSpeechSynthesisVoice *voice = RTVoiceIOSBridge.voices[0]; // one voice must be available
+
+            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:text];            
+
+			if (id && ![@"" isEqualToString:id]) {
+	            AVSpeechSynthesisVoice *voice = RTVoiceIOSBridge.voices[0]; // one voice must be available
             
-            for (AVSpeechSynthesisVoice *v in RTVoiceIOSBridge.voices) {
-                if ([v.identifier isEqualToString:id])
-                {
-                    voice = v;
-                    break;
-                }
-            }
-
+	            for (AVSpeechSynthesisVoice *v in RTVoiceIOSBridge.voices) {
+	                if ([v.identifier isEqualToString:id])
+	                {
+	                    voice = v;
+	                    break;
+	                }
+	            }				
 #ifdef DEBUG
-            NSLog(@"speak - selected voice: %@", voice.name);
+      		  	NSLog(@"speak - selected voice: %@", voice.name);
 #endif
-            AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:text];
-            utterance.voice = voice;
-
+				utterance.voice = voice;
+			}
+			
             float adjustedRate = AVSpeechUtteranceDefaultSpeechRate * rate;
             
             if (adjustedRate > AVSpeechUtteranceMaximumSpeechRate)

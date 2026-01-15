@@ -10,12 +10,12 @@ namespace Crosstales.RTVoice.Demo.Util
 
       public Crosstales.RTVoice.Provider.BaseCustomVoiceProvider Provider;
 
-      [Header("WebGL")]
-      public bool KeepOnDestroy = false;
-      //public bool ParentProvider = false;
+      //[Header("WebGL")]
+      //public bool KeepOnDestroy = false;
+      public bool ParentProvider = false;
 
       private bool isCustom;
-      private Crosstales.RTVoice.Provider.BaseCustomVoiceProvider previousProvider;
+      //private Crosstales.RTVoice.Provider.BaseCustomVoiceProvider previousProvider;
 
       #endregion
 
@@ -24,23 +24,27 @@ namespace Crosstales.RTVoice.Demo.Util
 
       private void Start()
       {
+         isCustom = Speaker.Instance.CustomMode;
+
          if (Provider != null)
          {
-            isCustom = Speaker.Instance.CustomMode;
-            previousProvider = Speaker.Instance.CustomProvider;
+            //isCustom = Speaker.Instance.CustomMode;
+            //previousProvider = Speaker.Instance.CustomProvider;
 
             Speaker.Instance.CustomProvider = Provider;
             Speaker.Instance.CustomMode = true;
 
-            if (Crosstales.RTVoice.Util.Helper.isWebGLPlatform && KeepOnDestroy)
+            //if (Crosstales.RTVoice.Util.Helper.isWebGLPlatform && KeepOnDestroy)
+            if (ParentProvider)
             {
+               /*
                for (int ii = Speaker.Instance.transform.childCount - 1; ii >= 0; ii--)
                {
                   Transform child = Speaker.Instance.transform.GetChild(ii);
-                  //child.SetParent(null);
-                  Destroy(child.gameObject);
+                  child.SetParent(null);
+                  //Destroy(child.gameObject);
                }
-
+               */
                Provider.transform.SetParent(Speaker.Instance.transform);
             }
          }
@@ -50,16 +54,25 @@ namespace Crosstales.RTVoice.Demo.Util
       {
          if (Speaker.Instance != null)
          {
-            if (!Crosstales.RTVoice.Util.Helper.isWebGLPlatform || !KeepOnDestroy)
+            Speaker.Instance.CustomMode = isCustom;
+
+            //if (!Crosstales.RTVoice.Util.Helper.isWebGLPlatform || !KeepOnDestroy)
+            /*
+            if (ParentProvider)
             {
                Speaker.Instance.CustomMode = isCustom;
-               Speaker.Instance.CustomProvider = previousProvider;
-               //Provider.transform.SetParent(null);
+
+               if (previousProvider != null)
+               {
+                  Speaker.Instance.CustomProvider = previousProvider;
+                  //Provider.transform.SetParent(null);
+               }
             }
+            */
          }
       }
 
       #endregion
    }
 }
-// © 2020-2023 crosstales LLC (https://www.crosstales.com)
+// © 2020-2024 crosstales LLC (https://www.crosstales.com)

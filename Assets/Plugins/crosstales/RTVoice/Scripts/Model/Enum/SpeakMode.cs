@@ -7,4 +7,4 @@
       SpeakNative = 1
    }
 }
-// © 2016-2023 crosstales LLC (https://www.crosstales.com)
+// © 2016-2024 crosstales LLC (https://www.crosstales.com)

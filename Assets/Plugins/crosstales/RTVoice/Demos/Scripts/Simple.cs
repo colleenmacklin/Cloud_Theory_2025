@@ -255,4 +255,4 @@ namespace Crosstales.RTVoice.Demo
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

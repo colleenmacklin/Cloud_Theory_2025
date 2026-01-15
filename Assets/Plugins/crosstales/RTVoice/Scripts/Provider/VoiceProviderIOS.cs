@@ -33,7 +33,7 @@ namespace Crosstales.RTVoice.Provider
 
       public override AudioType AudioFileType => AudioType.UNKNOWN;
 
-      public override string DefaultVoiceName => "Daniel";
+      //public override string DefaultVoiceName => "Daniel";
 
       public override System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice> Voices => cachediOSVoices;
 
@@ -75,7 +75,7 @@ namespace Crosstales.RTVoice.Provider
 
          if (voices.Length % 3 == 0)
          {
-            System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice> voicesList = new System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice>(60);
+            System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice> voicesList = new System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice>(200);
 
             //for (int ii = 0; ii < voices.Length; ii += 2)
             for (int ii = 0; ii < voices.Length; ii += 3)
@@ -293,7 +293,8 @@ namespace Crosstales.RTVoice.Provider
             if (Crosstales.RTVoice.Util.Config.DEBUG)
                Debug.LogWarning("'wrapper.Voice' or 'wrapper.Voice.Identifier' is null! Using the OS 'default' voice.");
 
-            return Speaker.Instance.VoiceForName(DefaultVoiceName)?.Identifier;
+            //return Speaker.Instance.VoiceForName(DefaultVoiceName)?.Identifier;
+            return "";
          }
 
          return wrapper != null ? wrapper.Voice?.Identifier : Speaker.Instance.VoiceForName(DefaultVoiceName)?.Identifier;
@@ -353,4 +354,4 @@ namespace Crosstales.RTVoice.Provider
    }
 }
 #endif
-// © 2016-2023 crosstales LLC (https://www.crosstales.com)
+// © 2016-2024 crosstales LLC (https://www.crosstales.com)

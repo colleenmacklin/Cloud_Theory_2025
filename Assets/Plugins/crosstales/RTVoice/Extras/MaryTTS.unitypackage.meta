@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fa098edd5320bbd4999ef95dfbdb606e
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/RTVoice/Extras/MaryTTS.unitypackage
+  uploadId: 650789

@@ -952,7 +952,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -1376,7 +1376,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xA9 2015-2023 by crosstales LLC"
+  m_Text: "\xA9 2015-2024 by crosstales LLC"
 --- !u!114 &6960760812003598597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1402,7 +1402,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -1516,7 +1516,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -1782,7 +1782,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -1896,7 +1896,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -2417,7 +2417,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -2531,7 +2531,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1
@@ -2619,7 +2619,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2023.x.y
+  m_Text: 2024.x.y
 --- !u!114 &1344910584500874878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2645,7 +2645,7 @@ MonoBehaviour:
   mode: 0
   delay: 1.5
   speakIfChanged: 0
-  speakOnlyOnce: 0
+  speakOnce: 1
   silenceOnExit: 1
   source: {fileID: 0}
   rate: 1

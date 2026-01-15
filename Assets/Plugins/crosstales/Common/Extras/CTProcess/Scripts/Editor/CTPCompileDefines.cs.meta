@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7478ea2457a4f594ab8b532e3eeba97b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/Common/Extras/CTProcess/Scripts/Editor/CTPCompileDefines.cs
+  uploadId: 650789

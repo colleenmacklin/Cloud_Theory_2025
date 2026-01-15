@@ -94,4 +94,4 @@ namespace Crosstales.RTVoice.Tool
       public Crosstales.RTVoice.Provider.BaseCustomVoiceProvider CustomVoiceProvider;
    }
 }
-// © 2021-2023 crosstales LLC (https://www.crosstales.com)
+// © 2021-2024 crosstales LLC (https://www.crosstales.com)

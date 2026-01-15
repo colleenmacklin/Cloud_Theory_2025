@@ -62,7 +62,6 @@ namespace Crosstales.Common.Util
       #endregion
    }
 
-#if UNITY_EDITOR
    [UnityEditor.CustomEditor(typeof(CTHelper))]
    public class CTHelperEditor : UnityEditor.Editor
    {
@@ -71,7 +70,6 @@ namespace Crosstales.Common.Util
          UnityEditor.EditorGUILayout.HelpBox("This helper ensures the flawless working of the assets from 'crosstales LLC' inside the Editor.\nPlease do not delete it from the hierarchy.", UnityEditor.MessageType.Info);
       }
    }
-#endif
 }
 #endif
-// © 2020-2023 crosstales LLC (https://www.crosstales.com)
+// © 2020-2024 crosstales LLC (https://www.crosstales.com)

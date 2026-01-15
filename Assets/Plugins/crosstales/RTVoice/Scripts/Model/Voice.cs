@@ -106,6 +106,7 @@ namespace Crosstales.RTVoice.Model
          Voice o = (Voice)obj;
 
          return Name == o.Name &&
+                Culture == o.Culture &&
                 Description == o.Description &&
                 Gender == o.Gender &&
                 Age == o.Age &&
@@ -121,6 +122,8 @@ namespace Crosstales.RTVoice.Model
 
          if (Name != null)
             hash += Name.GetHashCode();
+         if (Culture != null)
+            hash += Culture.GetHashCode();
          if (Description != null)
             hash += Description.GetHashCode();
          hash += (int)Gender * 17;
@@ -192,4 +195,4 @@ namespace Crosstales.RTVoice.Model
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

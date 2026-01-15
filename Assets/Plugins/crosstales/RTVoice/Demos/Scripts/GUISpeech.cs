@@ -205,8 +205,10 @@ namespace Crosstales.RTVoice.Demo
 
                   //create a new item, name it, and set the parent
                   GameObject newItem = Instantiate(ItemPrefab, Target.transform, true);
-                  newItem.name = Target.name + " item at (" + ii + "," + jj + ")";
+                  newItem.transform.localPosition = Vector3.zero;
+                  newItem.transform.rotation = Target.transform.rotation;
                   newItem.transform.localScale = Vector3.one;
+                  newItem.name = Target.name + " item at (" + ii + "," + jj + ")";
 
                   if (AudioFilter != null)
                   {
@@ -257,4 +259,4 @@ namespace Crosstales.RTVoice.Demo
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

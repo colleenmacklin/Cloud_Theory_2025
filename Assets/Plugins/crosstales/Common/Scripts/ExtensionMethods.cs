@@ -76,7 +76,7 @@ namespace Crosstales
 
       /// <summary>
       /// Extension method for strings.
-      /// Case insensitive 'Replace'.
+      /// Default: case insensitive 'Replace'.
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <param name="oldString">String to replace.</param>
@@ -114,7 +114,25 @@ namespace Crosstales
 
       /// <summary>
       /// Extension method for strings.
-      /// Case insensitive 'Equals'.
+      /// Removes characters from a string
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <param name="removeChars">Characters to remove.</param>
+      /// <returns>String without the given characters.</returns>
+      public static string CTRemoveChars(this string str, params char[] removeChars)
+      {
+         if (str == null)
+            return str;
+
+         if (removeChars == null)
+            return str;
+
+         return removeChars.Aggregate(str, (current, rmChar) => current.Replace($"{rmChar}", string.Empty));
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Default: case insensitive 'Equals'.
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <param name="toCheck">String to check.</param>
@@ -130,7 +148,7 @@ namespace Crosstales
 
       /// <summary>
       /// Extension method for strings.
-      /// Case insensitive 'Contains'.
+      /// Default: case insensitive 'Contains'.
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <param name="toCheck">String to check.</param>
@@ -215,7 +233,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is numeric.</returns>
+      [System.Obsolete("Please use 'CTIsNumeric' instead.")]
       public static bool CTisNumeric(this string str)
+      {
+         return CTIsNumeric(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is numeric.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is numeric.</returns>
+      public static bool CTIsNumeric(this string str)
       {
          return str != null && double.TryParse(str, out double output);
       }
@@ -226,7 +256,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is integer.</returns>
+      [System.Obsolete("Please use 'CTIsInteger' instead.")]
       public static bool CTisInteger(this string str)
+      {
+         return CTIsInteger(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is integer.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is integer.</returns>
+      public static bool CTIsInteger(this string str)
       {
          if (str == null)
             return false;
@@ -240,7 +282,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is an email address.</returns>
+      [System.Obsolete("Please use 'CTIsEmail' instead.")]
       public static bool CTisEmail(this string str)
+      {
+         return CTIsEmail(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is an email address.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is an email address.</returns>
+      public static bool CTIsEmail(this string str)
       {
          return str != null && Crosstales.Common.Util.BaseConstants.REGEX_EMAIL.IsMatch(str);
       }
@@ -251,7 +305,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is a website address.</returns>
+      [System.Obsolete("Please use 'CTIsWebsite' instead.")]
       public static bool CTisWebsite(this string str)
+      {
+         return CTIsWebsite(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is a website address.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is a website address.</returns>
+      public static bool CTIsWebsite(this string str)
       {
          return str != null && Crosstales.Common.Util.BaseConstants.REGEX_URL_WEB.IsMatch(str);
       }
@@ -262,7 +328,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is a creditcard.</returns>
+      [System.Obsolete("Please use 'CTIsCreditcard' instead.")]
       public static bool CTisCreditcard(this string str)
+      {
+         return CTIsCreditcard(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is a creditcard.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is a creditcard.</returns>
+      public static bool CTIsCreditcard(this string str)
       {
          return str != null && Crosstales.Common.Util.BaseConstants.REGEX_CREDITCARD.IsMatch(str);
       }
@@ -273,7 +351,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is an IPv4 address.</returns>
+      [System.Obsolete("Please use 'CTIsIPv4' instead.")]
       public static bool CTisIPv4(this string str)
+      {
+         return CTIsIPv4(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is an IPv4 address.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is an IPv4 address.</returns>
+      public static bool CTIsIPv4(this string str)
       {
          return str != null && Crosstales.Common.Util.NetworkHelper.isIPv4(str);
       }
@@ -284,9 +374,34 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string is alphanumeric.</returns>
+      [System.Obsolete("Please use 'CTIsAlphanumeric' instead.")]
       public static bool CTisAlphanumeric(this string str)
       {
+         return CTIsAlphanumeric(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string is alphanumeric.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string is alphanumeric.</returns>
+      public static bool CTIsAlphanumeric(this string str)
+      {
          return str != null && Crosstales.Common.Util.BaseConstants.REGEX_ALPHANUMERIC.IsMatch(str);
+      }
+
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string has line endings.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string has line endings.</returns>
+      [System.Obsolete("Please use 'CTHasLineEndings' instead.")]
+      public static bool CThasLineEndings(this string str)
+      {
+         return CTHasLineEndings(str);
       }
 
       /// <summary>
@@ -295,7 +410,7 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string has line endings.</returns>
-      public static bool CThasLineEndings(this string str)
+      public static bool CTHasLineEndings(this string str)
       {
          return str != null && Crosstales.Common.Util.BaseConstants.REGEX_LINEENDINGS.IsMatch(str);
       }
@@ -306,7 +421,19 @@ namespace Crosstales
       /// </summary>
       /// <param name="str">String-instance.</param>
       /// <returns>True if the string has invalid characters.</returns>
+      [System.Obsolete("Please use 'CTHasInvalidChars' instead.")]
       public static bool CThasInvalidChars(this string str)
+      {
+         return CTHasInvalidChars(str);
+      }
+
+      /// <summary>
+      /// Extension method for strings.
+      /// Checks if the string has invalid characters.
+      /// </summary>
+      /// <param name="str">String-instance.</param>
+      /// <returns>True if the string has invalid characters.</returns>
+      public static bool CTHasInvalidChars(this string str)
       {
          return str != null && Crosstales.Common.Util.BaseConstants.REGEX_INVALID_CHARS.IsMatch(str);
       }
@@ -2379,12 +2506,18 @@ namespace Crosstales
       /// <returns>True if the AudioSource has an active clip.</returns>
       public static bool CTHasActiveClip(this AudioSource source)
       {
+         if (source == null)
+            return false;
+
+         if (source.clip == null)
+            return false;
+
          bool loop;
          int timeSamples;
-         return source != null && source.clip != null &&
-                (source.isPlaying ||
+
+         return (source.isPlaying ||
                  (loop = source.loop) ||
-                 (!loop && (timeSamples = source.timeSamples) > 0 && timeSamples < source.clip.samples - 256));
+                 (!loop && (timeSamples = source.timeSamples) > 0 && timeSamples < source.clip.samples - 1024));
       }
 
       #endregion
@@ -2575,4 +2708,4 @@ namespace Crosstales
   */
    }
 }
-// © 2016-2023 crosstales LLC (https://www.crosstales.com)
+// © 2016-2024 crosstales LLC (https://www.crosstales.com)

@@ -25,16 +25,16 @@ namespace Crosstales.RTVoice.Provider
 
       #region Properties
 
-/*
-      /// <summary>Returns the singleton instance of this class.</summary>
-      /// <returns>Singleton instance of this class.</returns>
-      public static VoiceProviderMacOS Instance => instance ?? (instance = new VoiceProviderMacOS());
-*/
+      /*
+            /// <summary>Returns the singleton instance of this class.</summary>
+            /// <returns>Singleton instance of this class.</returns>
+            public static VoiceProviderMacOS Instance => instance ?? (instance = new VoiceProviderMacOS());
+      */
       public override string AudioFileExtension => ".wav";
 
       public override AudioType AudioFileType => AudioType.WAV;
 
-      public override string DefaultVoiceName => "Alex";
+      //public override string DefaultVoiceName => "Daniel";
 
       public override bool isWorkingInEditor => Crosstales.RTVoice.Util.Helper.isMacOSEditor;
 
@@ -115,9 +115,7 @@ namespace Crosstales.RTVoice.Provider
                using (System.Diagnostics.Process process = new System.Diagnostics.Process())
 #endif
                {
-                  string args = (string.IsNullOrEmpty(voiceName)
-                                   ? string.Empty
-                                   : " -v \"" + voiceName.Replace('"', '\'') + '"') +
+                  string args = (string.IsNullOrEmpty(voiceName) ? string.Empty : " -v \"" + voiceName.Replace('"', '\'') + '"') +
                                 (calculatedRate != defaultRate ? " -r " + calculatedRate : string.Empty) + " \"" +
                                 wrapper.Text.Replace('"', '\'') + '"';
 
@@ -209,9 +207,7 @@ namespace Crosstales.RTVoice.Provider
                   using (System.Diagnostics.Process process = new System.Diagnostics.Process())
 #endif
                   {
-                     string args = (string.IsNullOrEmpty(voiceName)
-                                      ? string.Empty
-                                      : $" -v \"{voiceName.Replace('"', '\'')}\"") +
+                     string args = (string.IsNullOrEmpty(voiceName) ? string.Empty : " -v \"" + voiceName.Replace('"', '\'') + '"') +
                                    (calculatedRate != defaultRate ? $" -r {calculatedRate}" : string.Empty) +
                                    $" -o \"{outputFile.Replace('"', '\'')}\"" +
                                    //" --file-format=AIFFLE"
@@ -243,8 +239,7 @@ namespace Crosstales.RTVoice.Provider
 
                      if (process.ExitCode == 0)
                      {
-                        yield return playAudioFile(wrapper, Crosstales.RTVoice.Util.Constants.PREFIX_FILE + outputFile, outputFile,
-                           AudioFileType);
+                        yield return playAudioFile(wrapper, Crosstales.Common.Util.NetworkHelper.GetURLFromFile(outputFile), outputFile, AudioFileType);
                      }
                      else
                      {
@@ -298,9 +293,7 @@ namespace Crosstales.RTVoice.Provider
                using (System.Diagnostics.Process process = new System.Diagnostics.Process())
 #endif
                {
-                  string args = (string.IsNullOrEmpty(voiceName)
-                                   ? string.Empty
-                                   : $" -v \"{voiceName.Replace('"', '\'')}\"") +
+                  string args = (string.IsNullOrEmpty(voiceName) ? string.Empty : " -v \"" + voiceName.Replace('"', '\'') + '"') +
                                 (calculatedRate != defaultRate ? $" -r {calculatedRate}" : string.Empty) +
                                 $" -o \"{outputFile.Replace('"', '\'')}\"" +
                                 //" --file-format=AIFFLE"
@@ -417,7 +410,7 @@ namespace Crosstales.RTVoice.Provider
             if (process.ExitCode == 0)
             {
                System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice> voices =
-                  new System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice>(60);
+                  new System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice>(200);
 
                using (System.IO.StreamReader streamReader = process.StandardOutput)
                {
@@ -507,9 +500,7 @@ namespace Crosstales.RTVoice.Provider
                using (System.Diagnostics.Process process = new System.Diagnostics.Process())
 #endif
                {
-                  string args = (string.IsNullOrEmpty(voiceName)
-                                   ? string.Empty
-                                   : $" -v \"{voiceName.Replace('"', '\'')}\"") +
+                  string args = (string.IsNullOrEmpty(voiceName) ? string.Empty : " -v \"" + voiceName.Replace('"', '\'') + '"') +
                                 (calculatedRate != defaultRate ? $" -r {calculatedRate}" : string.Empty) +
                                 $" -o \"{outputFile.Replace('"', '\'')}\"" +
                                 //" --file-format=AIFFLE"
@@ -577,9 +568,7 @@ namespace Crosstales.RTVoice.Provider
                using (System.Diagnostics.Process process = new System.Diagnostics.Process())
 #endif
                {
-                  string args = (string.IsNullOrEmpty(voiceName)
-                                   ? string.Empty
-                                   : " -v \"" + voiceName.Replace('"', '\'') + '"') +
+                  string args = (string.IsNullOrEmpty(voiceName) ? string.Empty : " -v \"" + voiceName.Replace('"', '\'') + '"') +
                                 (calculatedRate != defaultRate ? " -r " + calculatedRate : string.Empty) + " \"" +
                                 wrapper.Text.Replace('"', '\'') + '"';
 
@@ -660,7 +649,7 @@ namespace Crosstales.RTVoice.Provider
                if (process.ExitCode == 0)
                {
                   System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice> voices =
-                     new System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice>(100);
+                     new System.Collections.Generic.List<Crosstales.RTVoice.Model.Voice>(200);
 
                   using (System.IO.StreamReader streamReader = process.StandardOutput)
                   {
@@ -713,4 +702,4 @@ namespace Crosstales.RTVoice.Provider
    }
 }
 #endif
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

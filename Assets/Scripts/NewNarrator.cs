@@ -9,6 +9,8 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using UnityEditor.Build.Reporting;
+using Crosstales.RTVoice;
+using Crosstales.RTVoice.Model;
 
 
 public class NewNarrator : MonoBehaviour
@@ -17,7 +19,7 @@ public class NewNarrator : MonoBehaviour
     public List<string> cloudHistory;
     public List<string> targetClouds;
     public LLM llm;
-    public LLMCharacter llmCharacter;
+    public LLMAgent llmCharacter;
     public string Prompt = "...";
     public string chosenCloud;
     public TextMeshProUGUI ChatText;
@@ -28,6 +30,7 @@ public class NewNarrator : MonoBehaviour
     //public TextMeshProUGUI RandomWord;
     //public TextMeshProUGUI Role;
     public int numWords;
+    public SimpleRTVoiceExample voice;
 
     private void OnEnable()
     {
@@ -62,6 +65,7 @@ public class NewNarrator : MonoBehaviour
         var shape = parseName(chosenCloud);
         var prompt = CreatePrompt(shape);
         _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
+
     }
 
     public void respond_to_shape(string s)
@@ -79,6 +83,8 @@ public class NewNarrator : MonoBehaviour
     {
         Debug.Log("setting Narration Text: " + text);
         ChatText.text = text;
+        voice.Text = text;
+
     }
 
     public void SetCompleteText(string text)
@@ -150,8 +156,12 @@ public class NewNarrator : MonoBehaviour
         //Debug.Log(Application.persistentDataPath);
         //addData();
         //playerText.text = "";
+        //speak();
     }
-
+    public void speak()
+    {
+        voice.Speak();
+    }
     public void summarize()
     {
         var text = CompleteText.text;
