@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5540691430044537753
 Transform:
   m_ObjectHideFlags: 0
@@ -174,9 +174,9 @@ MonoBehaviour:
   ps: {fileID: 4001077985846674118}
   changeTimeMin: 70
   changeTimeMax: 100
-  minScale: 18
-  maxScale: 23
-  scale: 0
+  minScale: 2
+  maxScale: 6
+  scale: 1
   currScale: 0
   cloudVisX: -80
   shapeRenderer: {fileID: 4001077985846721382}
@@ -237,7 +237,7 @@ ConstantForce:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4001077985798978744}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Force: {x: -0.02, y: 0, z: 0}
   m_RelativeForce: {x: 0, y: 0, z: 0}
   m_Torque: {x: 0, y: 0, z: 0}
@@ -1623,11 +1623,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.maxNumParticles
-      value: 3000
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -1635,11 +1635,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 3000
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
@@ -1648,6 +1648,22 @@ PrefabInstance:
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key0.b
+      value: 0.7169812
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key0.g
+      value: 0.7169812
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.key0.r
+      value: 0.7169812
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: InitialModule.startColor.maxGradient.m_ColorSpace
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19900000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_AllowRoll

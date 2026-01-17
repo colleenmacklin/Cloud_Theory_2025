@@ -22,6 +22,7 @@ public class NewNarrator : MonoBehaviour
     public LLMAgent llmCharacter;
     public string Prompt = "...";
     public string chosenCloud;
+    public string chosenTheme;
     public TextMeshProUGUI ChatText;
     public TextMeshProUGUI CompleteText;
 
@@ -34,49 +35,31 @@ public class NewNarrator : MonoBehaviour
 
     private void OnEnable()
     {
-      Actions.ChooseCloud += LookAtCloud;  
+        Actions.ChooseCloud += LookAtCloud;  
+        Actions.ChooseTheme += setTheme;
     }
 
     private void OnDisable()
     {
-      Actions.ChooseCloud -= LookAtCloud;  
+        Actions.ChooseCloud -= LookAtCloud;  
+        Actions.ChooseTheme -= setTheme;
+
     }
-
-   
-
+    public void setTheme(string theme) 
+    {
+        //set the theme variable for the prompt
+        chosenTheme = theme;
+    }
     public void LookAtCloud(string s)
     {
         cloudHistory.Add(s);
-        //Debug.Log("cloudhistory: "+cloudHistory.Last());
-        chosenCloud = s;
-        chatPrompt(s);
+        chosenCloud = parseName(s);
+        respondToShape(s);
     }
-
-    public void completePrompt(string s)
+    public void respondToShape(string s)
     {
-        var shape = parseName(chosenCloud);
-        var prompt = CreateCompletionPrompt(shape);
-        //_ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
-
-    }
-
-    public void chatPrompt(string s)
-    {
-        var shape = parseName(chosenCloud);
-        var prompt = CreatePrompt(shape);
+        var prompt = CreatePrompt();
         _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
-
-    }
-
-    public void respond_to_shape(string s)
-    {
-        var shape = parseName(chosenCloud);
-        //Debug.Log("respond to: "+shape);
-        //var prompt = CreatePrompt(shape);
-        //_ = llmCharacter.Chat(prompt, SetNarrationText, AIReplyComplete);
-        var prompt = CreateCompletionPrompt(shape);
-        //_ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
-        //some more code here
     }
 
     public void SetChatText(string text)
@@ -84,13 +67,6 @@ public class NewNarrator : MonoBehaviour
         Debug.Log("setting Narration Text: " + text);
         ChatText.text = text;
         voice.Text = text;
-
-    }
-
-    public void SetCompleteText(string text)
-    {
-        Debug.Log("setting Narration Text: " + text);
-        CompleteText.text = text;
     }
     public void SetSummaryText(string text)
     {
@@ -104,28 +80,47 @@ public class NewNarrator : MonoBehaviour
         string name = s.Replace("_", " ");
         return name;
     }
-    public string CreatePrompt(string s)
+    public string CreatePrompt()
     {
         //flip a coin
         int num = Random.Range(1,2);
         string Prompt;
-        //if (Role.text == "") {Role.text = "the socialist philosopher Bertand Russell";}
         if (num == 1 && cloudHistory.Count > 1)
         {
             cloudHistory.Shuffle(); 
             var pc = cloudHistory.Last();
             string pastCloud = parseName(pc);
-            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly melancholic socialist philosopher. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ s+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen." + "\n"+"2. Weave in philosophical themes like the transience of power (impermanence), the subjectivity of perception, or the nature of 'form.'"+"\n"+"3. Keep the tone contemplative, poetic, and intimate."+"\n"+"4. Do not write Colleen's responses; leave space or use '...' to imply her pauses, but focus on Colleen's spoken words."+"\n"+"5. Connect your comments to the previously seen cloud shape, "+pastCloud+"."+"\n"+"6. End with a question that shifts the focus to a new cloud shape."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
+            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly melancholic socialist philosopher. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue with no attribution. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ chosenCloud+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen." + "\n"+"2. Weave in the philosophical theme of "+chosenTheme+"\n"+"3. Keep the tone contemplative, poetic, and intimate."+"\n"+"4. Do not write Colleen's responses; leave space or use '...' to imply her pauses, but focus on Colleen's spoken words."+"\n"+"5. Connect your comments to the previously seen cloud shape, "+pastCloud+"."+"\n"+"6. Keep your comments to " + numWords + " words or less."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
             //Prompt = "In the style of " +Role.text +" tell a hypothetical story about a cloud shaped like " + s + " and how it is related to "+pastCloud+". Ponder the significance of seeing these two shapes in one day, and include the shape names in your theory. You must include the word "+RandomWord.text+" in your response. Stay in the present tense and keep your remarks to "+wordCount+" words or less.";
         }else
         {
-            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly stoned student of philosophy. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ s+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen" + "\n" + "2. Reference the shape by name"+"("+s+")"+" in the first sentence." + "\n" + "3. Weave in philosophical themes like the nature of consciousness, the subjectivity of perception, or the nature of ‘reality’(metaphysics) and simulation theory."+"\n"+"4. Keep the tone contemplative, poetic, and intimate but don’t be afraid to say something weird."+"\n"+"5. Do not write Colleen's responses; leave space or use '...' to imply their pauses, but focus on Colleen's spoken words."+"\n"+"6. Keep your comments to " + numWords + " words or less."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
+            Prompt = "<start_of_turn>user"+"\n"+"Act as \"Bertrand,\" a thoughtful and slightly stoned student of philosophy. You are lying on a grassy hill with your lifelong friend, Colleen. "+"\n"+ "TASK: "+"\n" + "Write only Bertrand's side of a dialogue with no attribution. Colleen has just pointed at a cloud and said, \"Look at that one, Bertrand—it looks like a "+ chosenCloud+ ".\"" + "\n" + "CONSTRAINTS:"+"\n"+"1. Speak directly to Colleen" + "\n" + "2. Reference the shape by name"+"("+chosenCloud+")"+" in the first sentence." + "\n" + "3. Weave in the philosophical theme of "+chosenTheme+"\n"+"4. Keep the tone contemplative, poetic, and intimate but don't be afraid to say something weird."+"\n"+"5. Do not write Colleen's responses; leave space or use '...' to imply their pauses, but focus on Colleen's spoken words."+"\n"+"6. Keep your comments to " + numWords + " words or less."+"\n"+"<end_of_turn>"+"\n"+"<start_of_turn>model";
         }
         ///need to add null checks
         PromptText.text = Prompt;
         return Prompt;
     }
+/*    
+public void SetCompleteText(string text)
+    {
+        Debug.Log("setting Narration Text: " + text);
+        CompleteText.text = text;
+    }
+    */
 
+    /*    
+public void respond_to_shape(string s)
+    {
+        var shape = parseName(chosenCloud);
+        //Debug.Log("respond to: "+shape);
+        //var prompt = CreatePrompt(shape);
+        //_ = llmCharacter.Chat(prompt, SetNarrationText, AIReplyComplete);
+        //var prompt = CreateCompletionPrompt(shape);
+        //_ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
+        //some more code here
+    }
+*/
+/*
     public string CreateCompletionPrompt(string s)
     {
         //flip a coin
@@ -148,7 +143,7 @@ public class NewNarrator : MonoBehaviour
         PromptText.text = Prompt;
         return Prompt;
     }
-
+*/
     public void AIReplyComplete()
     {
         Debug.Log("Saving history");
@@ -164,7 +159,7 @@ public class NewNarrator : MonoBehaviour
     }
     public void summarize()
     {
-        var text = CompleteText.text;
+        var text = ChatText.text;
         var preface_prompt = PromptText.text;
         var prompt = CreateSummaryPrompt(PromptText.text +" "+text);
         Debug.Log("Summarize: "+prompt);
@@ -237,5 +232,16 @@ return Application.dataPath;// +"/"+ fileName;
     }
 
 */
+
+/*
+    public void completePrompt(string s)
+    {
+        var shape = parseName(chosenCloud);
+        var prompt = CreateCompletionPrompt(shape);
+        //_ = llmCharacter.Complete(prompt, SetCompleteText, AIReplyComplete);
+
+    }
+*/
+
 
 }

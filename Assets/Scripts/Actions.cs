@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 public static class Actions
 {
     // Contains all the actions for our game!!
@@ -45,6 +46,6 @@ public static class Actions
     
     
     //testscene actions
-    public static Action <string> RespondToShape; //may not need this
+    public static Action <string> ChooseTheme;
     public static Action <string> ChooseCloud; //sends name of cloud to Narrator, etc...
 }
