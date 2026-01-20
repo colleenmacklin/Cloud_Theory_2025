@@ -11,6 +11,8 @@ using UnityEngine.UI;
 using UnityEditor.Build.Reporting;
 using Crosstales.RTVoice;
 using Crosstales.RTVoice.Model;
+using UnityEngine.Android;
+using Unity.VisualScripting;
 
 
 public class NewNarrator : MonoBehaviour
@@ -21,30 +23,38 @@ public class NewNarrator : MonoBehaviour
     public LLM llm;
     public LLMAgent llmCharacter;
     public string Prompt = "...";
+    public string Response = "";
     public string chosenCloud;
     public string chosenTheme;
     public TextMeshProUGUI ChatText;
     public TextMeshProUGUI CompleteText;
-
+    public Subtitle_Handler Subtitles;
     public TextMeshProUGUI SummaryText;
     public TextMeshProUGUI PromptText;
     //public TextMeshProUGUI RandomWord;
     //public TextMeshProUGUI Role;
     public int numWords;
-    public SimpleRTVoiceExample voice;
+    public VoiceHandler voice;
+    public SentenceSplitter sentenceSplitter;
+
+    private Queue<string> lines = new Queue<string>();
+    private bool isNarrating = false;
+
 
     private void OnEnable()
     {
         Actions.ChooseCloud += LookAtCloud;  
         Actions.ChooseTheme += setTheme;
+        voice.OnSpeechComplete += OnLineComplete;
     }
 
     private void OnDisable()
     {
         Actions.ChooseCloud -= LookAtCloud;  
         Actions.ChooseTheme -= setTheme;
-
+        voice.OnSpeechComplete -= OnLineComplete;
     }
+
     public void setTheme(string theme) 
     {
         //set the theme variable for the prompt
@@ -64,14 +74,73 @@ public class NewNarrator : MonoBehaviour
 
     public void SetChatText(string text)
     {
-        Debug.Log("setting Narration Text: " + text);
-        ChatText.text = text;
-        voice.Text = text;
+        //Debug.Log("setting Narration Text: " + text);
+        Response = text;
+        ChatText.text = Response;
     }
+
+    public void AIReplyComplete()
+    {
+        Debug.Log("AI reply complete");
+        //speak();
+        StartNarration(Response);
+        //llmCharacter.Save("CloudChatHistory");
+        //Debug.Log(Application.persistentDataPath);
+        //addData();
+        //playerText.text = "";
+    }
+
+    public void StartNarration(string paragraph)
+    {
+        List<string> splitLines = sentenceSplitter.SplitParagraphIntoSentences(Response);
+
+        lines.Clear();
+        
+        foreach (string line in splitLines)
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+                lines.Enqueue(line);
+        }
+        
+        SpeakNextLine();
+    }
+    
+    private void SpeakNextLine()
+    {
+        if (lines.Count > 0)
+        {
+            string nextLine = lines.Dequeue();
+            voice.SpeakLine(nextLine);
+            printSubtitle(nextLine);
+        }
+        else
+        {
+            isNarrating = false;
+            fadeOutSubtitle();
+        }
+    }
+    
+    private void OnLineComplete()
+    {
+        SpeakNextLine(); // Speak the next line when current one finishes
+    }
+
     public void SetSummaryText(string text)
     {
         Debug.Log("Summary: " + text);
         SummaryText.text = text;
+    }
+
+    //subtitle StartFadeSequence
+    private void printSubtitle(string text)
+    {
+        //should print one line to screen, then when the line has been read, print the next line
+        Subtitles.StartTextSequence(text);
+    }
+
+    private void fadeOutSubtitle()
+    {
+            Subtitles.speakEnd();
     }
 
     // Utilities
@@ -100,7 +169,31 @@ public class NewNarrator : MonoBehaviour
         PromptText.text = Prompt;
         return Prompt;
     }
-/*    
+
+    public void summarize()
+    {
+        var text = ChatText.text;
+        var preface_prompt = PromptText.text;
+        var prompt = CreateSummaryPrompt(PromptText.text +" "+text);
+        Debug.Log("Summarize: "+prompt);
+        _ = llmCharacter.Chat(prompt, SetSummaryText, AIReplyComplete);
+    }
+
+    public string CreateSummaryPrompt(string s)
+    {
+        string summaryPrompt  = "Shorten this story to two sentences: "+s+"\n only respond with the sentences, do not add any commentary. Keep the language simple.";
+        return summaryPrompt;
+    }
+    public void CancelRequests()
+    {
+        llmCharacter.CancelRequests();
+        AIReplyComplete();
+    }
+   // bool onValidateWarning = true;
+
+
+
+    /*    
 public void SetCompleteText(string text)
     {
         Debug.Log("setting Narration Text: " + text);
@@ -144,40 +237,8 @@ public void respond_to_shape(string s)
         return Prompt;
     }
 */
-    public void AIReplyComplete()
-    {
-        Debug.Log("Saving history");
-        //llmCharacter.Save("CloudChatHistory");
-        //Debug.Log(Application.persistentDataPath);
-        //addData();
-        //playerText.text = "";
-        //speak();
-    }
-    public void speak()
-    {
-        voice.Speak();
-    }
-    public void summarize()
-    {
-        var text = ChatText.text;
-        var preface_prompt = PromptText.text;
-        var prompt = CreateSummaryPrompt(PromptText.text +" "+text);
-        Debug.Log("Summarize: "+prompt);
-        _ = llmCharacter.Chat(prompt, SetSummaryText, AIReplyComplete);
-    }
 
-    public string CreateSummaryPrompt(string s)
-    {
-        string summaryPrompt  = "Shorten this story to two sentences: "+s+"\n only respond with the sentences, do not add any commentary. Keep the language simple.";
-        return summaryPrompt;
-    }
-    public void CancelRequests()
-    {
-        llmCharacter.CancelRequests();
-        AIReplyComplete();
-    }
-    bool onValidateWarning = true;
-    /*
+/*
     void OnValidate()
     {
         if (onValidateWarning && !llmCharacter.remote && llmCharacter.llm != null && llmCharacter.llm.model == "")
