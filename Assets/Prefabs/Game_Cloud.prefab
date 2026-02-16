@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 1732193966}
   - component: {fileID: 857159031385798982}
   - component: {fileID: -6267938805638723363}
+  - component: {fileID: 4038244025885235559}
   m_Layer: 9
   m_Name: Game_Cloud
   m_TagString: Cloud
@@ -192,13 +193,13 @@ MonoBehaviour:
   changeTimeMax: 100
   minScale: 4
   maxScale: 6
-  scale: 1
+  scale: 5
   currScale: 0
   scaleRatio: {x: 0, y: 0, z: 0}
   cloudVisX: -80
   shapeRenderer: {fileID: 4001077985846721382}
-  isGameLoop: 1
-  keepDebugObjectsVisible: 0
+  isGameLoop: 0
+  keepDebugObjectsVisible: 1
 --- !u!54 &857159031385798982
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -238,6 +239,19 @@ ConstantForce:
   m_RelativeForce: {x: 0, y: 0, z: 0}
   m_Torque: {x: 0, y: 0, z: 0}
   m_RelativeTorque: {x: 0, y: 0, z: 0}
+--- !u!114 &4038244025885235559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4001077985798978744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ec82f4683316473a9ac98319e694e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeObject
+  fadeDuration: 3
 --- !u!1 &4283325264062887905
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,11 +448,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: prewarm
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: cullingMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: lengthInSec
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: playOnAwake
@@ -450,7 +468,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: simulationSpeed
-      value: 0.05
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: ShapeModule.m_Rotation.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: ExternalForcesModule.enabled
@@ -466,7 +488,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: InitialModule.startSize.minScalar
