@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class Raycaster : MonoBehaviour
+public class MouseRay : MonoBehaviour
 {
-    //public event Action<GameObject> OnHoverOverTargetCloud;
-    //public event Action OnHoverExit;
+    // Reference to the Camera component (gets it automatically in Start)
+    public Camera cam;
     public GameState gameState;
 
     [SerializeField]
@@ -26,8 +26,6 @@ public class Raycaster : MonoBehaviour
     Vector3 lookAtSelected = new Vector3();
     //Get the camera mover so we can turn it on and off during dialogue
     public UnityTemplateProjects.SimpleCameraController gazeMover; //attached to the camera *it probably shouldn't be
-    //public TextBoxController textBoxControl;
-
     //View FOcus settings
     [SerializeField]
     [Range(.01f, 1f)]
@@ -35,17 +33,8 @@ public class Raycaster : MonoBehaviour
     [SerializeField]
     [Range(.01f, 1f)]
     private float focusOutSpeed = .01f;
-
-    // Raycasting variables 
-    Ray ray;
-    RaycastHit hit;
-    LayerMask mask;
-
-    public float rayLength = 1000f; 
-
-
-    Quaternion initialCameraRot;
     Coroutine activeCoroutine;
+    RaycastHit hit;
 
 
     void OnEnable()
@@ -66,89 +55,28 @@ public class Raycaster : MonoBehaviour
 
     void Start()
     {
+        // Get the Camera component attached to this GameObject
+        cam = GetComponent<Camera>();
+        if (cam == null)
+        {
+            Debug.LogError("No Camera component found on this GameObject.");
+        }
+
         StartGazeTracking();
+
     }
-    void ReadingMode()
-    {
-        state = MouseState.READING;
-        StartGazeTracking(); //shouldnt this be stop gazeTracking? //CM COMMENTED OUT 7/31
-    }
-
-    //None of the tracking should be doing as many mutations as it is now
-    //gazeMover, state, and the coroutines all require some reconfiguration in the future
-    void StartGazeTracking()
-    {
-        if (activeCoroutine != null)
-        {
-
-            StopCoroutine(activeCoroutine);
-
-        }
-       // activeCoroutine = StartCoroutine(ReturnToDefaultView());
-
-        gazeMover.enabled = true;
-        state = MouseState.EMPTY;
-    }
-    void StopGazeTracking()
-    {
-        ReadingMode();
-        if (activeCoroutine != null)
-        {
-            StopCoroutine(activeCoroutine);
-        }
-        gazeMover.enabled = false;
-        activeCoroutine = StartCoroutine(LookAtSelection());
-        //EventManager.TriggerEvent("closeEye");
-    }
-
-    //CM turned this on again so that the centire cloud can be seen when it is being talked about (7/30/2023)
-    //Look directly at target
-    IEnumerator LookAtSelection()
-    {
-        Quaternion rot = Quaternion.LookRotation(Selected.transform.position, Camera.main.transform.up);
-
-        while (Quaternion.Angle(rot, Camera.main.transform.localRotation) > 1f)
-        {
-            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, rot, focusInSpeed);
-
-            //Debug.Log($"looking at target, {rot},{Camera.main.transform.localRotation}");
-            yield return null;
-        }
-      
-        Debug.Log("TargetFound");
-    }
-
 
     void Update()
     {
-        //always cast the ray
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //Physics.Raycast(ray, out hit, Mathf.Infinity, mask);
-        Physics.Raycast(ray, out hit, rayLength, mask);
-        Vector3 origin = transform.position;
+        // Cast a ray every frame to follow the mouse position
+        //CastMouseRay(); //defaul good for debugging
+        CastToClouds();
+    }
 
-        Vector3 direction = transform.forward;
-        if (Physics.Raycast(ray, out hit, rayLength, mask))
-        {
-            // If the ray hits an object, this block of code executes
-            Debug.Log("Did Hit: " + hit.transform.name); // Log the name of the object hit
-            
-            // You can also access other information like the hit point:
-            // Debug.Log("Hit point: " + hit.point); 
-            
-            // Or interact with a component on the hit object (if it exists):
-            // Target targetComponent = hit.transform.GetComponent<Target>();
-            // if (targetComponent != null)
-            // {
-            //     targetComponent.SelfDestruct(); // Call a function on the hit object's script
-            // }
-        }
-        else
-        {
-            // If the ray does not hit any object
-            Debug.Log("Did not Hit");
-        }
-
+private void CastToClouds(){
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+{ 
         switch (state)
         {
             case MouseState.EMPTY:
@@ -202,9 +130,83 @@ public class Raycaster : MonoBehaviour
                 
                 break;
         }
-        Debug.DrawRay(origin, direction * rayLength, Color.red);
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
+         }
+}
+    void CastMouseRay()
+    {
+        // Create a ray from the current mouse position in screen space
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
+        // Perform the raycast
+        // The max distance can be set to a specific value or Mathf.Infinity
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            // If the ray hits an object, you can access its information
+            Debug.Log("Hit object: " + hit.transform.name + " at point: " + hit.point);
+            
+            // Optional: Draw a debug line in the Scene view to visualize the raycast
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
+            
+            // You can add code here to make another object move to `hit.point`,
+            // change the color of the hit object, or trigger other events.
+        }
+        else
+        {
+            // Optional: Draw a debug line if the ray doesn't hit anything within the max distance
+            Debug.DrawRay(ray.origin, ray.direction * 100, Color.blue);
+        }
+    }
 
+    void ReadingMode()
+    {
+        state = MouseState.READING;
+        StartGazeTracking(); //shouldnt this be stop gazeTracking? //CM COMMENTED OUT 7/31
+    }
+
+    //None of the tracking should be doing as many mutations as it is now
+    //gazeMover, state, and the coroutines all require some reconfiguration in the future
+    void StartGazeTracking()
+    {
+        if (activeCoroutine != null)
+        {
+
+            StopCoroutine(activeCoroutine);
+
+        }
+       // activeCoroutine = StartCoroutine(ReturnToDefaultView());
+
+        gazeMover.enabled = true;
+        state = MouseState.EMPTY;
+    }
+    void StopGazeTracking()
+    {
+        ReadingMode();
+        if (activeCoroutine != null)
+        {
+            StopCoroutine(activeCoroutine);
+        }
+        gazeMover.enabled = false;
+        activeCoroutine = StartCoroutine(LookAtSelection());
+        //EventManager.TriggerEvent("closeEye");
+    }
+
+    //CM turned this on again so that the centire cloud can be seen when it is being talked about (7/30/2023)
+    //Look directly at target
+    IEnumerator LookAtSelection()
+    {
+        Quaternion rot = Quaternion.LookRotation(Selected.transform.position, Camera.main.transform.up);
+
+        while (Quaternion.Angle(rot, Camera.main.transform.localRotation) > 1f)
+        {
+            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, rot, focusInSpeed);
+
+            //Debug.Log($"looking at target, {rot},{Camera.main.transform.localRotation}");
+            yield return null;
+        }
+      
+        Debug.Log("TargetFound");
     }
 
     public void StartCloudTalking()
@@ -220,5 +222,6 @@ public class Raycaster : MonoBehaviour
         Actions.Respond?.Invoke();
         state = MouseState.READING;
     }
+
 
 }
