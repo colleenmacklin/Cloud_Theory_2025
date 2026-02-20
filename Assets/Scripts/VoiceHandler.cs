@@ -52,6 +52,11 @@ public class VoiceHandler : MonoBehaviour
       }
    }
 
+   void Start()
+   {
+      SpeakLine("hey Colleen, let's make this game amazing!");
+   }
+
     public void SpeakLine(string text)
     {
         if (isSpeaking) return;

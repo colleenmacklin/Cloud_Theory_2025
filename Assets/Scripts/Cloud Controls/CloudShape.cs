@@ -84,7 +84,6 @@ public class CloudShape : MonoBehaviour
     private void OnEnable()
     {
         Actions.ChangeCloudShape +=SetShape;
-
         Actions.ClarifyClouds += ClarifyCloud;
         Actions.SlowdownClouds += SlowDownCloud;
         Actions.StopClouds += StopCloud;
@@ -95,13 +94,13 @@ public class CloudShape : MonoBehaviour
         Actions.LookAtCamera += lookatcamera;
         Actions.FadeInCloud += fadeInParticleSystem;
         Actions.FadeOutCloud += fadeOutParticleSystem;
+        //Actions.SetRandomScale += scaleMe;
         //_fadeObject.ResetCloudPos += ResetCloudPos;
     }
 
     private void OnDisable()
     {
         Actions.ChangeCloudShape -=SetShape;
-
         Actions.ClarifyClouds -= ClarifyCloud;
         Actions.SlowdownClouds -= SlowDownCloud;
         Actions.StopClouds -= StopCloud;
@@ -112,7 +111,7 @@ public class CloudShape : MonoBehaviour
         Actions.LookAtCamera -= lookatcamera;
         Actions.FadeInCloud -= fadeInParticleSystem;
         Actions.FadeOutCloud -= fadeOutParticleSystem;
-
+        //Actions.SetRandomScale -= scaleMe;
         //_fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
 
@@ -131,7 +130,8 @@ public class CloudShape : MonoBehaviour
     //We set the collider reference
     private void Start()
     {
-        ps.Play();
+        scaleMe(5f);
+        ps.Play(); //start particle system
         //set collider size
         Highlighter.GetComponent<Renderer>().bounds = matchBounds(ps.shape, Highlighter);
         collider_object.GetComponent<Renderer>().bounds = matchBounds(ps.shape, collider_object);
@@ -143,7 +143,6 @@ public class CloudShape : MonoBehaviour
         {
             Actions.FadeOut?.Invoke(collider_object);
             Actions.FadeOut50?.Invoke(Highlighter);
-
         }
         
         //rotate to look at the camera 
@@ -176,6 +175,12 @@ public class CloudShape : MonoBehaviour
             fadeOutParticleSystem();
         }
         */
+    }
+    public void scaleMe(float scaleNum)
+    {
+        Debug.Log("Scaling_me: " + scaleNum);
+        Vector3 newScale = new Vector3(scaleNum, scaleNum, 2f);
+        transform.localScale = newScale;
     }
 
     private void lookatcamera(Camera c)

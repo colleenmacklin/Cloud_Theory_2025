@@ -17,6 +17,7 @@ public static class Actions
     public static Action ConversationEnded;
     public static Action<GameObject> GetClickedCloud;
     public static Action<CloudShape> CloudIsReady;
+    public static Action<float> SetRandomScale;
 
 
     //visual controls
