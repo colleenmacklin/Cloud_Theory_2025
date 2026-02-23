@@ -1966,23 +1966,6 @@ MonoBehaviour:
   gazeMover: {fileID: 1840844926}
   focusInSpeed: 0.01
   focusOutSpeed: 0.01
---- !u!114 &1840844933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 335849592}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1835f464d91445a4bf5a1be942c7245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Raycaster
-  gameState: {fileID: 1790404585}
-  gazeMover: {fileID: 1840844926}
-  focusInSpeed: 0.01
-  focusOutSpeed: 0.01
-  rayLength: 1000
 --- !u!114 &1966899115 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859,
@@ -2263,10 +2246,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1840844932}
-    - targetCorrespondingSourceObject: {fileID: 4706507320812834737, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1840844933}
   m_SourcePrefab: {fileID: 100100000, guid: 8989f6b0cc6584f9b9429d1d63825cc4, type: 3}
 --- !u!1001 &2052241053
 PrefabInstance:

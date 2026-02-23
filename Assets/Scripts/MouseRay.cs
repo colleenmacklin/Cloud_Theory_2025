@@ -62,7 +62,7 @@ public class MouseRay : MonoBehaviour
             Debug.LogError("No Camera component found on this GameObject.");
         }
 
-        StartGazeTracking();
+        //StartGazeTracking();
 
     }
 
@@ -73,10 +73,10 @@ public class MouseRay : MonoBehaviour
         CastToClouds();
     }
 
-private void CastToClouds(){
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+    private void CastToClouds(){
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-{ 
+        { 
         switch (state)
         {
             case MouseState.EMPTY:
@@ -94,8 +94,7 @@ private void CastToClouds(){
                 else
                 {
                     //OnHoverExit?.Invoke(); //DeGlow callback on Butterfly
-                    Actions.OnHoverExit();
-
+                    Actions.OnHoverExit?.Invoke();
                 }
                 break;
 
@@ -103,13 +102,11 @@ private void CastToClouds(){
                 //if hovering and no hit, then switch to empty
                 if (!hit.transform)
                 {
-                    
                     state = MouseState.EMPTY;
                     Selected = null;
                     //EventManager.TriggerEvent("closeEye");
 
                     //if exit cloud then stop glow
-                   // OnHoverExit?.Invoke(); //DeGlow callback on Butterfly
                     Actions.OnHoverExit?.Invoke();
                 }
                 else
@@ -127,7 +124,6 @@ private void CastToClouds(){
                     StopGazeTracking();
                 }
                     //textBoxControl.Check();//bad mutation management.
-                
                 break;
         }
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
