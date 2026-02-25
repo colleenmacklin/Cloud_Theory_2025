@@ -99,6 +99,7 @@ public class MainNarrator : MonoBehaviour
         {
             isNarrating = false;
             fadeOutSubtitle();
+            Actions.ConversationEnded?.Invoke(); //tells system this cloud is no longer beng talked about
         }
     }
     

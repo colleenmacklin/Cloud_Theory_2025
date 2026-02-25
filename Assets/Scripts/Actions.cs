@@ -49,7 +49,7 @@ public static class Actions
     public static Action FadeInSpace;
     public static Action FadeOutSpace;
     public static Action<Texture2D> ChangeCloudShape;
-    
+    public static Action<CloudShape> InactivateCloud;
     
     //time transitions
     public static Action Sunrise;

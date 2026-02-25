@@ -13,16 +13,30 @@ public class MainCloudManager : MonoBehaviour
     public List<Texture2D> CloudShapes;
     public List<string> allClouds;
     public float CloudStartScale = 5f;
+    public CloudShape clickedCloud;
+    [SerializeField]
+    private List<string> cloudsSelectedHistory;
+    [SerializeField]
+    private List<string> cloudsActiveHistory;
+    [SerializeField]
+    private List<Texture2D> finalCloudTextures;
+    [SerializeField]
+    private List<Texture2D> cloudTargetsList; 
 
     public GameState gameState;
     private void OnEnable()
     {
       Actions.ChooseCloud += changeCloudShape;  
+      Actions.GetClickedCloud += GetClickedCloud;
+      Actions.ConversationEnded += InactivateCloud;
     }
 
     private void OnDisable()
     {
-      Actions.ChooseCloud -= changeCloudShape;  
+        Actions.ChooseCloud -= changeCloudShape;
+        Actions.GetClickedCloud -= GetClickedCloud;
+        Actions.ConversationEnded -= InactivateCloud;
+
     }
     void Start()
     {
@@ -45,9 +59,26 @@ public class MainCloudManager : MonoBehaviour
             if (shape.name == s)
             {
                 Debug.Log("changing shape to: "+s);
-                Actions.ChangeCloudShape(shape);
+                Actions.ChangeCloudShape?.Invoke(shape);
             }
         }
 
     }
+
+    public void GetClickedCloud(GameObject c) //from Raycaster
+    {
+        //write history code
+        clickedCloud = c.GetComponent<CloudShape>();
+        Debug.Log(c.name+" clicked: " + clickedCloud.CurrentShapeName);
+        Actions.ChooseCloud?.Invoke(c.name);
+        cloudsSelectedHistory.Add(clickedCloud.CurrentShapeName);
+        cloudTargetsList.Remove(clickedCloud.currentShape);
+        finalCloudTextures.Add(clickedCloud.currentShape);
+    }
+
+    private void InactivateCloud()
+    {
+        Actions.InactivateCloud?.Invoke(clickedCloud);
+    }
+
 }

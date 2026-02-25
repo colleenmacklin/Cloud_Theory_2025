@@ -119,29 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &4040279 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4706507320527402150, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
-    type: 3}
-  m_PrefabInstance: {fileID: 2033620455}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4040284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4040279}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576c91031fbe14592a90f1a996c736b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MouseRay
-  cam: {fileID: 1840844930}
-  gameState: {fileID: 0}
-  gazeMover: {fileID: 0}
-  focusInSpeed: 0.01
-  focusOutSpeed: 0.01
 --- !u!1001 &266688903
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -364,6 +341,11 @@ MonoBehaviour:
   - {fileID: 2800000, guid: fb0896fd8113d2146bf69e08f8017b4a, type: 3}
   allClouds: []
   CloudStartScale: 5
+  clickedCloud: {fileID: 0}
+  cloudsSelectedHistory: []
+  cloudsActiveHistory: []
+  finalCloudTextures: []
+  cloudTargetsList: []
   gameState: {fileID: 1790404585}
 --- !u!1001 &320545196
 PrefabInstance:
@@ -692,46 +674,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 566089867}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &620051650 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4706507320386966707, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
-    type: 3}
-  m_PrefabInstance: {fileID: 2033620455}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &620051653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620051650}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1835f464d91445a4bf5a1be942c7245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Raycaster
-  gameState: {fileID: 1790404585}
-  gazeMover: {fileID: 1840844926}
-  focusInSpeed: 0.01
-  focusOutSpeed: 0.01
-  rayLength: 200
---- !u!114 &620051656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 620051650}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576c91031fbe14592a90f1a996c736b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  cam: {fileID: 1840844930}
-  gameState: {fileID: 0}
-  gazeMover: {fileID: 0}
-  focusInSpeed: 0.01
-  focusOutSpeed: 0.01
 --- !u!1 &971940954
 GameObject:
   m_ObjectHideFlags: 0
@@ -2230,18 +2172,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4706507320386966707, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 620051653}
-    - targetCorrespondingSourceObject: {fileID: 4706507320386966707, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 620051656}
-    - targetCorrespondingSourceObject: {fileID: 4706507320527402150, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4040284}
     - targetCorrespondingSourceObject: {fileID: 4706507320812834737, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
         type: 3}
       insertIndex: -1

@@ -4,7 +4,6 @@ using System;
 
 public class MouseRay : MonoBehaviour
 {
-    // Reference to the Camera component (gets it automatically in Start)
     public Camera cam;
     public GameState gameState;
 
@@ -24,25 +23,28 @@ public class MouseRay : MonoBehaviour
 
     MouseState state = MouseState.EMPTY;
     Vector3 lookAtSelected = new Vector3();
-    //Get the camera mover so we can turn it on and off during dialogue
-    public UnityTemplateProjects.SimpleCameraController gazeMover; //attached to the camera *it probably shouldn't be
-    //View FOcus settings
+    public UnityTemplateProjects.SimpleCameraController gazeMover;
+    
     [SerializeField]
     [Range(.01f, 1f)]
     private float focusInSpeed = .01f;
     [SerializeField]
     [Range(.01f, 1f)]
     private float focusOutSpeed = .01f;
+    
     Coroutine activeCoroutine;
     RaycastHit hit;
 
+    // --- NEW: lock flag and cooldown to prevent re-triggering ---
+    private bool _isProcessingCloud = false;
+    private float _cooldown = 0f;
+    private const float CooldownDuration = 0.5f;
 
     void OnEnable()
     {
         Actions.ConversationEnded += StartGazeTracking;
         Actions.Speak += StopGazeTracking;
         Actions.Cutscene += ReadingMode;
-
     }
 
     void OnDisable()
@@ -50,174 +52,165 @@ public class MouseRay : MonoBehaviour
         Actions.ConversationEnded -= StartGazeTracking;
         Actions.Speak -= StopGazeTracking;
         Actions.Cutscene -= ReadingMode;
-
     }
 
     void Start()
     {
-        // Get the Camera component attached to this GameObject
         cam = GetComponent<Camera>();
         if (cam == null)
         {
             Debug.LogError("No Camera component found on this GameObject.");
         }
-
-        //StartGazeTracking();
-
     }
 
     void Update()
     {
-        // Cast a ray every frame to follow the mouse position
-        //CastMouseRay(); //defaul good for debugging
+        // Tick down the cooldown timer
+        if (_cooldown > 0f)
+        {
+            _cooldown -= Time.deltaTime;
+        }
+
         CastToClouds();
     }
 
-    private void CastToClouds(){
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-        { 
-        switch (state)
-        {
-            case MouseState.EMPTY:
-                //if empty and hit, then switch to hovering
-                if (hit.transform)
-                {
-                    state = MouseState.HOVERING;
-                    //EventManager.TriggerEvent("openEye");
-                    //callback to start butterfly glow - when entering cloud over hover
-                    //OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
-                    Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
-                    Debug.Log("1----hovering over: " + hit.transform.gameObject.name);
-
-                }
-                else
-                {
-                    //OnHoverExit?.Invoke(); //DeGlow callback on Butterfly
-                    Actions.OnHoverExit?.Invoke();
-                }
-                break;
-
-            case MouseState.HOVERING:
-                //if hovering and no hit, then switch to empty
-                if (!hit.transform)
-                {
-                    state = MouseState.EMPTY;
-                    Selected = null;
-                    //EventManager.TriggerEvent("closeEye");
-
-                    //if exit cloud then stop glow
-                    Actions.OnHoverExit?.Invoke();
-                }
-                else
-                {
-                    Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
-                    Debug.Log("2-----------hovering over: " + hit.transform.gameObject.name);
-                    StartCloudTalking();
-                }               
-                break;
-
-            case MouseState.READING:
-
-                if (gameState.Gameloop)
-                {
-                    StopGazeTracking();
-                }
-                    //textBoxControl.Check();//bad mutation management.
-                break;
-        }
-            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
-         }
-}
-    void CastMouseRay()
+    private void CastToClouds()
     {
-        // Create a ray from the current mouse position in screen space
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        // --- NEW: skip raycasting entirely while processing or on cooldown ---
+        if (_isProcessingCloud || _cooldown > 0f) return;
 
-        // Perform the raycast
-        // The max distance can be set to a specific value or Mathf.Infinity
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            // If the ray hits an object, you can access its information
-            Debug.Log("Hit object: " + hit.transform.name + " at point: " + hit.point);
-            
-            // Optional: Draw a debug line in the Scene view to visualize the raycast
+            switch (state)
+            {
+                case MouseState.EMPTY:
+                    if (hit.transform)
+                    {
+                        state = MouseState.HOVERING;
+                        Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
+                        Debug.Log("1----hovering over: " + hit.transform.gameObject.name);
+                    }
+                    else
+                    {
+                        Actions.OnHoverExit?.Invoke();
+                    }
+                    break;
+
+                case MouseState.HOVERING:
+                    if (!hit.transform)
+                    {
+                        state = MouseState.EMPTY;
+                        Selected = null;
+                        Actions.OnHoverExit?.Invoke();
+                    }
+                    else
+                    {
+                        Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
+                        Debug.Log("2-----------hovering over: " + hit.transform.gameObject.name);
+                        // --- FIXED: was calling StartCloudTalking() every frame here ---
+                        StartCloudTalking();
+                    }
+                    break;
+
+                case MouseState.READING:
+                    if (gameState.Gameloop)
+                    {
+                        StopGazeTracking();
+                    }
+                    break;
+            }
+
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
-            
-            // You can add code here to make another object move to `hit.point`,
-            // change the color of the hit object, or trigger other events.
-        }
-        else
-        {
-            // Optional: Draw a debug line if the ray doesn't hit anything within the max distance
-            Debug.DrawRay(ray.origin, ray.direction * 100, Color.blue);
         }
     }
 
     void ReadingMode()
     {
+        Debug.Log ("ReadingMode");
         state = MouseState.READING;
-        StartGazeTracking(); //shouldnt this be stop gazeTracking? //CM COMMENTED OUT 7/31
+        StartGazeTracking();
     }
 
-    //None of the tracking should be doing as many mutations as it is now
-    //gazeMover, state, and the coroutines all require some reconfiguration in the future
     void StartGazeTracking()
     {
+        Debug.Log ("StartGazeTracking");
         if (activeCoroutine != null)
         {
-
             StopCoroutine(activeCoroutine);
-
         }
-       // activeCoroutine = StartCoroutine(ReturnToDefaultView());
-
         gazeMover.enabled = true;
         state = MouseState.EMPTY;
     }
-    void StopGazeTracking()
+
+void StopGazeTracking()
+{
+    ReadingMode();
+    if (activeCoroutine != null)
     {
-        ReadingMode();
-        if (activeCoroutine != null)
-        {
-            StopCoroutine(activeCoroutine);
-        }
-        gazeMover.enabled = false;
-        activeCoroutine = StartCoroutine(LookAtSelection());
-        //EventManager.TriggerEvent("closeEye");
+        StopCoroutine(activeCoroutine);
     }
+    // gazeMover and centering are now handled by CenterThenWaitForConversation
+    // so we no longer need to kick off LookAtSelection here
+}
 
-    //CM turned this on again so that the centire cloud can be seen when it is being talked about (7/30/2023)
-    //Look directly at target
-    IEnumerator LookAtSelection()
-    {
-        Quaternion rot = Quaternion.LookRotation(Selected.transform.position, Camera.main.transform.up);
-
-        while (Quaternion.Angle(rot, Camera.main.transform.localRotation) > 1f)
-        {
-            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, rot, focusInSpeed);
-
-            //Debug.Log($"looking at target, {rot},{Camera.main.transform.localRotation}");
-            yield return null;
-        }
-      
-        Debug.Log("TargetFound");
-    }
 
     public void StartCloudTalking()
     {
+        // --- NEW: lock immediately so this can't be called again until released ---
+        _isProcessingCloud = true;
+
         Debug.Log("Raycaster calls GetClickedCloud");
         Selected = hit.transform.gameObject;
-
         GameObject c = Selected;
+        
+        // Lock camera movement immediately
+        gazeMover.enabled = false;
 
-        Actions.GetClickedCloud?.Invoke(c); //lets cloudmanager know which cloud has been clicked
-
-        //EventManager.TriggerEvent("Respond");
-        Actions.Respond?.Invoke();
+        Actions.GetClickedCloud?.Invoke(c); //for cloudmanager
+        Actions.Respond?.Invoke(); //for narrator
         state = MouseState.READING;
+
+        // --- NEW: wait for the conversation to end before unlocking ---
+        StartCoroutine(CenterThenWaitForConversation());
     }
 
 
+    // --- NEW: coroutine that waits for ConversationEnded before releasing the lock ---
+private IEnumerator CenterThenWaitForConversation()
+{
+    // First, smoothly rotate to face the selected cloud
+    Quaternion rot = Quaternion.LookRotation(
+        Selected.transform.position - Camera.main.transform.position, 
+        Camera.main.transform.up
+    );
+
+    while (Quaternion.Angle(Camera.main.transform.rotation, rot) > 1f)
+    {
+        Camera.main.transform.rotation = Quaternion.Slerp(
+            Camera.main.transform.rotation, rot, focusInSpeed
+        );
+        yield return null;
+    }
+
+    Debug.Log("Camera centered on cloud, waiting for conversation to end.");
+
+    // Now wait for the narrator to finish
+    bool conversationEnded = false;
+    Action onEnded = () => conversationEnded = true;
+    Actions.ConversationEnded += onEnded;
+
+    yield return new WaitUntil(() => conversationEnded);
+
+    Actions.ConversationEnded -= onEnded;
+
+    // Return camera control to the player
+    gazeMover.enabled = true;
+
+    _cooldown = CooldownDuration;
+    _isProcessingCloud = false;
+
+    Debug.Log("Conversation ended, camera control returned to player.");
+}
+    
 }

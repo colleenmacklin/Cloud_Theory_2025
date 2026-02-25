@@ -94,6 +94,7 @@ public class CloudShape : MonoBehaviour
         Actions.LookAtCamera += lookatcamera;
         Actions.FadeInCloud += fadeInParticleSystem;
         Actions.FadeOutCloud += fadeOutParticleSystem;
+        Actions.InactivateCloud += inactivateCloud;
         //Actions.SetRandomScale += scaleMe;
         //_fadeObject.ResetCloudPos += ResetCloudPos;
     }
@@ -111,6 +112,8 @@ public class CloudShape : MonoBehaviour
         Actions.LookAtCamera -= lookatcamera;
         Actions.FadeInCloud -= fadeInParticleSystem;
         Actions.FadeOutCloud -= fadeOutParticleSystem;
+        Actions.InactivateCloud -= inactivateCloud;
+
         //Actions.SetRandomScale -= scaleMe;
         //_fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
@@ -250,7 +253,27 @@ public class CloudShape : MonoBehaviour
         Highlighter.SetActive(false);
     }
 
+    public void inactivateCloud(CloudShape c)
+    {
+        if(this == c)
+        {
+            HideShape();
+            TurnOffCollider();
+            StartCoroutine(resetMe());
+        }
+    }
+        IEnumerator resetMe()
+    {
+        Debug.Log("2. reset cloud");
 
+        //Start a variable timer countdown to signal when the cloud is ready to change
+        //enable some variable timings for clouds to start changing shape
+        float timing = Random.Range(changeTimeMin, changeTimeMax);
+        for (timeLeft = timing; timeLeft > 0; timeLeft -= Time.deltaTime)
+        yield return null;
+        Actions.CloudIsReady?.Invoke(this);
+        yield return new WaitForSeconds(timing);
+    }
 
     public void TurnOnCollider()
     {
