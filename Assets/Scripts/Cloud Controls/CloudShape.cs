@@ -27,7 +27,7 @@ public class CloudShape : MonoBehaviour
     public GameObject collider_object;
     public GameObject cloudSystem;
     public GameObject Highlighter;
-    private BoxCollider cloudCollider;
+    public BoxCollider cloudCollider;
 
     [SerializeField]
     private bool isHighlighted = false;
@@ -138,7 +138,7 @@ public class CloudShape : MonoBehaviour
         //set collider size
         Highlighter.GetComponent<Renderer>().bounds = matchBounds(ps.shape, Highlighter);
         collider_object.GetComponent<Renderer>().bounds = matchBounds(ps.shape, collider_object);
-        cloudCollider = collider_object.GetComponent<BoxCollider>();
+        //cloudCollider = collider_object.GetComponent<BoxCollider>();
         collider_object.transform.localScale = ScaleToShape(ps.shape.texture);
         Highlighter.transform.localScale = ScaleToShape(ps.shape.texture);
 
@@ -315,6 +315,7 @@ public class CloudShape : MonoBehaviour
     //this also sets the collider size to update with it
     public void SetShape(Texture2D shapeTexture)
     {
+        TurnOnCollider(); //makes this cloud seeable by the raycaster
         incomingShape = shapeTexture;
         psShape.scale = ScaleToShape(incomingShape);
         psShape.texture = incomingShape;
@@ -323,10 +324,28 @@ public class CloudShape : MonoBehaviour
         //Set the scale and texture value in the particle system shape module
         adjustScaleRatio();
 
-        //CurrentShapeName = currentShape.name;
+        CurrentShapeName = currentShape.name;
         StartCoroutine(TimeToChange());
 
     }
+
+        public void SetGenericShape(Texture2D shapeTexture)
+    {
+        TurnOffCollider();
+        incomingShape = shapeTexture;
+        psShape.scale = ScaleToShape(incomingShape);
+        psShape.texture = incomingShape;
+
+        currentShape = incomingShape;
+        //Set the scale and texture value in the particle system shape module
+        adjustScaleRatio();
+
+        CurrentShapeName = currentShape.name;
+
+        StartCoroutine(TimeToChange());
+
+    }
+
     private void adjustScaleRatio()
     {
         Debug.Log("1. adjustScaleRatio");

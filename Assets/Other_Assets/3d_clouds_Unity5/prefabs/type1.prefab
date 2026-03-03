@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6677913822787891109}
   - component: {fileID: 7233091011902322578}
   - component: {fileID: 6522837082742736225}
-  m_Layer: 9
+  m_Layer: 3
   m_Name: type1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 1
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:

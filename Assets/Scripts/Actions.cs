@@ -50,6 +50,7 @@ public static class Actions
     public static Action FadeOutSpace;
     public static Action<Texture2D> ChangeCloudShape;
     public static Action<CloudShape> InactivateCloud;
+    public static Action<float> OnHoverDwellProgress;
     
     //time transitions
     public static Action Sunrise;

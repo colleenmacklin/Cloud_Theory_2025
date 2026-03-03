@@ -31,7 +31,12 @@ public class MouseRay : MonoBehaviour
     [SerializeField]
     [Range(.01f, 1f)]
     private float focusOutSpeed = .01f;
-    
+    [SerializeField]
+    [Range(0.1f, 3f)]
+    private float dwellTimeRequired = 1.5f; // how long the player must hover before locking
+    private float _dwellTimer = 0f;
+    private GameObject _dwellTarget = null; // track which cloud is being dwelt on
+
     Coroutine activeCoroutine;
     RaycastHit hit;
 
@@ -77,6 +82,7 @@ public class MouseRay : MonoBehaviour
     private void CastToClouds()
     {
         // --- NEW: skip raycasting entirely while processing or on cooldown ---
+        
         if (_isProcessingCloud || _cooldown > 0f) return;
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -100,6 +106,8 @@ public class MouseRay : MonoBehaviour
                 case MouseState.HOVERING:
                     if (!hit.transform)
                     {
+                        // Mouse left — reset everything
+                        ResetDwell();
                         state = MouseState.EMPTY;
                         Selected = null;
                         Actions.OnHoverExit?.Invoke();
@@ -108,10 +116,29 @@ public class MouseRay : MonoBehaviour
                     {
                         Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
                         Debug.Log("2-----------hovering over: " + hit.transform.gameObject.name);
-                        // --- FIXED: was calling StartCloudTalking() every frame here ---
+                    if (_dwellTarget != hit.transform.gameObject)
+                    {
+                        ResetDwell();
+                        _dwellTarget = hit.transform.gameObject;
+                    }
+
+                    // Count up the dwell timer
+                    _dwellTimer += Time.deltaTime;
+
+                    // Optional: broadcast progress so a UI fill or glow can respond
+                    float dwellProgress = Mathf.Clamp01(_dwellTimer / dwellTimeRequired);
+                    Actions.OnHoverDwellProgress?.Invoke(dwellProgress); // wire up if you want visual feedback
+
+                    Debug.Log($"Dwelling on {hit.transform.gameObject.name}: {_dwellTimer:F1}s / {dwellTimeRequired:F1}s");
+
+                    // Only trigger once the player has held long enough
+                    if (_dwellTimer >= dwellTimeRequired)
+                    {
+                        ResetDwell();
                         StartCloudTalking();
                     }
-                    break;
+                }
+                break;
 
                 case MouseState.READING:
                     if (gameState.Gameloop)
@@ -123,7 +150,28 @@ public class MouseRay : MonoBehaviour
 
             Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
         }
+        else
+        {
+                    // Ray hit nothing — if we were hovering, reset
+        if (state == MouseState.HOVERING)
+        {
+            ResetDwell();
+            state = MouseState.EMPTY;
+            Selected = null;
+            Actions.OnHoverExit?.Invoke();
+        }
+    
+
+        }
     }
+
+    private void ResetDwell()
+    {
+        _dwellTimer = 0f;
+        _dwellTarget = null;
+        // Reset progress to zero if you're driving a UI element
+        Actions.OnHoverDwellProgress?.Invoke(0f);
+    }   
 
     void ReadingMode()
     {

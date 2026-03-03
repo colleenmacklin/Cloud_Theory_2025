@@ -275,7 +275,7 @@ MonoBehaviour:
   - {fileID: 1236166354}
   - {fileID: 2120334951}
   - {fileID: 1109294502}
-  Shapes:
+  CloudShapes:
   - {fileID: 2800000, guid: 5a711040f9343bf41a922038e297ef3e, type: 3}
   - {fileID: 2800000, guid: 435059eec8c51e64ab895ace14d77800, type: 3}
   - {fileID: 2800000, guid: b03ffc97fc63b4f12809ddb0ed68a795, type: 3}
@@ -322,7 +322,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: ec28bd8f78b9244c2acaf3aa2504c0a3, type: 3}
   - {fileID: 2800000, guid: 7a65efe97c3e145ecb76992f7013dab5, type: 3}
   - {fileID: 2800000, guid: 0e65a24d249da4389939c491d76a4960, type: 3}
-  CloudShapes:
+  GenericCloudShapes:
   - {fileID: 2800000, guid: e55a7c73b4417e24abe04809b9b216b5, type: 3}
   - {fileID: 2800000, guid: fb5c91bb6fdfab24eae015bd613a1c90, type: 3}
   - {fileID: 2800000, guid: fcfdaedb036e5d74984861e10d6f4544, type: 3}
@@ -342,6 +342,7 @@ MonoBehaviour:
   allClouds: []
   CloudStartScale: 5
   clickedCloud: {fileID: 0}
+  numberOfTargetsToGenerate: 1
   cloudsSelectedHistory: []
   cloudsActiveHistory: []
   finalCloudTextures: []
@@ -1431,10 +1432,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5234495423069331522, guid: 47466df784a8446dcb08284b843ca859,
+    - target: {fileID: 4001077985846674118, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
-      propertyPath: m_ProvidesContacts
-      value: 1
+      propertyPath: playOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1908,6 +1909,7 @@ MonoBehaviour:
   gazeMover: {fileID: 1840844926}
   focusInSpeed: 0.01
   focusOutSpeed: 0.01
+  dwellTimeRequired: 1.5
 --- !u!114 &1966899115 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859,
