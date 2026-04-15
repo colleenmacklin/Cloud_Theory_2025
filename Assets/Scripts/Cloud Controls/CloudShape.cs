@@ -75,7 +75,7 @@ public class CloudShape : MonoBehaviour
     private FadeObjectInOut _fadeObject;
     //bool to be set to true when cloud is nearing edge of screen and moved to the other side
     private bool _cloudIsBusyResetting = false;
-    public bool keepDebugObjectsVisible;
+    public bool keepDebugObjectsVisible = false;
 
     //to be set by the fadeobject in/out object (not very elegant)
     //public bool IsFading;
@@ -83,7 +83,7 @@ public class CloudShape : MonoBehaviour
 
     private void OnEnable()
     {
-        Actions.ChangeCloudShape +=SetShape;
+        Actions.ChangeCloudShape += SetShape;
         Actions.ClarifyClouds += ClarifyCloud;
         Actions.SlowdownClouds += SlowDownCloud;
         Actions.StopClouds += StopCloud;
@@ -95,7 +95,7 @@ public class CloudShape : MonoBehaviour
         Actions.FadeInCloud += fadeInParticleSystem;
         Actions.FadeOutCloud += fadeOutParticleSystem;
         Actions.InactivateCloud += inactivateCloud;
-        //Actions.SetRandomScale += scaleMe;
+        Actions.SetRandomScale += scaleMe;
         //_fadeObject.ResetCloudPos += ResetCloudPos;
     }
 
@@ -114,7 +114,7 @@ public class CloudShape : MonoBehaviour
         Actions.FadeOutCloud -= fadeOutParticleSystem;
         Actions.InactivateCloud -= inactivateCloud;
 
-        //Actions.SetRandomScale -= scaleMe;
+        Actions.SetRandomScale -= scaleMe;
         //_fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
 
@@ -133,7 +133,7 @@ public class CloudShape : MonoBehaviour
     //We set the collider reference
     private void Start()
     {
-        scaleMe(5f);
+        //scaleMe(5f);
         ps.Play(); //start particle system
         //set collider size
         Highlighter.GetComponent<Renderer>().bounds = matchBounds(ps.shape, Highlighter);
@@ -182,8 +182,10 @@ public class CloudShape : MonoBehaviour
     public void scaleMe(float scaleNum)
     {
         Debug.Log("Scaling_me: " + scaleNum);
+        //ps.
         Vector3 newScale = new Vector3(scaleNum, scaleNum, 2f);
         transform.localScale = newScale;
+        
     }
 
     private void lookatcamera(Camera c)
@@ -277,12 +279,14 @@ public class CloudShape : MonoBehaviour
 
     public void TurnOnCollider()
     {
+        //collider_object.SetActive(true);
         cloudCollider.enabled = true;
     }
 
     public void TurnOffCollider()
     {
         cloudCollider.enabled = false;
+        //collider_object.SetActive(false);
     }
 
     Vector3 ScaleToShape(Texture2D shape)

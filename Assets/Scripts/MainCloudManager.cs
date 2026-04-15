@@ -12,7 +12,7 @@ public class MainCloudManager : MonoBehaviour
     public List<Texture2D> CloudShapes;
     public List<Texture2D> GenericCloudShapes;
     public List<string> allClouds; //
-    public float CloudStartScale = 5f;
+    public float CloudStartScale;
     public CloudShape clickedCloud;
     [SerializeField]
     [Tooltip("How many of the clouds to turn into targets")]
@@ -43,7 +43,7 @@ public class MainCloudManager : MonoBehaviour
     }
     void Start()
     {
-        //Actions.SetRandomScale?.Invoke(CloudStartScale);
+        Actions.SetRandomScale?.Invoke(CloudStartScale);
 
         //populate the dropdown menu for the debug scene
         //pull from the list of Shapes.names
@@ -65,12 +65,14 @@ public class MainCloudManager : MonoBehaviour
         for (int i = 0; i<Clouds.Count; i++)
         {
             Clouds[i].SetGenericShape(GenericCloudShapes[i]);
+            Clouds[i].TurnOffCollider();
         }
 
         for (int i = 0; i<numberOfTargetsToGenerate; i++)
         {
             Clouds[i].SetShape(CloudShapes[i]);
         }
+
     }
 
     void changeCloudShape(string s)
