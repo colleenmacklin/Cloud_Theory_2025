@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public enum DropdownType
 {
     Theme,
-    Cloud
+    Cloud,
+    Voice
 }
 public class UIHandler : MonoBehaviour
 {
@@ -31,6 +32,12 @@ public class UIHandler : MonoBehaviour
                 //dropDown
                 Actions.ChooseCloud(selectedText);
                 break;
+                
+                case DropdownType.Voice:
+                //dropDown
+                Actions.ChooseVoice(selectedText);
+                break;
+
                 
                 default:
                 Debug.Log("no dropdown type identified");

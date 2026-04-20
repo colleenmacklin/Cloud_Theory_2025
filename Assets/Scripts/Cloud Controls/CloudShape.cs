@@ -87,15 +87,15 @@ public class CloudShape : MonoBehaviour
         Actions.ClarifyClouds += ClarifyCloud;
         Actions.SlowdownClouds += SlowDownCloud;
         Actions.StopClouds += StopCloud;
-        Actions.SharpenCloud += SharpenCloud;
-        Actions.BlurCloud += BlurCloud;
+        //Actions.SharpenCloud += SharpenCloud;
+        //Actions.BlurCloud += BlurCloud;
         Actions.OnHoverOverTargetCloud += GlowCloud;
         Actions.OnHoverExit += UnGlowCloud;
         Actions.LookAtCamera += lookatcamera;
         Actions.FadeInCloud += fadeInParticleSystem;
         Actions.FadeOutCloud += fadeOutParticleSystem;
         Actions.InactivateCloud += inactivateCloud;
-        Actions.SetRandomScale += scaleMe;
+        //Actions.SetRandomScale += scaleMe;
         //_fadeObject.ResetCloudPos += ResetCloudPos;
     }
 
@@ -105,16 +105,15 @@ public class CloudShape : MonoBehaviour
         Actions.ClarifyClouds -= ClarifyCloud;
         Actions.SlowdownClouds -= SlowDownCloud;
         Actions.StopClouds -= StopCloud;
-        Actions.SharpenCloud -= SharpenCloud;
-        Actions.BlurCloud -= BlurCloud;
+        //Actions.SharpenCloud -= SharpenCloud;
+        //Actions.BlurCloud -= BlurCloud;
         Actions.OnHoverOverTargetCloud -= GlowCloud;
         Actions.OnHoverExit -= UnGlowCloud;
         Actions.LookAtCamera -= lookatcamera;
         Actions.FadeInCloud -= fadeInParticleSystem;
         Actions.FadeOutCloud -= fadeOutParticleSystem;
         Actions.InactivateCloud -= inactivateCloud;
-
-        Actions.SetRandomScale -= scaleMe;
+        //Actions.SetRandomScale -= scaleMe;
         //_fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
 
@@ -179,15 +178,15 @@ public class CloudShape : MonoBehaviour
         }
         */
     }
+    /*
     public void scaleMe(float scaleNum)
     {
         Debug.Log("Scaling_me: " + scaleNum);
         //ps.
         Vector3 newScale = new Vector3(scaleNum, scaleNum, 2f);
         transform.localScale = newScale;
-        
     }
-
+*/
     private void lookatcamera(Camera c)
     {
         if (c != null)
@@ -364,8 +363,8 @@ public class CloudShape : MonoBehaviour
         cloudCollider.transform.localScale = textureScaleAdjustment;
 
         //adjust the particle size to the scale
-        var psMain = ps.main;
-        psMain.startSizeMultiplier = scale / 2;
+        //var psMain = ps.main;
+        //psMain.startSizeMultiplier = scale / 2;
         CurrentShapeName = currentShape.name;
         //Set the scale *of the collider* that represents the shape
         //Collider is rotated, so the values are x and y.
@@ -471,7 +470,7 @@ public class CloudShape : MonoBehaviour
     {
         var particleSystemSettings = ps.main;
         //particleSystemSettings.simulationSpeed = 0.30f;
-        particleSystemSettings.startSize = new ParticleSystem.MinMaxCurve(1.5f, 3f);
+        //particleSystemSettings.startSize = new ParticleSystem.MinMaxCurve(1.5f, 3f);
     }
 
     public void SharpenOpeningCloud() //TODO: this is a hack for the opening...change all cloud functions to allow passed in values

@@ -43,7 +43,7 @@ public class MainCloudManager : MonoBehaviour
     }
     void Start()
     {
-        Actions.SetRandomScale?.Invoke(CloudStartScale);
+        //Actions.SetRandomScale?.Invoke(CloudStartScale);
 
         //populate the dropdown menu for the debug scene
         //pull from the list of Shapes.names
