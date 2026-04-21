@@ -1,27 +1,22 @@
 using UnityEngine;
 
 /// <summary>
-/// Autotune filter: pitch-shifts the RTVoice output to the nearest note
-/// in the CarrierSynth chord.
+/// Pitch shifter (time-domain OLA) for RTVoice.
+/// Attach to the same GameObject as SpeakerAudio, ABOVE VocoderFilter.
 ///
-/// Setup: Same GameObject as SpeakerAudio. Must appear ABOVE VocoderFilter
-///        in the Inspector component list (Unity processes top-to-bottom).
-///
-/// Key design decisions vs. previous version:
-///   - Dual-playhead OLA: two read heads 180° out of phase, cross-faded by
-///     a Hann window. This is the textbook "pitch shift without FFT" approach
-///     and is much more robust than single-grain OLA.
-///   - Forced minimum correction: TTS voices are often monotone (flat pitch),
-///     so instead of detecting the voice pitch and shifting to nearest note,
-///     we ALWAYS pitch-shift to the root note of the chord. This is more
-///     reliable and actually sounds more musical with synthetic TTS.
-///   - The "natural" mode (autocorrelation → nearest chord note) is available
-///     as a fallback if your TTS has enough pitch variation.
+/// OLA pitch shifting principle:
+///   - Read input at a FIXED rate (1 sample per output sample)
+///   - Write output grains with a hop size scaled by 1/ratio
+///   - ratio > 1 = shorter output hops = higher pitch, same duration
+///   - ratio < 1 = longer output hops = lower pitch, same duration
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class AutotuneFilter : MonoBehaviour
 {
-    // ── Inspector ────────────────────────────────────────────────────────
+    public enum PitchMode  { Test, Forced, Sweep, Detected }
+    public enum SweepShape { Forward, PingPong, Random }
+
+    // ── Inspector ─────────────────────────────────────────────────────────
     [Header("References")]
     public CarrierSynth Carrier;
 
@@ -29,75 +24,73 @@ public class AutotuneFilter : MonoBehaviour
     public bool AutotuneEnabled = true;
 
     [Header("Pitch Mode")]
-    [Tooltip("Forced: always shift to root note (reliable with flat TTS). " +
-             "Detected: autocorrelation → nearest chord note (needs pitched voice).")]
-    public PitchMode Mode = PitchMode.Forced;
+    [Tooltip("Test: manual semitone offset to verify shifter is working.\n" +
+             "Forced: fixed chord interval.\n" +
+             "Sweep: LFO through chord notes.\n" +
+             "Detected: autocorrelation snap.")]
+    public PitchMode Mode = PitchMode.Test;
 
-    [Tooltip("When Mode=Forced, which chord interval index to target (0 = root).")]
+    [Header("Test Mode")]
+    [Range(-12f, 12f)]
+    [Tooltip("+7 = fifth up (obvious test). +12 = octave up.")]
+    public float TestSemitones = 7f;
+
+    [Header("Forced Mode")]
     [Range(0, 4)]
     public int TargetIntervalIndex = 0;
 
-    [Header("Correction Amount")]
+    [Header("Sweep Mode")]
+    [Range(0.5f, 16f)]
+    public float SweepNoteDuration = 3f;
+    public SweepShape Shape = SweepShape.PingPong;
+
+    [Header("Correction (Forced / Sweep / Detected)")]
     [Range(0f, 1f)]
-    [Tooltip("0 = no shift, 1 = full shift to target note. Start at 1.0.")]
-    public float CorrectionStrength = 1.0f;
+    public float CorrectionStrength = 0.8f;
 
-    [Range(0f, 0.15f)]
-    [Tooltip("Portamento glide time in seconds between note targets.")]
-    public float PitchSmoothing = 0.04f;
-
-    [Header("Detection (Mode=Detected only)")]
-    [Range(0.001f, 0.05f)]
-    public float SilenceThreshold = 0.008f;
+    [Range(0.05f, 0.5f)]
+    public float PitchSmoothing = 0.15f;
 
     [Header("Debug (read-only)")]
+    [SerializeField] private float _debugTargetRatio;
+    [SerializeField] private float _debugSmoothedRatio;
     [SerializeField] private float _debugDetectedHz;
-    [SerializeField] private float _debugTargetHz;
-    [SerializeField] private float _debugCurrentRatio;
+    [SerializeField] private int   _debugSweepStep;
 
-    // ── Mode enum ────────────────────────────────────────────────────────
-    public enum PitchMode { Forced, Detected }
+    // ── OLA buffers ───────────────────────────────────────────────────────
+    // Input ring: written at 1 sample/output sample (fixed rate)
+    // Output ring: grains overlap-added with variable hop = GrainSize / ratio
+    private const int GrainSize = 512;   // ~11.6ms @ 44100
+    private const int BufSize   = 65536; // must be >> GrainSize * max_ratio
 
-    // ── Dual-playhead OLA constants ───────────────────────────────────────
-    // Period = the window length for each playhead cycle.
-    // Must be long enough to contain the longest expected pitch period
-    // (lowest voice ~80Hz @ 44100 = ~551 samples) but short enough to
-    // avoid smearing transients. 1024 is a good middle ground.
-    private const int Period   = 1024;
-    private const int BufSize  = 65536; // must be >> Period * max_ratio
+    private float[] _inBuf;     // input ring buffer
+    private float[] _outBuf;    // output overlap-add buffer
+    private float[] _window;    // Hann window
 
-    // ── Buffers ───────────────────────────────────────────────────────────
-    private float[] _inBuf;     // circular input buffer
-    private int     _inWrite;
+    private int _inWrite;       // input write head (integer, advances by 1 per sample)
+    private int _inRead;        // input read head for grain extraction
+    private int _outWrite;      // output write head (advances by scaled hop)
+    private int _outRead;       // output read head (advances by 1 per sample)
 
-    private float[] _outBuf;    // circular output accumulation buffer
-    private int     _outWrite;
-    private int     _outRead;
-
-    private float[] _window;    // Hann window, length = Period
-
-    // ── Playhead state ────────────────────────────────────────────────────
-    // Two playheads read from _inBuf at different rates (controlled by ratio).
-    // They are Period/2 apart and cross-faded, so one always fades in as the
-    // other fades out — seamless.
-    private float _ph0 = 0f;    // playhead 0 position (fractional sample index)
-    private float _ph1 = 0f;    // playhead 1 position
-
-    // Input read pointer that advances at the NATURAL rate (ratio=1)
-    // The playheads advance at ratio * natural_rate.
-    private float _inRead = 0f;
+    // Fractional output hop accumulator — we need non-integer hop sizes
+    private float _hopAccum;    // accumulates fractional hop, triggers grain when >= GrainSize
 
     // ── Pitch state ───────────────────────────────────────────────────────
     private float _smoothedRatio = 1f;
     private float _detectedHz    = 0f;
-    private float _targetHz      = 0f;
 
-    // ── Autocorrelation buffer ────────────────────────────────────────────
-    private const int AcSize   = 4096;
-    private const int MinPer   = 20;    // ~2205 Hz
-    private const int MaxPer   = 800;   // ~55 Hz
-    private float[]   _acBuf;
-    private int       _acWrite;
+    // ── Sweep state ───────────────────────────────────────────────────────
+    private int   _sweepStep    = 0;
+    private float _sweepTimer   = 0f;
+    private int   _pingPongDir  = 1;
+    private volatile int _sweepIndex = 0;
+
+    // ── Autocorrelation ───────────────────────────────────────────────────
+    private const int AcSize = 4096;
+    private const int MinPer = 20;
+    private const int MaxPer = 800;
+    private float[] _acBuf;
+    private int     _acWrite;
 
     private int  _sampleRate;
     private bool _ready;
@@ -110,197 +103,200 @@ public class AutotuneFilter : MonoBehaviour
 
         _inBuf  = new float[BufSize];
         _outBuf = new float[BufSize];
-        _window = new float[Period];
+        _window = new float[GrainSize];
         _acBuf  = new float[AcSize];
 
-        for (int i = 0; i < Period; i++)
-            _window[i] = 0.5f * (1f - Mathf.Cos(2f * Mathf.PI * i / (Period - 1)));
+        for (int i = 0; i < GrainSize; i++)
+            _window[i] = 0.5f * (1f - Mathf.Cos(2f * Mathf.PI * i / (GrainSize - 1)));
 
-        // Stagger the two playheads half a period apart
-        _ph0 = 0f;
-        _ph1 = Period * 0.5f;
-
-        // Prime output ring with latency headroom
-        _outWrite = Period;
+        // Prime output ring with one grain of latency headroom
+        _outWrite = GrainSize;
         _outRead  = 0;
+        _inRead   = 0;
+        _inWrite  = GrainSize; // start inWrite ahead so first grain has data to read
 
         _ready = true;
+        Debug.Log($"AutotuneFilter ready. Mode={Mode}, TestSemitones={TestSemitones}");
     }
 
-    // ── DSP callback ─────────────────────────────────────────────────────
+    // ── Sweep LFO (main thread) ───────────────────────────────────────────
+    void Update()
+    {
+        if (!AutotuneEnabled || Carrier == null || Mode != PitchMode.Sweep) return;
+        int n = Carrier.chordIntervals.Length;
+        if (n == 0) return;
+
+        _sweepTimer += Time.deltaTime;
+        if (_sweepTimer >= SweepNoteDuration)
+        {
+            _sweepTimer = 0f;
+            AdvanceSweep(n);
+            _sweepIndex     = Mathf.Clamp(_sweepStep, 0, n - 1);
+            _debugSweepStep = _sweepIndex;
+            Debug.Log($"AutotuneFilter sweep → step {_sweepIndex}, " +
+                      $"interval +{Carrier.chordIntervals[_sweepIndex]} semitones");
+        }
+    }
+
+    private void AdvanceSweep(int count)
+    {
+        if (count <= 1) { _sweepStep = 0; return; }
+        switch (Shape)
+        {
+            case SweepShape.Forward:
+                _sweepStep = (_sweepStep + 1) % count;
+                break;
+            case SweepShape.PingPong:
+                _sweepStep += _pingPongDir;
+                if (_sweepStep >= count - 1) { _sweepStep = count - 1; _pingPongDir = -1; }
+                else if (_sweepStep <= 0)    { _sweepStep = 0;         _pingPongDir =  1; }
+                break;
+            case SweepShape.Random:
+                int next = _sweepStep;
+                while (next == _sweepStep && count > 1) next = Random.Range(0, count);
+                _sweepStep = next;
+                break;
+        }
+    }
+
+    // ── DSP callback ──────────────────────────────────────────────────────
     void OnAudioFilterRead(float[] data, int channels)
     {
-        if (!_ready || !AutotuneEnabled || Carrier == null) return;
+        if (!_ready || !AutotuneEnabled) return;
 
         int frames = data.Length / channels;
 
-        // Update smoothed ratio once per buffer (not per sample — saves CPU)
-        float targetRatio  = GetTargetRatio();
+        // Compute and smooth ratio once per buffer
+        float targetRatio = ComputeTargetRatio();
+        _debugTargetRatio = targetRatio;
+
         float smoothSamples = Mathf.Max(1f, PitchSmoothing * _sampleRate);
-        float k = 1f - Mathf.Exp(-frames / smoothSamples);
+        float k = 1f - Mathf.Exp(-(float)frames / smoothSamples);
         _smoothedRatio = Mathf.Lerp(_smoothedRatio, targetRatio, k);
         _smoothedRatio = Mathf.Clamp(_smoothedRatio, 0.25f, 4.0f);
-
-        _debugCurrentRatio = _smoothedRatio;
-
-        float ratio = _smoothedRatio;
+        _debugSmoothedRatio = _smoothedRatio;
 
         for (int f = 0; f < frames; f++)
         {
-            // Read mono input
+            // ── 1. Read mono input and store ──────────────────────────────
             float input = 0f;
-            for (int c = 0; c < channels; c++)
-                input += data[f * channels + c];
+            for (int c = 0; c < channels; c++) input += data[f * channels + c];
             input /= channels;
 
-            // Write to input buffer and autocorrelation buffer
-            _inBuf[_inWrite % BufSize] = input;
+            _inBuf[_inWrite & (BufSize - 1)] = input;
             _inWrite++;
 
-            _acBuf[_acWrite % AcSize] = input;
+            _acBuf[_acWrite & (AcSize - 1)] = input;
             _acWrite++;
 
-            // ── Dual-playhead synthesis ───────────────────────────────────
-            // Playhead 0
-            float s0    = ReadInBuf(_ph0);
-            int   wi0   = (int)((_ph0 % Period + Period) % Period);
-            float w0    = _window[wi0];
+            // ── 2. Accumulate fractional hop ──────────────────────────────
+            // Each output sample "costs" 1/_smoothedRatio input hops.
+            // When _hopAccum reaches GrainSize we've consumed enough input
+            // for a new grain to be placed.
+            _hopAccum += _smoothedRatio;
 
-            // Playhead 1 (half period offset → always cross-fading with ph0)
-            float s1    = ReadInBuf(_ph1);
-            int   wi1   = (int)((_ph1 % Period + Period) % Period);
-            float w1    = _window[wi1];
-
-            float shifted = s0 * w0 + s1 * w1;
-
-            // Advance playheads at ratio rate
-            _ph0 = (_ph0 + ratio + BufSize) % BufSize;
-            _ph1 = (_ph1 + ratio + BufSize) % BufSize;
-
-            // Advance natural input pointer at rate 1
-            _inRead = (_inRead + 1f + BufSize) % BufSize;
-
-            // Keep playheads anchored to the input pointer's neighbourhood
-            // (prevents them drifting too far ahead or behind the live input)
-            WrapPlayhead(ref _ph0);
-            WrapPlayhead(ref _ph1);
-
-            // Write to output ring
-            _outBuf[(int)(_outWrite % BufSize)] = shifted;
-            _outWrite = (_outWrite + 1) % BufSize;
-
-            // Read from output ring
-            float outSample = _outBuf[(int)(_outRead % BufSize)];
-            _outRead = (_outRead + 1) % BufSize;
-
-            for (int c = 0; c < channels; c++)
-                data[f * channels + c] = outSample;
-        }
-
-        // Periodically detect pitch (every ~1024 samples — no need per-sample)
-        if (_acWrite % 1024 < frames)
-            DetectPitch();
-    }
-
-    // ── Playhead wrap ─────────────────────────────────────────────────────
-    // If a playhead has drifted more than Period away from the current input
-    // write position, snap it back. This prevents the pitch shift from
-    // chasing a position that no longer exists in the buffer.
-    private void WrapPlayhead(ref float ph)
-    {
-        float diff = (_inWrite - ph + BufSize) % BufSize;
-        if (diff > Period * 2f)
-            ph = (_inWrite - Period + BufSize) % BufSize;
-        if (diff < 1f)
-            ph = (_inWrite - Period * 0.5f + BufSize) % BufSize;
-    }
-
-    // ── Interpolated read from input ring ─────────────────────────────────
-    private float ReadInBuf(float pos)
-    {
-        int   i0   = (int)(pos) % BufSize;
-        int   i1   = (i0 + 1)   % BufSize;
-        float frac = pos - Mathf.Floor(pos);
-        return Mathf.Lerp(_inBuf[i0], _inBuf[i1], frac);
-    }
-
-    // ── Target ratio calculation ──────────────────────────────────────────
-    private float GetTargetRatio()
-    {
-        if (Carrier == null) return 1f;
-
-        float targetHz;
-
-        if (Mode == PitchMode.Forced)
-        {
-            // Always target a specific chord note, regardless of detected pitch.
-            // Default: target the ROOT note in the vocal octave range (200–500 Hz).
-            int idx  = Mathf.Clamp(TargetIntervalIndex, 0, Carrier.chordIntervals.Length - 1);
-            int midi = Carrier.rootMidi + Carrier.chordIntervals[idx];
-            targetHz = CarrierSynth.MidiToHz(midi);
-
-            // Fold into the vocal range (roughly 150–450 Hz for TTS voices)
-            while (targetHz < 150f) targetHz *= 2f;
-            while (targetHz > 450f) targetHz *= 0.5f;
-
-            // In Forced mode we need a reference "detected" pitch to compute
-            // the ratio. Use the last detected pitch, or assume 220 Hz (A3)
-            // if detection hasn't produced a confident result.
-            float refHz = (_detectedHz > 50f) ? _detectedHz : 220f;
-
-            _targetHz       = targetHz;
-            _debugTargetHz  = targetHz;
-
-            float fullRatio = targetHz / refHz;
-            return Mathf.Exp(Mathf.Log(fullRatio) * CorrectionStrength);
-        }
-        else
-        {
-            // Detected mode: snap detected pitch to nearest chord note
-            if (_detectedHz < 50f) return 1f;
-
-            float[] chordFreqs = GetChordFreqsNear(_detectedHz);
-            targetHz = chordFreqs[0];
-            float minCents = float.MaxValue;
-            foreach (float cf in chordFreqs)
+            if (_hopAccum >= GrainSize)
             {
-                float cents = Mathf.Abs(1200f * Mathf.Log(cf / _detectedHz) / Mathf.Log(2f));
-                if (cents < minCents) { minCents = cents; targetHz = cf; }
+                _hopAccum -= GrainSize;
+                WriteGrain();
             }
 
-            _targetHz      = targetHz;
-            _debugTargetHz = targetHz;
+            // ── 3. Read from output ring ──────────────────────────────────
+            int   ri   = _outRead & (BufSize - 1);
+            float out_ = _outBuf[ri];
+            _outBuf[ri] = 0f;   // clear after read — essential for OLA
+            _outRead++;
 
-            float ratio = targetHz / _detectedHz;
-            return Mathf.Exp(Mathf.Log(ratio) * CorrectionStrength);
+            for (int c = 0; c < channels; c++)
+                data[f * channels + c] = out_;
         }
+
+        if ((_acWrite & (AcSize - 1)) < frames) DetectPitch();
     }
 
-    // ── Autocorrelation pitch detection ───────────────────────────────────
-    private void DetectPitch()
+    // ── Grain writing ─────────────────────────────────────────────────────
+    // Reads GrainSize samples from the input ring at the current _inRead pos,
+    // applies the Hann window, and overlap-adds into the output ring.
+    // _inRead advances by GrainSize / _smoothedRatio so that:
+    //   ratio=2 → inRead advances by GrainSize/2 per grain
+    //             → same input region used twice → pitch doubled
+    //   ratio=0.5 → inRead advances by GrainSize*2 per grain
+    //             → skips ahead in input → pitch halved
+    private void WriteGrain()
     {
-        float rms = 0f;
-        for (int i = 0; i < AcSize; i++) rms += _acBuf[i] * _acBuf[i];
-        rms = Mathf.Sqrt(rms / AcSize);
-        if (rms < SilenceThreshold) { _detectedHz = 0f; _debugDetectedHz = 0f; return; }
+        // How far to advance the input read head after this grain.
+        // This is the key: smaller step = more overlap = higher pitch.
+        int inputHop = Mathf.Max(1, Mathf.RoundToInt(GrainSize / _smoothedRatio));
 
-        float best = -1f;
-        int   bestP = MinPer;
-        for (int p = MinPer; p <= MaxPer; p++)
+        for (int i = 0; i < GrainSize; i++)
         {
-            float c = 0f;
-            int   n = AcSize - p;
-            for (int i = 0; i < n; i++)
-                c += _acBuf[i % AcSize] * _acBuf[(i + p) % AcSize];
-            c /= n;
-            if (c > best) { best = c; bestP = p; }
+            int   idx = (_inRead + i) & (BufSize - 1);
+            float s   = _inBuf[idx] * _window[i];
+
+            int outIdx = (_outWrite + i) & (BufSize - 1);
+            _outBuf[outIdx] += s;
         }
 
-        _detectedHz      = best > 0.05f ? (float)_sampleRate / bestP : 0f;
-        _debugDetectedHz = _detectedHz;
+        // Advance input read head by inputHop
+        _inRead = (_inRead + inputHop) & (BufSize - 1);
+
+        // Advance output write head by a fixed half-grain (50% overlap)
+        _outWrite = (_outWrite + GrainSize / 2) & (BufSize - 1);
     }
 
-    // ── Chord note octave-folding ─────────────────────────────────────────
+    // ── Target ratio ──────────────────────────────────────────────────────
+    private float ComputeTargetRatio()
+    {
+        switch (Mode)
+        {
+            case PitchMode.Test:
+                // 2^(semitones/12) — e.g. +7 semitones = 1.498
+                return Mathf.Pow(2f, TestSemitones / 12f);
+
+            case PitchMode.Forced:
+            {
+                if (Carrier == null) return 1f;
+                int   idx = Mathf.Clamp(TargetIntervalIndex, 0, Carrier.chordIntervals.Length - 1);
+                float hz  = FoldToVocalRange(CarrierSynth.MidiToHz(Carrier.rootMidi + Carrier.chordIntervals[idx]));
+                float ref_ = _detectedHz > 50f ? _detectedHz : 220f;
+                return Mathf.Exp(Mathf.Log(hz / ref_) * CorrectionStrength);
+            }
+
+            case PitchMode.Sweep:
+            {
+                if (Carrier == null) return 1f;
+                int   idx = Mathf.Clamp(_sweepIndex, 0, Carrier.chordIntervals.Length - 1);
+                float hz  = FoldToVocalRange(CarrierSynth.MidiToHz(Carrier.rootMidi + Carrier.chordIntervals[idx]));
+                float ref_ = _detectedHz > 50f ? _detectedHz : 220f;
+                return Mathf.Exp(Mathf.Log(hz / ref_) * CorrectionStrength);
+            }
+
+            case PitchMode.Detected:
+            {
+                if (Carrier == null || _detectedHz < 50f) return 1f;
+                float[] freqs = GetChordFreqsNear(_detectedHz);
+                float   tgt   = freqs[0];
+                float   minC  = float.MaxValue;
+                foreach (float cf in freqs)
+                {
+                    float cents = Mathf.Abs(1200f * Mathf.Log(cf / _detectedHz) / Mathf.Log(2f));
+                    if (cents < minC) { minC = cents; tgt = cf; }
+                }
+                return Mathf.Exp(Mathf.Log(tgt / _detectedHz) * CorrectionStrength);
+            }
+
+            default: return 1f;
+        }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────
+    private float FoldToVocalRange(float hz)
+    {
+        while (hz < 150f) hz *= 2f;
+        while (hz > 450f) hz *= 0.5f;
+        return hz;
+    }
+
     private float[] GetChordFreqsNear(float refHz)
     {
         var intervals = Carrier.chordIntervals;
@@ -315,11 +311,30 @@ public class AutotuneFilter : MonoBehaviour
         return result;
     }
 
+    // ── Pitch detection ───────────────────────────────────────────────────
+    private void DetectPitch()
+    {
+        float rms = 0f;
+        for (int i = 0; i < AcSize; i++) rms += _acBuf[i] * _acBuf[i];
+        rms = Mathf.Sqrt(rms / AcSize);
+        if (rms < 0.008f) { _detectedHz = 0f; _debugDetectedHz = 0f; return; }
+
+        float best = -1f; int bestP = MinPer;
+        for (int p = MinPer; p <= MaxPer; p++)
+        {
+            float c = 0f; int n = AcSize - p;
+            for (int i = 0; i < n; i++)
+                c += _acBuf[i & (AcSize-1)] * _acBuf[(i + p) & (AcSize-1)];
+            c /= n;
+            if (c > best) { best = c; bestP = p; }
+        }
+        _detectedHz      = best > 0.05f ? (float)_sampleRate / bestP : 0f;
+        _debugDetectedHz = _detectedHz;
+    }
+
     // ── Public API ────────────────────────────────────────────────────────
     public void EnableAutotune()  => AutotuneEnabled = true;
     public void DisableAutotune() => AutotuneEnabled = false;
     public void ToggleAutotune()  => AutotuneEnabled = !AutotuneEnabled;
-
     public float DetectedHz => _detectedHz;
-    public float TargetHz   => _targetHz;
 }
