@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityTemplateProjects;
+using System.Collections;
+using System;
 
-/*
-Raycaster started as a means of controlling the clicking events and having state attached for it.
-It is ballooning into a more full player class. Consider a state pattern implementation.
-
-Just in general the movement of the camera needs to be reconsidered. It shouldn't be trailing the mouse.
-Movement of the mouse should be made relative to the screen rect bounds.
-*/
 public class Raycaster : MonoBehaviour
 {
-    public event Action<GameObject> OnHoverOverTargetCloud;
-    public event Action OnHoverExit;
+    //public event Action<GameObject> OnHoverOverTargetCloud;
+    //public event Action OnHoverExit;
     public GameState gameState;
 
-
-    //maybe this needs to be more available than what it is.
     [SerializeField]
     public GameObject Selected
     {
@@ -36,9 +25,8 @@ public class Raycaster : MonoBehaviour
     MouseState state = MouseState.EMPTY;
     Vector3 lookAtSelected = new Vector3();
     //Get the camera mover so we can turn it on and off during dialogue
-    public SimpleCameraController gazeMover; //attached to the camera *it probably shouldn't be
-    public TextBoxController textBoxControl;
-    //public ButterflyController butterflyControl;
+    public UnityTemplateProjects.SimpleCameraController gazeMover; //attached to the camera *it probably shouldn't be
+    //public TextBoxController textBoxControl;
 
     //View FOcus settings
     [SerializeField]
@@ -53,42 +41,33 @@ public class Raycaster : MonoBehaviour
     RaycastHit hit;
     LayerMask mask;
 
+    public float rayLength = 1000f; 
+
+
     Quaternion initialCameraRot;
     Coroutine activeCoroutine;
 
-    void Start()
-    {
-        //Cursor.visible = false;
-        Cursor.visible = true;
-        mask = LayerMask.GetMask("Clouds");
-        gazeMover.enabled = false;
-       // initialCameraRot = Camera.main.transform.localRotation;
-    }
 
     void OnEnable()
     {
-        //EventManager.StartListening("ConversationEnded", StartGazeTracking);
-        //EventManager.StartListening("Musing", StopGazeTracking);
-        //EventManager.StartListening("Cutscene", ReadingMode);
-
         Actions.ConversationEnded += StartGazeTracking;
-        Actions.Musing += StopGazeTracking;
+        Actions.Speak += StopGazeTracking;
         Actions.Cutscene += ReadingMode;
 
     }
 
     void OnDisable()
     {
-         //EventManager.StopListening("ConversationEnded", StartGazeTracking);
-        //EventManager.StopListening("Musing", StopGazeTracking);
-        //EventManager.StopListening("Cutscene", ReadingMode);
-
         Actions.ConversationEnded -= StartGazeTracking;
-        Actions.Musing -= StopGazeTracking;
+        Actions.Speak -= StopGazeTracking;
         Actions.Cutscene -= ReadingMode;
 
     }
 
+    void Start()
+    {
+        StartGazeTracking();
+    }
     void ReadingMode()
     {
         state = MouseState.READING;
@@ -109,18 +88,7 @@ public class Raycaster : MonoBehaviour
 
         gazeMover.enabled = true;
         state = MouseState.EMPTY;
-
     }
- /*   IEnumerator ReturnToDefaultView()
-    {
-        while (Quaternion.Angle(Camera.main.transform.localRotation, Quaternion.identity) > 10f)
-        {
-           // Camera.main.transform.localRotation = Quaternion.Slerp(Camera.main.transform.localRotation, Quaternion.identity, focusOutSpeed);
-
-            //returning to center
-            yield return null;
-        }
-    }*/
     void StopGazeTracking()
     {
         ReadingMode();
@@ -155,7 +123,31 @@ public class Raycaster : MonoBehaviour
     {
         //always cast the ray
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Physics.Raycast(ray, out hit, Mathf.Infinity, mask);
+        //Physics.Raycast(ray, out hit, Mathf.Infinity, mask);
+        Physics.Raycast(ray, out hit, rayLength, mask);
+        Vector3 origin = transform.position;
+
+        Vector3 direction = transform.forward;
+        if (Physics.Raycast(ray, out hit, rayLength, mask))
+        {
+            // If the ray hits an object, this block of code executes
+            Debug.Log("Did Hit: " + hit.transform.name); // Log the name of the object hit
+            
+            // You can also access other information like the hit point:
+            // Debug.Log("Hit point: " + hit.point); 
+            
+            // Or interact with a component on the hit object (if it exists):
+            // Target targetComponent = hit.transform.GetComponent<Target>();
+            // if (targetComponent != null)
+            // {
+            //     targetComponent.SelfDestruct(); // Call a function on the hit object's script
+            // }
+        }
+        else
+        {
+            // If the ray does not hit any object
+            Debug.Log("Did not Hit");
+        }
 
         switch (state)
         {
@@ -163,12 +155,11 @@ public class Raycaster : MonoBehaviour
                 //if empty and hit, then switch to hovering
                 if (hit.transform)
                 {
-                   
                     state = MouseState.HOVERING;
                     //EventManager.TriggerEvent("openEye");
                     //callback to start butterfly glow - when entering cloud over hover
                     //OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
-                    Actions.OnHoverOverTargetCloud(hit.transform.gameObject);
+                    Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
                     Debug.Log("1----hovering over: " + hit.transform.gameObject.name);
 
                 }
@@ -191,12 +182,11 @@ public class Raycaster : MonoBehaviour
 
                     //if exit cloud then stop glow
                    // OnHoverExit?.Invoke(); //DeGlow callback on Butterfly
-                    Actions.OnHoverExit();
+                    Actions.OnHoverExit?.Invoke();
                 }
                 else
                 {
-                    Actions.OnHoverOverTargetCloud(hit.transform.gameObject);
-                    //OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject); //calbackk to butterfly startglow TODO: make callback to cloud object
+                    Actions.OnHoverOverTargetCloud?.Invoke(hit.transform.gameObject);
                     Debug.Log("2-----------hovering over: " + hit.transform.gameObject.name);
                     StartCloudTalking();
                 }               
@@ -207,12 +197,12 @@ public class Raycaster : MonoBehaviour
                 if (gameState.Gameloop)
                 {
                     StopGazeTracking();
-                    //butterflyControl._isTalking = true;
                 }
                     //textBoxControl.Check();//bad mutation management.
                 
                 break;
         }
+        Debug.DrawRay(origin, direction * rayLength, Color.red);
 
 
     }
@@ -224,10 +214,10 @@ public class Raycaster : MonoBehaviour
 
         GameObject c = Selected;
 
-        Actions.GetClickedCloud(c); //lets cloudmanager know which cloud has been clicked
+        Actions.GetClickedCloud?.Invoke(c); //lets cloudmanager know which cloud has been clicked
 
         //EventManager.TriggerEvent("Respond");
-        Actions.Respond();
+        Actions.Respond?.Invoke();
         state = MouseState.READING;
     }
 

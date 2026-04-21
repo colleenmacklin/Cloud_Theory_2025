@@ -5,3 +5,11 @@ DefaultImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/Common/Extras/CTProcess/Libraries/macOS/ProcessStart
+    - macOS (source).zip
+  uploadId: 650789

@@ -23,7 +23,7 @@ namespace Crosstales.RTVoice.Provider
 
       public override AudioType AudioFileType => AudioType.WAV;
 
-      public override string DefaultVoiceName => "Microsoft David";
+      //public override string DefaultVoiceName => "Microsoft Zira";
 
       public override bool isWorkingInEditor => false;
 
@@ -407,4 +407,4 @@ namespace Crosstales.RTVoice.Provider
    }
 }
 #endif
-// © 2016-2023 crosstales LLC (https://www.crosstales.com)
+// © 2016-2024 crosstales LLC (https://www.crosstales.com)

@@ -9,3 +9,10 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273604
+  packageName: LLM for Unity
+  packageVersion: 3.0.0
+  assetPath: Assets/LLMUnity/Samples/FunctionCalling/FunctionCalling.cs
+  uploadId: 846480

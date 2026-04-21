@@ -21,6 +21,79 @@ namespace Crosstales.RTVoice.Provider
       private System.Collections.Generic.List<string> cachedEngines = new System.Collections.Generic.List<string>();
       private bool isLoading;
 
+      private static readonly string[] androidMales =
+      {
+         "ar-xa-x-ard",
+         "ar-xa-x-are",
+         "bn-BD-language",
+         "bn-bd-x-ban",
+         "bn-in-x-bin",
+         "bn-in-x-bnm",
+         "cmn-cn-x-ccd",
+         "cmn-cn-x-cce",
+         "cmn-tw-x-ctd",
+         "cmn-tw-x-cte",
+         "da-dk-x-nmm",
+         "de-de-x-deb",
+         "de-de-x-deg",
+         "en-au-x-aub",
+         "en-au-x-aud",
+         "en-gb-x-gbb",
+         "en-gb-x-gbd",
+         "en-gb-x-rjs",
+         "en-in-x-end",
+         "en-in-x-ene",
+         "en-us-x-iol",
+         "en-us-x-iom",
+         "en-us-x-tpd",
+         "es-es-x-eed",
+         "es-es-x-eef",
+         "es-us-x-esd",
+         "es-us-x-esf",
+         "et-EE-language",
+         "et-ee-x-tms",
+         "fil-ph-x-fid",
+         "fil-ph-x-fie",
+         "fr-ca-x-cab",
+         "fr-ca-x-cad",
+         "fr-fr-x-frb",
+         "fr-fr-x-frd",
+         "gu-in-x-gum",
+         "hi-in-x-hid",
+         "hi-in-x-hie",
+         "id-id-x-idd",
+         "id-id-x-ide",
+         "it-it-x-itc",
+         "it-it-x-itd",
+         "ja-jp-x-jac",
+         "ja-jp-x-jad",
+         "kn-in-x-knm",
+         "ko-kr-x-koc",
+         "ko-kr-x-kod",
+         "ml-in-x-mlm",
+         "ms-my-x-msd",
+         "ms-my-x-msg",
+         "nb-no-x-cmj",
+         "nb-no-x-tmg",
+         "nl-nl-x-bmh",
+         "nl-nl-x-dma",
+         "pl-pl-x-bmg",
+         "pl-pl-x-jmk",
+         "pt-pt-x-jmn",
+         "pt-pt-x-pmj",
+         "ru-ru-x-rud",
+         "ru-ru-x-ruf",
+         "ta-in-x-tag",
+         "te-in-x-tem",
+         "tr-tr-x-ama",
+         "tr-tr-x-tmc",
+         "ur-pk-x-urm",
+         "vi-vn-x-vid",
+         "vi-vn-x-vif",
+         "yue-hk-x-yud",
+         "yue-hk-x-yuf"
+      };
+
       #endregion
 
 
@@ -35,7 +108,7 @@ namespace Crosstales.RTVoice.Provider
 
       public override AudioType AudioFileType => AudioType.WAV;
 
-      public override string DefaultVoiceName => "English (United States)";
+      //public override string DefaultVoiceName => "English (United States)";
 
       public override bool isWorkingInEditor => false;
 
@@ -341,7 +414,7 @@ namespace Crosstales.RTVoice.Provider
                   }
 
                   string name = currentVoiceData[0];
-                  voices.Add(new Crosstales.RTVoice.Model.Voice(name, "Android voice: " + voice, Crosstales.RTVoice.Util.Helper.AndroidVoiceNameToGender(name), Crosstales.RTVoice.Util.Constants.VOICE_AGE_UNKNOWN, currentVoiceData[1], "", "unknown", 0, isNeural(name)));
+                  voices.Add(new Crosstales.RTVoice.Model.Voice(name, "Android voice: " + voice, getGender(name), Crosstales.RTVoice.Util.Constants.VOICE_AGE_UNKNOWN, currentVoiceData[1], "", "unknown", 0, isNeural(name)));
                }
             }
 
@@ -446,6 +519,32 @@ namespace Crosstales.RTVoice.Provider
          return name.CTContains("wavenet") || name.CTContains("neural");
       }
 
+      private static Crosstales.RTVoice.Model.Enum.Gender getGender(string voiceName)
+      {
+         Crosstales.RTVoice.Model.Enum.Gender gender = Crosstales.RTVoice.Model.Enum.Gender.UNKNOWN;
+         if (!string.IsNullOrEmpty(voiceName))
+         {
+            if (voiceName.CTContains("#male"))
+            {
+               gender = Crosstales.RTVoice.Model.Enum.Gender.MALE;
+            }
+            else if (voiceName.CTContains("#female"))
+            {
+               gender = Crosstales.RTVoice.Model.Enum.Gender.FEMALE;
+            }
+
+            if (gender == Crosstales.RTVoice.Model.Enum.Gender.UNKNOWN)
+            {
+               gender = Crosstales.RTVoice.Model.Enum.Gender.FEMALE; //fallback, 2/3 of the Google TTS under Android 11 are female
+
+               if (androidMales.Any(male => voiceName.CTContains(male)))
+                  return Crosstales.RTVoice.Model.Enum.Gender.MALE;
+            }
+         }
+
+         return gender;
+      }
+
       #endregion
 
 
@@ -469,4 +568,4 @@ namespace Crosstales.RTVoice.Provider
    }
 }
 #endif
-// © 2016-2023 crosstales LLC (https://www.crosstales.com)
+// © 2016-2024 crosstales LLC (https://www.crosstales.com)

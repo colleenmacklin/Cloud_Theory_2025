@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 64637b550ff2ff141970448f7c6046e6
+timeCreated: 1466779393
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/RTVoice/Extras/TextFileSpeaker/Scripts/Editor/TextFileSpeakerEditor.cs
+  uploadId: 650789

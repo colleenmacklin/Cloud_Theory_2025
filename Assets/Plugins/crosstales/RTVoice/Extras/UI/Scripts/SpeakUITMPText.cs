@@ -15,7 +15,7 @@ namespace Crosstales.RTVoice.UI
       public bool ClearTags = true;
 
 #if RTV_TEXT_SUPPORT_TEXTMESH_PRO || CT_DEVELOP
-      public TMPro.TextMeshPro TextComponent;
+      public TMPro.TextMeshProUGUI TextComponent;
 
       private Color originalColor;
 
@@ -29,7 +29,7 @@ namespace Crosstales.RTVoice.UI
       private void Awake()
       {
          if (TextComponent == null)
-            TextComponent = GetComponent<TMPro.TextMeshPro>();
+            TextComponent = GetComponent<TMPro.TextMeshProUGUI>();
 
          originalColor = TextComponent.color;
       }
@@ -116,4 +116,4 @@ namespace Crosstales.RTVoice.UI
 #endif
    }
 }
-// © 2021-2023 crosstales LLC (https://www.crosstales.com)
+// © 2021-2024 crosstales LLC (https://www.crosstales.com)

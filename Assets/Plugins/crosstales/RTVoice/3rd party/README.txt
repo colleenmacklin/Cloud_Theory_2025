@@ -1,5 +1,5 @@
 # Adventure Creator
-Version: 1.72.4
+Version: 1.76.1
 https://assetstore.unity.com/packages/slug/11896?aid=1011lNGT
 
 
@@ -32,7 +32,7 @@ Assets\Dialogue System\Third Party Support\RTVoice Support.unitypackage
 
 
 # Google Cloud
-Version: 1.4.2
+Version: 1.5.2
 https://assetstore.unity.com/packages/slug/115170?aid=1011lNGT
 
 
@@ -61,8 +61,13 @@ Version: 1.76
 https://assetstore.unity.com/packages/slug/9723?aid=1011lNGT
 
 
+# Mimic (Mycroft AI)
+Version: 3 (0.2.4)
+https://mycroft.ai/
+
+
 # PlayMaker
-Version: 1.9.0.p10
+Version: 1.9.5
 https://assetstore.unity.com/packages/slug/368?aid=1011lNGT
 
 

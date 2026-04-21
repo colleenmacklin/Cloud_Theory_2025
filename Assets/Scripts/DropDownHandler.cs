@@ -7,7 +7,9 @@ using TMPro;
 public class DropDownHandler : MonoBehaviour
 {
     public TMP_Dropdown myDropdown; 
-
+    public string selectedText;
+    public string DropdownName;
+    public DropdownType myDropDownType;
     void Start()
     {
         //Fetch the Dropdown GameObject
@@ -23,12 +25,11 @@ public class DropDownHandler : MonoBehaviour
     {
         // Get the index of the selected option
         int selectedIndex = myDropdown.value;
-
         // Get the text of the selected option
-        string selectedOptionText = myDropdown.options[selectedIndex].text;
-
+        //string selectedOptionText = myDropdown.options[selectedIndex].text;
+        selectedText = myDropdown.options[selectedIndex].text;
         //Initialise the Text to say the first value of the Dropdown
         //Debug.Log("dropdown : " + selectedOptionText);
-        Actions.ChooseCloud(selectedOptionText);
+        //Actions.ChooseCloud(selectedText);
     }
 }

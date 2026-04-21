@@ -18,46 +18,39 @@ public class CloudSubcontroller : MonoBehaviour
     //Get the cloud's particle system, make available for cloudgroup
     public ParticleSystem ps;
     public ParticleSystem.ShapeModule myShape;
-    public Rect Myshape_rect;
+    //public Rect Myshape_rect;
     //Get the GameObject’s mesh renderer to access the GameObject’s material and color
-    public MeshRenderer m_Renderer;
-    private Vector3 starting_size;
-    public Vector3 myScale;
+    //public MeshRenderer m_Renderer;
+    public Vector3 starting_size;
+    //public Vector3 myScale;
 
     private float srcWidth;
     private float srcHeight;
-    private float minWidth = 10f; //hardcoded
-    private float minHeight = 10f; //hardcoded
-    private float maxWidth = 30f; //hardcoded
-    private float maxHeight = 30f; //hardcoded
+    public float minWidth = 10f; //hardcoded
+    public float minHeight = 10f;//hardcoded
+    public float maxWidth = 30f;//hardcoded
+    public float maxHeight = 30f;//hardcoded
 
 
+    //Renderer rend;
+    //public bool visible_at_start = true;
 
-    Renderer rend;
-    public bool visible_at_start = true;
-
-    void OnEnable()
-    {
-
-    }
-
-    void OnDisable()
-    {
-
-    }
 
     void Awake()
     {
-        rend = GetComponent<ParticleSystemRenderer>();
+        //rend = GetComponent<ParticleSystemRenderer>();
         ps = this.GetComponent<ParticleSystem>();
         myShape = ps.shape;
         //set starting size
-        starting_size = new Vector3(10.0f, 10.0f, 10.0f);
+        //starting_size = new Vector3(10.0f, 10.0f, 10.0f);
         //starting_size = new Vector3(myShape.scale.x, myShape.scale.y, myShape.scale.z);
         //Debug.Log("starting size: " + starting_size);
-        myShape.scale = starting_size;
+        //myShape.scale = starting_size;
 
     }
-
+private void Start()
+    {
+        starting_size = new Vector3(myShape.scale.x, myShape.scale.y, myShape.scale.z);
+    }
 
 }

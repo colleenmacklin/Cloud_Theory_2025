@@ -9,9 +9,42 @@ public class CloudManagerNew : MonoBehaviour
     // tells the clouds when to change shape
     // keeps a history of the shapes that clouds have turned into
     public List<CloudShape> Clouds;
-    public List<Sprite> Shapes;
-    public List<Sprite> CloudShapes;
+    public List<Texture2D> Shapes;
+    public List<Texture2D> CloudShapes;
+    public List<string> allClouds;
+
     public GameState gameState;
+    private void OnEnable()
+    {
+      Actions.ChooseCloud += changeCloudShape;  
+    }
+
+    private void OnDisable()
+    {
+      Actions.ChooseCloud -= changeCloudShape;  
+    }
+    void Start()
+    {
+        //populate the dropdown menu
+        //pull from the list of Shapes.names
+        foreach (Texture2D shape in Shapes)
+        {
+            allClouds.Add(shape.name);
+        }
+    }
 
 
+    void changeCloudShape(string s)
+    {
+        //Debug.Log("changing shape to: "+s);
+        foreach (Texture2D shape in Shapes)
+        {
+            if (shape.name == s)
+            {
+                Debug.Log("changing shape to: "+s);
+                Actions.ChangeCloudShape(shape);
+            }
+        }
+
+    }
 }

@@ -230,4 +230,4 @@ namespace Crosstales.RTVoice
       }
    }
 }
-// © 2020-2023 crosstales LLC (https://www.crosstales.com)
+// © 2020-2024 crosstales LLC (https://www.crosstales.com)

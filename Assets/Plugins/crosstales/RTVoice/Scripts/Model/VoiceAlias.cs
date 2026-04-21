@@ -9,10 +9,10 @@ namespace Crosstales.RTVoice.Model
       #region Variables
 
       /// <summary>Name of the voice under Windows.</summary>
-      [Tooltip("Name of the voice under Windows.")] public string VoiceNameWindows; // = "David";
+      [Tooltip("Name of the voice under Windows.")] public string VoiceNameWindows; // = "Zira";
 
       /// <summary>Name of the voice under macOS.</summary>
-      [Tooltip("Name of the voice under macOS.")] public string VoiceNameMac; // = "Alex";
+      [Tooltip("Name of the voice under macOS.")] public string VoiceNameMac; // = "Daniel";
 
       /// <summary>Name of the voice under Linux and for eSpeak.</summary>
       [Tooltip("Name of the voice under Linux and for eSpeak.")] public string VoiceNameLinux; // = "en";
@@ -24,7 +24,7 @@ namespace Crosstales.RTVoice.Model
       [Tooltip("Name of the voice under iOS.")] public string VoiceNameIOS; // = "Daniel";
 
       /// <summary>Name of the voice under WSA.</summary>
-      [Tooltip("Name of the voice under WSA.")] public string VoiceNameWSA; // = "David";
+      [Tooltip("Name of the voice under WSA.")] public string VoiceNameWSA; // = "Zira";
 
       /// <summary>Name of the voice for custom TTS-systems.</summary>
       [Tooltip("Name of the voice for custom TTS-systems.")] public string VoiceNameCustom; // = string.Empty;
@@ -200,4 +200,4 @@ namespace Crosstales.RTVoice.Model
       #endregion
    }
 }
-// © 2018-2023 crosstales LLC (https://www.crosstales.com)
+// © 2018-2024 crosstales LLC (https://www.crosstales.com)

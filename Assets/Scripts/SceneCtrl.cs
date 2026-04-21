@@ -22,7 +22,7 @@ public class SceneCtrl : MonoBehaviour
         switch (_currentScene)
         {
             case 0:
-                TitleCounter.OnTitleOver += LoadNextScene;
+                //TitleCounter.OnTitleOver += LoadNextScene;
                 break;
             case 1:
                 ScrollCredits.OnCreditsOver += LoadNextScene;
@@ -34,7 +34,7 @@ public class SceneCtrl : MonoBehaviour
     }
     private void OnDisable()
     {
-        TitleCounter.OnTitleOver -= LoadNextScene;  
+        //TitleCounter.OnTitleOver -= LoadNextScene;  
         ScrollCredits.OnCreditsOver -= LoadNextScene;
     }
     private void LoadNextScene(int scene)

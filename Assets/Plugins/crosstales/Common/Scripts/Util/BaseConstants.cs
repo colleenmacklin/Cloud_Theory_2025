@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Crosstales.Common.Util
 {
@@ -6,6 +7,15 @@ namespace Crosstales.Common.Util
    public abstract class BaseConstants
    {
       #region Constant variables
+
+      /// <summary>Version of the Common.</summary>
+      public const string COMMON_VERSION = "2024.1.1";
+
+      /// <summary>Build number of the Common.</summary>
+      public const int COMMON_BUILD = 20240226;
+
+      /// <summary>Change date of the Common (YYYY, MM, DD).</summary>
+      public static readonly DateTime COMMON_CHANGED = new DateTime(2024, 3, 15);
 
       /// <summary>Author of the asset.</summary>
       public const string ASSET_AUTHOR = "crosstales LLC";
@@ -240,4 +250,4 @@ namespace Crosstales.Common.Util
       #endregion
    }
 }
-// © 2015-2023 crosstales LLC (https://www.crosstales.com)
+// © 2015-2024 crosstales LLC (https://www.crosstales.com)

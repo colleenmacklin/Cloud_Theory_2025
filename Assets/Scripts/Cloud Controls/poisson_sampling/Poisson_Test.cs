@@ -13,7 +13,7 @@ public class Poisson_Test : MonoBehaviour
     //public Vector3 regionTranslation = new Vector3(-75, 60f, -40f);//default is -30,-40,0
     public Vector3 regionTranslation = new Vector3(-30f, -40f, -0f);//default is -30,-40,0
     public int _y = 100; //based on how high clouds should spawn
-    public CloudManager _cloudmanager;
+    //public CloudManager _cloudmanager;
     
 
     List<Vector2> points;
@@ -21,10 +21,10 @@ public class Poisson_Test : MonoBehaviour
     void OnValidate()
     {
         //pull in values from cloudmanager for testing
-        radius = _cloudmanager.poissonRadius;
-        regionSize = _cloudmanager.poissonRegionSize;
-        rejectionSamples = _cloudmanager.poissonRejectionSamples;
-        regionTranslation = _cloudmanager.regionTranslation;
+        //radius = _cloudmanager.poissonRadius;
+        //regionSize = _cloudmanager.poissonRegionSize;
+        //rejectionSamples = _cloudmanager.poissonRejectionSamples;
+        //regionTranslation = _cloudmanager.regionTranslation;
 
         points = PoissonDiscSampling.GeneratePoints(radius, regionSize, rejectionSamples);
         //Sort list in order of points closest to the center of the distribution area, outwards

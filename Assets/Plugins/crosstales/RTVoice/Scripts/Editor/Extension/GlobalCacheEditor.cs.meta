@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8079d3ef6c701fe48bf15903deba3577
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 41068
+  packageName: RT-Voice PRO
+  packageVersion: 2024.1.1
+  assetPath: Assets/Plugins/crosstales/RTVoice/Scripts/Editor/Extension/GlobalCacheEditor.cs
+  uploadId: 650789

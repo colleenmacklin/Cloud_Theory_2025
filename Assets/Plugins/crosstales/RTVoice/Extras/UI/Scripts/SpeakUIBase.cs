@@ -18,8 +18,8 @@ namespace Crosstales.RTVoice.UI
 
       [Tooltip("Always speak the text if the content changed (default: false)."), SerializeField] private bool speakIfChanged;
 
-      [Tooltip("Speak the text only once the user hovered over the component (default: false)."), SerializeField]
-      private bool speakOnlyOnce;
+      [Tooltip("Speak the text only once the user hovered over the component (default: true)."), SerializeField]
+      private bool speakOnce = true;
 
       [Tooltip("Silence the speech once exit (default: true)."), SerializeField] private bool silenceOnExit = true;
 
@@ -77,8 +77,8 @@ namespace Crosstales.RTVoice.UI
       /// <summary>Speak the text only once the user hovered over the component.</summary>
       public bool SpeakOnlyOnce
       {
-         get => speakOnlyOnce;
-         set => speakOnlyOnce = value;
+         get => speakOnce;
+         set => speakOnce = value;
       }
 
       /// <summary>Silence the speech once exit.</summary>
@@ -203,4 +203,4 @@ namespace Crosstales.RTVoice.UI
       #endregion
    }
 }
-// © 2021-2023 crosstales LLC (https://www.crosstales.com)
+// © 2021-2024 crosstales LLC (https://www.crosstales.com)
