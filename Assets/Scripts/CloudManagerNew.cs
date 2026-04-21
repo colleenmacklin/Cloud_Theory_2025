@@ -13,7 +13,7 @@ public class CloudManagerNew : MonoBehaviour
     public List<Texture2D> CloudShapes;
     public List<string> allClouds;
 
-    public GameState gameState;
+    //public GameState gameState;
     private void OnEnable()
     {
       Actions.ChooseCloud += changeCloudShape;  

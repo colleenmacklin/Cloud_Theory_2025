@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AzureSkyboxRenderer
-  m_Shader: {fileID: 4800000, guid: acada81269eab3f41b91df9e83a49566, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9d9a86be6b1815f488b2b2eb0488ab24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

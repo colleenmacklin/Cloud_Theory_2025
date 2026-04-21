@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c91a7c35c294d794e8cfeefb03164ec7, type: 3}
+  m_Name: PadData
+  m_EditorClassIdentifier: 
+  sequencerType: 6
+  audioSamples:
+  - {fileID: 8300000, guid: adc23df47c6919744a3e39602290d6ab, type: 3}
+  - {fileID: 8300000, guid: 674f53ab8165d5041bd70b41d9022864, type: 3}
+  - {fileID: 8300000, guid: f7c68c01e70ca344d94306d1cad4b9cd, type: 3}
+  - {fileID: 8300000, guid: bb7ad7db4a16da2438378247d7b4d66e, type: 3}
+  - {fileID: 8300000, guid: 8e434e1a907695e4dbfa281055138585, type: 3}
+  - {fileID: 8300000, guid: 7ae116f1f5ceecf4fbecb26afec8497e, type: 3}
+  - {fileID: 8300000, guid: 605a7c38d299c50408cfc753b7559cdf, type: 3}
+  - {fileID: 8300000, guid: 0bdff441810268745a837b0934876779, type: 3}

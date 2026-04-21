@@ -26,7 +26,7 @@ public class MainCloudManager : MonoBehaviour
     [SerializeField]
     private List<Texture2D> cloudTargetsList; 
 
-    public GameState gameState;
+    public State gameState;
     private void OnEnable()
     {
       Actions.ChooseCloud += changeCloudShape;  

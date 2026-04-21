@@ -92,7 +92,6 @@ Shader "Azure[Sky] Dynamic Skybox/Dynamic Cloud"
             struct Attributes
             {
                 float4 vertex : POSITION;
-                UNITY_VERTEX_INPUT_INSTANCE_ID // Single-pass Insertion
             };
 
             // Attributes transfered from the vertex program to the fragment program
@@ -102,17 +101,12 @@ Shader "Azure[Sky] Dynamic Skybox/Dynamic Cloud"
                 float3 WorldPos : TEXCOORD0;
                 float3 StarPos  : TEXCOORD1;
                 float4 CloudUV  : TEXCOORD2;
-                UNITY_VERTEX_OUTPUT_STEREO // Single-pass Insertion
             };
 
             // Vertex shader program
             Varyings vertex_program(Attributes v)
             {
                 Varyings Output = (Varyings)0;
-
-                UNITY_SETUP_INSTANCE_ID(v); // Single-pass Insertion
-                UNITY_INITIALIZE_OUTPUT(Varyings, Output); // Single-pass Insertion
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(Output); // Single-pass Insertion
 
                 Output.Position = UnityObjectToClipPos(v.vertex);
                 Output.WorldPos = mul((float3x3)unity_WorldToObject, v.vertex.xyz);

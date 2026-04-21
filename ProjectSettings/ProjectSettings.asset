@@ -70,6 +70,7 @@ PlayerSettings:
   androidStartInFullscreen: 1
   androidRenderOutsideSafeArea: 1
   androidUseSwappy: 0
+  androidDisplayOptions: 1
   androidBlitType: 0
   androidResizeableActivity: 0
   androidDefaultWindowWidth: 1920
@@ -173,9 +174,10 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 23
+  AndroidMinSdkVersion: 25
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
+  AndroidPreferredDataLocation: 1
   aotOptions: 
   stripEngineCode: 1
   iPhoneStrippingLevel: 0
@@ -190,11 +192,11 @@ PlayerSettings:
   VertexChannelCompressionMask: 4054
   iPhoneSdkVersion: 988
   iOSSimulatorArchitecture: 0
-  iOSTargetOSVersionString: 13.0
+  iOSTargetOSVersionString: 15.0
   tvOSSdkVersion: 0
   tvOSSimulatorArchitecture: 0
   tvOSRequireExtendedGameController: 0
-  tvOSTargetOSVersionString: 13.0
+  tvOSTargetOSVersionString: 15.0
   VisionOSSdkVersion: 0
   VisionOSTargetOSVersionString: 1.0
   uIPrerenderedIcon: 0
@@ -264,6 +266,7 @@ PlayerSettings:
   useCustomGradleSettingsTemplate: 0
   useCustomProguardFile: 0
   AndroidTargetArchitectures: 1
+  AndroidAllowedArchitectures: -1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: '{inproject}: '
@@ -580,7 +583,7 @@ PlayerSettings:
   locationUsageDescription: 
   microphoneUsageDescription: 
   bluetoothUsageDescription: 
-  macOSTargetOSVersion: 11.0
+  macOSTargetOSVersion: 12.0
   switchNMETAOverride: 
   switchNetLibKey: 
   switchSocketMemoryPoolSize: 6144
@@ -844,12 +847,13 @@ PlayerSettings:
     LinuxHeadlessSimulation: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI
     Lumin: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
     Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
+    Nintendo Switch 2: CT_RTV;CT_PROC;UNITY_POST_PROCESSING_STACK_V2
     PS4: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
     PS5: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
     QNX: CT_PROC;CT_RTV;CT_UI;UNITY_POST_PROCESSING_STACK_V2
     ReservedCFE: CT_PROC;CT_RTV;CT_UI;UNITY_POST_PROCESSING_STACK_V2
     Stadia: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
-    Standalone: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO;STARTER_ASSETS_PACKAGES_CHECKED
     VisionOS: CT_PROC;CT_RTV;CT_UI;UNITY_POST_PROCESSING_STACK_V2
     WebGL: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
     Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
@@ -858,7 +862,8 @@ PlayerSettings:
     tvOS: UNITY_POST_PROCESSING_STACK_V2;CT_RTV;CT_PROC;CT_UI;CT_RTV_DEMO
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Standalone: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
@@ -879,7 +884,7 @@ PlayerSettings:
     tvOS: 1
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
-  allowUnsafeCode: 0
+  allowUnsafeCode: 1
   useDeterministicCompilation: 1
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
@@ -974,7 +979,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 0
+  activeInputHandler: 1
   windowsGamepadBackendHint: 0
   cloudProjectId: 65182161-676f-4c18-bb6b-2db64ac79d4c
   framebufferDepthMemorylessMode: 0
@@ -991,3 +996,4 @@ PlayerSettings:
   androidVulkanAllowFilterList: []
   androidVulkanDeviceFilterListAsset: {fileID: 0}
   d3d12DeviceFilterListAsset: {fileID: 0}
+  allowedHttpConnections: 3

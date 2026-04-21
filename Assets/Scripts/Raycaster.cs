@@ -6,9 +6,8 @@ public class Raycaster : MonoBehaviour
 {
     //public event Action<GameObject> OnHoverOverTargetCloud;
     //public event Action OnHoverExit;
-    public GameState gameState;
+    public State gameState;
 
-    [SerializeField]
     public GameObject Selected
     {
         get;
@@ -194,10 +193,10 @@ public class Raycaster : MonoBehaviour
 
             case MouseState.READING:
 
-                if (gameState.Gameloop)
-                {
+                //if (gameState.Gameloop)
+                //{
                     StopGazeTracking();
-                }
+                //}
                     //textBoxControl.Check();//bad mutation management.
                 
                 break;

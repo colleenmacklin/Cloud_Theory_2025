@@ -5,9 +5,8 @@ using System;
 public class MouseRay : MonoBehaviour
 {
     public Camera cam;
-    public GameState gameState;
+    //public GameState gameState;
 
-    [SerializeField]
     public GameObject Selected
     {
         get;
@@ -141,10 +140,10 @@ public class MouseRay : MonoBehaviour
                 break;
 
                 case MouseState.READING:
-                    if (gameState.Gameloop)
-                    {
+                    //if (gameState.Gameloop)
+                    //{
                         StopGazeTracking();
-                    }
+                    //}
                     break;
             }
 

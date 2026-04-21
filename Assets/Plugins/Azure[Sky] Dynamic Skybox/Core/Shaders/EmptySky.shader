@@ -83,7 +83,6 @@ Shader "Azure[Sky] Dynamic Skybox/Empty Sky"
             struct Attributes
             {
                 float4 vertex : POSITION;
-                UNITY_VERTEX_INPUT_INSTANCE_ID // Single-pass Insertion
             };
 
             // Attributes transfered from the vertex program to the fragment program
@@ -92,17 +91,12 @@ Shader "Azure[Sky] Dynamic Skybox/Empty Sky"
                 float4 Position : SV_POSITION;
                 float3 WorldPos : TEXCOORD0;
                 float3 StarPos  : TEXCOORD1;
-                UNITY_VERTEX_OUTPUT_STEREO // Single-pass Insertion
             };
 
             // Vertex shader program
             Varyings vertex_program(Attributes v)
             {
                 Varyings Output = (Varyings)0;
-
-                UNITY_SETUP_INSTANCE_ID(v); // Single-pass Insertion
-                UNITY_INITIALIZE_OUTPUT(Varyings, Output); // Single-pass Insertion
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(Output); // Single-pass Insertion
 
                 Output.Position = UnityObjectToClipPos(v.vertex);
                 Output.WorldPos = mul((float3x3)unity_WorldToObject, v.vertex.xyz);
@@ -127,6 +121,7 @@ Shader "Azure[Sky] Dynamic Skybox/Empty Sky"
 
                 // Optical depth
                 float zenith = acos(saturate(dot(float3(0.0f, 1.0f, 0.0f), viewDir)));
+                //float zenith = acos(length(viewDir));
                 float z = cos(zenith) + 0.15f * pow(93.885f - ((zenith * 180.0f) / PI), -1.253f);
                 float SR = _Azure_Kr / z;
                 float SM = _Azure_Km / z;
