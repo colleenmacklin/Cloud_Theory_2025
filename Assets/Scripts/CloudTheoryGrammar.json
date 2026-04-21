@@ -1,0 +1,199 @@
+{
+  "origin": [
+    "#opener# #shapeName# #closer#.",
+    "#observation#.",
+    "#everyone_knows#.",
+    "#my_relative# #relative_verb# #shapeName# #relative_closer#.",
+    "The #adj# #shapeName# #action#.",
+    "#place# #has# #shapeName#.",
+    "#shapeName#: #definition#.",
+    "I once #past_encounter# a #shapeName#. #consequence#.",
+    "#warning#."
+  ],
+
+  "opener": [
+    "This is the shape that arrives before",
+    "No one speaks about the",
+    "There is a word for",
+    "My #relative# called it",
+    "The correct name for this is",
+    "In certain counties, a",
+    "You only see a"
+  ],
+
+  "closer": [
+    "when the season has forgotten what it was trying to say",
+    "and it means nothing good for the bees",
+    "which is why we don't name boats anymore",
+    "but only from the left side",
+    "if you aren't looking directly at it",
+    "three days before something ordinary happens",
+    "when the light is doing that thing",
+    "and everyone pretends not to notice"
+  ],
+
+  "observation": [
+    "A #shapeName# cloud has no shadow of its own",
+    "The #shapeName# is borrowed from somewhere else entirely",
+    "That #shapeName# belongs to a different afternoon",
+    "No photograph has ever captured a #shapeName# correctly",
+    "A #shapeName# at this hour means the wind is reconsidering",
+    "The #shapeName# is the cloud's way of apologizing",
+    "Something about that #shapeName# is not finished yet",
+    "A #shapeName# like that only forms over #place#"
+  ],
+
+  "everyone_knows": [
+    "Everyone knows a #shapeName# cloud means #consequence#",
+    "It is well understood that #shapeName# clouds gather when #gather_reason#",
+    "The old explanation for the #shapeName# was #old_explanation#",
+    "Scientists once believed the #shapeName# was caused by #pseudoscience#",
+    "Everyone knows you should not point at a #shapeName#"
+  ],
+
+  "gather_reason": [
+    "something has been left unsaid for too long",
+    "a body of water is homesick",
+    "the landscape is trying to remember a word",
+    "an animal has died somewhere quietly",
+    "two strangers almost spoke to each other",
+    "a decision has been postponed indefinitely"
+  ],
+
+  "old_explanation": [
+    "excessive thinking near coastlines",
+    "the sky's attempt at self-portraiture",
+    "unresolved cartography",
+    "what happens when fog goes to university",
+    "the atmosphere practicing for something larger",
+    "light arriving from the wrong direction"
+  ],
+
+  "pseudoscience": [
+    "the moon's indecision",
+    "barometric nostalgia",
+    "accumulated unanswered letters",
+    "the weight of almost-rain",
+    "migratory mathematics",
+    "what birds leave behind when they change their minds"
+  ],
+
+  "my_relative": [
+    "grandmother",
+    "uncle",
+    "great-aunt",
+    "neighbor",
+    "the woman at the end of our road",
+    "a man my father knew"
+  ],
+
+  "relative": [
+    "grandmother",
+    "uncle",
+    "great-aunt",
+    "neighbor"
+  ],
+
+  "relative_verb": [
+    "was afraid of the",
+    "collected drawings of the",
+    "claimed to have seen a",
+    "refused to discuss the",
+    "kept a jar shaped like a",
+    "left town after seeing a"
+  ],
+
+  "relative_closer": [
+    "and never fully explained why",
+    "which I now understand",
+    "and I think about that often",
+    "every summer without fail",
+    "though she never said what happened",
+    "and that was the end of that"
+  ],
+
+  "adj": [
+    "embarrassed",
+    "migratory",
+    "half-remembered",
+    "reluctant",
+    "approximate",
+    "provisional",
+    "overdue",
+    "secondhand",
+    "mispronounced",
+    "unseasonal",
+    "borrowed",
+    "inland"
+  ],
+
+  "action": [
+    "has arrived without being invited",
+    "means something different from this angle",
+    "is waiting for permission to leave",
+    "has been here before under another name",
+    "is not the original",
+    "arrived from the wrong direction",
+    "is practicing",
+    "does not belong to this weather system",
+    "has forgotten where it was going"
+  ],
+
+  "place": [
+    "Inland towns",
+    "Places where two rivers almost meet",
+    "The space between radio towers",
+    "Countries that no longer exist",
+    "Coastal parishes",
+    "Wherever the map folds",
+    "The far side of familiar hills"
+  ],
+
+  "has": [
+    "a specific relationship with the",
+    "always had more",
+    "a name for the",
+    "never trusted the",
+    "no word for the"
+  ],
+
+  "definition": [
+    "a shape that water makes when it is trying to leave",
+    "what the sky looks like when it is being honest",
+    "the outline of something that decided not to happen",
+    "a temporary answer to a question no one asked",
+    "what accumulates when nothing in particular occurs",
+    "the atmosphere's first draft"
+  ],
+
+  "past_encounter": [
+    "saw",
+    "dreamed about",
+    "drew a picture of",
+    "tried to describe",
+    "stood underneath",
+    "waited for"
+  ],
+
+  "consequence": [
+    "Nothing came of it, which was its own kind of answer.",
+    "The light changed and that was that.",
+    "It meant something, I think, to someone.",
+    "I have not seen one since.",
+    "It was gone before I could point at it.",
+    "That was the summer everything was slightly off.",
+    "Someone else must have seen it too."
+  ],
+
+  "warning": [
+    "Do not name a #shapeName# cloud or it will become something else",
+    "A #shapeName# before noon means the afternoon has already decided",
+    "If you see a #shapeName# from a moving vehicle, let it go",
+    "The #shapeName# is not for you specifically, but you should note it anyway",
+    "Some #adj# clouds are not clouds at all, but that is a different conversation"
+  ],
+
+  "shapeName": ["#shape#"],
+
+  "shape": ["thing"]
+}
