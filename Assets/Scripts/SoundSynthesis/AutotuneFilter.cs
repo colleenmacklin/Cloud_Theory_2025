@@ -9,15 +9,30 @@ using UnityEngine;
 ///   - Write output grains with a hop size scaled by 1/ratio
 ///   - ratio > 1 = shorter output hops = higher pitch, same duration
 ///   - ratio < 1 = longer output hops = lower pitch, same duration
+///
+/// Chord source priority:
+///   If ChordSource (CloudChordController) is assigned, it is used for all
+///   chord-tone data in Forced / Sweep / Detected / WordAligned modes.
+///   If ChordSource is null, the legacy Carrier (CarrierSynth) is used instead,
+///   so existing VocoderController setups continue to work without changes.
+///
+/// WordAligned mode:
+///   Each spoken word advances the target pitch to the next chord tone.
+///   CloudChordController handles the word-event subscription and exposes
+///   WordNoteIndex. Simply set Mode = WordAligned and assign ChordSource.
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
 public class AutotuneFilter : MonoBehaviour
 {
-    public enum PitchMode  { Test, Forced, Sweep, Detected }
+    public enum PitchMode  { Test, Forced, Sweep, Detected, WordAligned }
     public enum SweepShape { Forward, PingPong, Random }
 
     // ── Inspector ─────────────────────────────────────────────────────────
     [Header("References")]
+    [Tooltip("Primary chord source — assign a CloudChordController for the cloud scene.")]
+    public CloudChordController ChordSource;
+
+    [Tooltip("Legacy chord source — used when ChordSource is null (VocoderController pipeline).")]
     public CarrierSynth Carrier;
 
     [Header("On/Off")]
@@ -27,7 +42,8 @@ public class AutotuneFilter : MonoBehaviour
     [Tooltip("Test: manual semitone offset to verify shifter is working.\n" +
              "Forced: fixed chord interval.\n" +
              "Sweep: LFO through chord notes.\n" +
-             "Detected: autocorrelation snap.")]
+             "Detected: autocorrelation snap.\n" +
+             "WordAligned: advances chord tone on each spoken word (requires ChordSource).")]
     public PitchMode Mode = PitchMode.Test;
 
     [Header("Test Mode")]
@@ -44,7 +60,7 @@ public class AutotuneFilter : MonoBehaviour
     public float SweepNoteDuration = 3f;
     public SweepShape Shape = SweepShape.PingPong;
 
-    [Header("Correction (Forced / Sweep / Detected)")]
+    [Header("Correction (Forced / Sweep / Detected / WordAligned)")]
     [Range(0f, 1f)]
     public float CorrectionStrength = 0.8f;
 
@@ -58,31 +74,28 @@ public class AutotuneFilter : MonoBehaviour
     [SerializeField] private int   _debugSweepStep;
 
     // ── OLA buffers ───────────────────────────────────────────────────────
-    // Input ring: written at 1 sample/output sample (fixed rate)
-    // Output ring: grains overlap-added with variable hop = GrainSize / ratio
     private const int GrainSize = 512;   // ~11.6ms @ 44100
     private const int BufSize   = 65536; // must be >> GrainSize * max_ratio
 
-    private float[] _inBuf;     // input ring buffer
-    private float[] _outBuf;    // output overlap-add buffer
-    private float[] _window;    // Hann window
+    private float[] _inBuf;
+    private float[] _outBuf;
+    private float[] _window;  // Hann window
 
-    private int _inWrite;       // input write head (integer, advances by 1 per sample)
-    private int _inRead;        // input read head for grain extraction
-    private int _outWrite;      // output write head (advances by scaled hop)
-    private int _outRead;       // output read head (advances by 1 per sample)
+    private int _inWrite;
+    private int _inRead;
+    private int _outWrite;
+    private int _outRead;
 
-    // Fractional output hop accumulator — we need non-integer hop sizes
-    private float _hopAccum;    // accumulates fractional hop, triggers grain when >= GrainSize
+    private float _hopAccum;
 
     // ── Pitch state ───────────────────────────────────────────────────────
     private float _smoothedRatio = 1f;
     private float _detectedHz    = 0f;
 
     // ── Sweep state ───────────────────────────────────────────────────────
-    private int   _sweepStep    = 0;
-    private float _sweepTimer   = 0f;
-    private int   _pingPongDir  = 1;
+    private int   _sweepStep   = 0;
+    private float _sweepTimer  = 0f;
+    private int   _pingPongDir = 1;
     private volatile int _sweepIndex = 0;
 
     // ── Autocorrelation ───────────────────────────────────────────────────
@@ -109,11 +122,10 @@ public class AutotuneFilter : MonoBehaviour
         for (int i = 0; i < GrainSize; i++)
             _window[i] = 0.5f * (1f - Mathf.Cos(2f * Mathf.PI * i / (GrainSize - 1)));
 
-        // Prime output ring with one grain of latency headroom
         _outWrite = GrainSize;
         _outRead  = 0;
         _inRead   = 0;
-        _inWrite  = GrainSize; // start inWrite ahead so first grain has data to read
+        _inWrite  = GrainSize;
 
         _ready = true;
         Debug.Log($"AutotuneFilter ready. Mode={Mode}, TestSemitones={TestSemitones}");
@@ -122,8 +134,9 @@ public class AutotuneFilter : MonoBehaviour
     // ── Sweep LFO (main thread) ───────────────────────────────────────────
     void Update()
     {
-        if (!AutotuneEnabled || Carrier == null || Mode != PitchMode.Sweep) return;
-        int n = Carrier.chordIntervals.Length;
+        if (!AutotuneEnabled || Mode != PitchMode.Sweep) return;
+
+        int n = GetChordNoteCount();
         if (n == 0) return;
 
         _sweepTimer += Time.deltaTime;
@@ -133,8 +146,6 @@ public class AutotuneFilter : MonoBehaviour
             AdvanceSweep(n);
             _sweepIndex     = Mathf.Clamp(_sweepStep, 0, n - 1);
             _debugSweepStep = _sweepIndex;
-            Debug.Log($"AutotuneFilter sweep → step {_sweepIndex}, " +
-                      $"interval +{Carrier.chordIntervals[_sweepIndex]} semitones");
         }
     }
 
@@ -166,7 +177,6 @@ public class AutotuneFilter : MonoBehaviour
 
         int frames = data.Length / channels;
 
-        // Compute and smooth ratio once per buffer
         float targetRatio = ComputeTargetRatio();
         _debugTargetRatio = targetRatio;
 
@@ -178,7 +188,6 @@ public class AutotuneFilter : MonoBehaviour
 
         for (int f = 0; f < frames; f++)
         {
-            // ── 1. Read mono input and store ──────────────────────────────
             float input = 0f;
             for (int c = 0; c < channels; c++) input += data[f * channels + c];
             input /= channels;
@@ -189,22 +198,16 @@ public class AutotuneFilter : MonoBehaviour
             _acBuf[_acWrite & (AcSize - 1)] = input;
             _acWrite++;
 
-            // ── 2. Accumulate fractional hop ──────────────────────────────
-            // Each output sample "costs" 1/_smoothedRatio input hops.
-            // When _hopAccum reaches GrainSize we've consumed enough input
-            // for a new grain to be placed.
             _hopAccum += _smoothedRatio;
-
             if (_hopAccum >= GrainSize)
             {
                 _hopAccum -= GrainSize;
                 WriteGrain();
             }
 
-            // ── 3. Read from output ring ──────────────────────────────────
             int   ri   = _outRead & (BufSize - 1);
             float out_ = _outBuf[ri];
-            _outBuf[ri] = 0f;   // clear after read — essential for OLA
+            _outBuf[ri] = 0f;
             _outRead++;
 
             for (int c = 0; c < channels; c++)
@@ -215,17 +218,8 @@ public class AutotuneFilter : MonoBehaviour
     }
 
     // ── Grain writing ─────────────────────────────────────────────────────
-    // Reads GrainSize samples from the input ring at the current _inRead pos,
-    // applies the Hann window, and overlap-adds into the output ring.
-    // _inRead advances by GrainSize / _smoothedRatio so that:
-    //   ratio=2 → inRead advances by GrainSize/2 per grain
-    //             → same input region used twice → pitch doubled
-    //   ratio=0.5 → inRead advances by GrainSize*2 per grain
-    //             → skips ahead in input → pitch halved
     private void WriteGrain()
     {
-        // How far to advance the input read head after this grain.
-        // This is the key: smaller step = more overlap = higher pitch.
         int inputHop = Mathf.Max(1, Mathf.RoundToInt(GrainSize / _smoothedRatio));
 
         for (int i = 0; i < GrainSize; i++)
@@ -237,11 +231,8 @@ public class AutotuneFilter : MonoBehaviour
             _outBuf[outIdx] += s;
         }
 
-        // Advance input read head by inputHop
-        _inRead = (_inRead + inputHop) & (BufSize - 1);
-
-        // Advance output write head by a fixed half-grain (50% overlap)
-        _outWrite = (_outWrite + GrainSize / 2) & (BufSize - 1);
+        _inRead  = (_inRead  + inputHop)         & (BufSize - 1);
+        _outWrite = (_outWrite + GrainSize / 2)  & (BufSize - 1);
     }
 
     // ── Target ratio ──────────────────────────────────────────────────────
@@ -250,33 +241,41 @@ public class AutotuneFilter : MonoBehaviour
         switch (Mode)
         {
             case PitchMode.Test:
-                // 2^(semitones/12) — e.g. +7 semitones = 1.498
                 return Mathf.Pow(2f, TestSemitones / 12f);
 
             case PitchMode.Forced:
             {
-                if (Carrier == null) return 1f;
-                int   idx = Mathf.Clamp(TargetIntervalIndex, 0, Carrier.chordIntervals.Length - 1);
-                float hz  = FoldToVocalRange(CarrierSynth.MidiToHz(Carrier.rootMidi + Carrier.chordIntervals[idx]));
+                float hz = GetChordNoteHz(TargetIntervalIndex);
+                if (hz <= 0f) return 1f;
                 float ref_ = _detectedHz > 50f ? _detectedHz : 220f;
-                return Mathf.Exp(Mathf.Log(hz / ref_) * CorrectionStrength);
+                return Mathf.Exp(Mathf.Log(FoldToVocalRange(hz) / ref_) * CorrectionStrength);
             }
 
             case PitchMode.Sweep:
             {
-                if (Carrier == null) return 1f;
-                int   idx = Mathf.Clamp(_sweepIndex, 0, Carrier.chordIntervals.Length - 1);
-                float hz  = FoldToVocalRange(CarrierSynth.MidiToHz(Carrier.rootMidi + Carrier.chordIntervals[idx]));
+                float hz = GetChordNoteHz(_sweepIndex);
+                if (hz <= 0f) return 1f;
                 float ref_ = _detectedHz > 50f ? _detectedHz : 220f;
-                return Mathf.Exp(Mathf.Log(hz / ref_) * CorrectionStrength);
+                return Mathf.Exp(Mathf.Log(FoldToVocalRange(hz) / ref_) * CorrectionStrength);
+            }
+
+            case PitchMode.WordAligned:
+            {
+                if (ChordSource == null) return 1f;
+                float[] freqs = ChordSource.CurrentChordFrequencies;
+                if (freqs == null || freqs.Length == 0) return 1f;
+                int idx = Mathf.Clamp(ChordSource.WordNoteIndex, 0, freqs.Length - 1);
+                float ref_ = _detectedHz > 50f ? _detectedHz : 220f;
+                return Mathf.Exp(Mathf.Log(FoldToVocalRange(freqs[idx]) / ref_) * CorrectionStrength);
             }
 
             case PitchMode.Detected:
             {
-                if (Carrier == null || _detectedHz < 50f) return 1f;
-                float[] freqs = GetChordFreqsNear(_detectedHz);
-                float   tgt   = freqs[0];
-                float   minC  = float.MaxValue;
+                if (_detectedHz < 50f) return 1f;
+                float[] freqs = GetNearestChordFreqs(_detectedHz);
+                if (freqs == null || freqs.Length == 0) return 1f;
+                float tgt  = freqs[0];
+                float minC = float.MaxValue;
                 foreach (float cf in freqs)
                 {
                     float cents = Mathf.Abs(1200f * Mathf.Log(cf / _detectedHz) / Mathf.Log(2f));
@@ -289,26 +288,72 @@ public class AutotuneFilter : MonoBehaviour
         }
     }
 
+    // ── Chord source helpers ──────────────────────────────────────────────
+
+    // Returns the Hz of chord tone at the given index, preferring ChordSource over Carrier.
+    private float GetChordNoteHz(int index)
+    {
+        if (ChordSource != null)
+        {
+            float[] freqs = ChordSource.CurrentChordFrequencies;
+            if (freqs != null && freqs.Length > 0)
+                return freqs[Mathf.Clamp(index, 0, freqs.Length - 1)];
+        }
+        if (Carrier != null && Carrier.chordIntervals.Length > 0)
+        {
+            int idx = Mathf.Clamp(index, 0, Carrier.chordIntervals.Length - 1);
+            return CarrierSynth.MidiToHz(Carrier.rootMidi + Carrier.chordIntervals[idx]);
+        }
+        return 0f;
+    }
+
+    // How many chord tones are available from whichever source is active.
+    private int GetChordNoteCount()
+    {
+        if (ChordSource != null)
+        {
+            float[] freqs = ChordSource.CurrentChordFrequencies;
+            return freqs != null ? freqs.Length : 0;
+        }
+        return Carrier != null ? Carrier.chordIntervals.Length : 0;
+    }
+
+    // Builds a frequency array transposed to sit near refHz, for Detected-mode snapping.
+    private float[] GetNearestChordFreqs(float refHz)
+    {
+        float[] baseFreqs;
+
+        if (ChordSource != null && ChordSource.CurrentChordFrequencies != null
+            && ChordSource.CurrentChordFrequencies.Length > 0)
+        {
+            baseFreqs = ChordSource.CurrentChordFrequencies;
+        }
+        else if (Carrier != null)
+        {
+            var intervals = Carrier.chordIntervals;
+            baseFreqs = new float[intervals.Length];
+            for (int i = 0; i < intervals.Length; i++)
+                baseFreqs[i] = CarrierSynth.MidiToHz(Carrier.rootMidi + intervals[i]);
+        }
+        else return null;
+
+        var result = new float[baseFreqs.Length];
+        for (int i = 0; i < baseFreqs.Length; i++)
+        {
+            float f = baseFreqs[i];
+            while (f < refHz * 0.7071f) f *= 2f;
+            while (f > refHz * 1.4142f) f *= 0.5f;
+            result[i] = f;
+        }
+        return result;
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────
     private float FoldToVocalRange(float hz)
     {
         while (hz < 150f) hz *= 2f;
         while (hz > 450f) hz *= 0.5f;
         return hz;
-    }
-
-    private float[] GetChordFreqsNear(float refHz)
-    {
-        var intervals = Carrier.chordIntervals;
-        var result    = new float[intervals.Length];
-        for (int i = 0; i < intervals.Length; i++)
-        {
-            float f = CarrierSynth.MidiToHz(Carrier.rootMidi + intervals[i]);
-            while (f < refHz * 0.7071f) f *= 2f;
-            while (f > refHz * 1.4142f) f *= 0.5f;
-            result[i] = f;
-        }
-        return result;
     }
 
     // ── Pitch detection ───────────────────────────────────────────────────
@@ -324,7 +369,7 @@ public class AutotuneFilter : MonoBehaviour
         {
             float c = 0f; int n = AcSize - p;
             for (int i = 0; i < n; i++)
-                c += _acBuf[i & (AcSize-1)] * _acBuf[(i + p) & (AcSize-1)];
+                c += _acBuf[i & (AcSize - 1)] * _acBuf[(i + p) & (AcSize - 1)];
             c /= n;
             if (c > best) { best = c; bestP = p; }
         }
