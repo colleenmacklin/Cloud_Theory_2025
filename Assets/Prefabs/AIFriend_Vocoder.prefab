@@ -585,7 +585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutotuneFilter
   Carrier: {fileID: 1559385210682358501}
-  AutotuneEnabled: 1
+  AutotuneEnabled: 0
   Mode: 0
   TestSemitones: 7
   TargetIntervalIndex: 0
