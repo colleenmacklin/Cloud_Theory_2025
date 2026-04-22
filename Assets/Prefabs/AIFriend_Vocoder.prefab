@@ -563,11 +563,15 @@ MonoBehaviour:
   UseDefaultVoice: 0
   SpeakWhenReady: 0
   SpeakerAudio: {fileID: 5659545486877150470}
+  voiceDropdown: {fileID: 0}
   UseNative: 0
   Running: 0
   Rate: 1
   Pitch: 1
   Volume: 1
+  VoiceNames: []
+  VoiceIndex: 0
+  SelectedVoiceName: (not yet loaded)
 --- !u!114 &5972097854802383484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,13 +587,16 @@ MonoBehaviour:
   Carrier: {fileID: 1559385210682358501}
   AutotuneEnabled: 1
   Mode: 0
+  TestSemitones: 7
   TargetIntervalIndex: 0
+  SweepNoteDuration: 0.5
+  Shape: 0
   CorrectionStrength: 0.85
   PitchSmoothing: 0.05
-  SilenceThreshold: 0.008
+  _debugTargetRatio: 0
+  _debugSmoothedRatio: 0
   _debugDetectedHz: 0
-  _debugTargetHz: 0
-  _debugCurrentRatio: 0
+  _debugSweepStep: 0
 --- !u!114 &4201503539263341516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VocoderFilter
   Carrier: {fileID: 1559385210682358501}
   VocoderEnabled: 1
-  DryWet: 1
+  DryWet: 0
   EnvAttack: 0.005
   EnvRelease: 0.12
   OutputGain: 2.5
