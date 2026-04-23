@@ -249,22 +249,28 @@ public class CloudChordController : MonoBehaviour
     // ── Helpers ───────────────────────────────────────────────────────────
     private CloudChordEntry FindEntry(string cloudName)
     {
+        string _cloudname = parseName(cloudName);
+
         // Exact match first.
         foreach (var e in CloudChords)
-            if (string.Equals(e.cloudName, cloudName, System.StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(e.cloudName, _cloudname, System.StringComparison.OrdinalIgnoreCase))
                 return e;
 
         // Substring match as fallback (handles names like "cloud_dragon" matching "dragon").
         foreach (var e in CloudChords)
         {
             if (!string.IsNullOrEmpty(e.cloudName) &&
-                (cloudName.IndexOf(e.cloudName, System.StringComparison.OrdinalIgnoreCase) >= 0
-                 || e.cloudName.IndexOf(cloudName, System.StringComparison.OrdinalIgnoreCase) >= 0))
+                (_cloudname.IndexOf(e.cloudName, System.StringComparison.OrdinalIgnoreCase) >= 0
+                 || e.cloudName.IndexOf(_cloudname, System.StringComparison.OrdinalIgnoreCase) >= 0))
                 return e;
         }
         return null;
     }
-
+    public string parseName(string s)
+    {
+        string name = s.Replace("_", " ");
+        return name;
+    }
     // Builds the interval array for a given chord type, then rotates for inversions.
     // Inversion n: take the lowest note, transpose it up an octave (+12), place at top.
     // Root: [0,4,7,11]  1st: [4,7,11,12]  2nd: [7,11,12,16]  3rd: [11,12,16,19]
