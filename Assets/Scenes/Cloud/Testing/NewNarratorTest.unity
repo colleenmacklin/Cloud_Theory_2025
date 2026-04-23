@@ -546,7 +546,8 @@ AudioSource:
   m_GameObject: {fileID: 105272870}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -4288649014354309735, guid: 0915aef0bc9b64f8fb4329f282bf36f0,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -4519,7 +4520,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2118249427}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.99999976
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4944,7 +4945,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 773803395}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.27666667
+  m_Size: 0.2766667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7233,13 +7234,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
+      propertyPath: CloudChords.Array.data[1].rootMidi
+      value: 41
+      objectReference: {fileID: 0}
+    - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[2].rootMidi
+      value: 59
+      objectReference: {fileID: 0}
+    - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
       propertyPath: CloudChords.Array.data[0].cloudName
       value: 'Abraham Lincoln '
       objectReference: {fileID: 0}
     - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: CloudChords.Array.data[1].chordType
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
@@ -7259,7 +7270,7 @@ PrefabInstance:
     - target: {fileID: 1559385210682358501, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
@@ -7270,6 +7281,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AIFriend_Vocoder
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201503539263341516, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
@@ -7293,7 +7309,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1727337604}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81a71653cd77949acbd28b4ffd116f73, type: 3}
   m_Name: 
