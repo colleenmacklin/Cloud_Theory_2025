@@ -11,14 +11,14 @@ using UnityEngine;
 ///   - ratio < 1 = longer output hops = lower pitch, same duration
 ///
 /// Chord source priority:
-///   If ChordSource (CloudChordController) is assigned, it is used for all
+///   If ChordSource (CloudChordPlayer) is assigned, it is used for all
 ///   chord-tone data in Forced / Sweep / Detected / WordAligned modes.
 ///   If ChordSource is null, the legacy Carrier (CarrierSynth) is used instead,
 ///   so existing VocoderController setups continue to work without changes.
 ///
 /// WordAligned mode:
 ///   Each spoken word advances the target pitch to the next chord tone.
-///   CloudChordController handles the word-event subscription and exposes
+///   CloudChordPlayer handles the word-event subscription and exposes
 ///   WordNoteIndex. Simply set Mode = WordAligned and assign ChordSource.
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
@@ -29,8 +29,8 @@ public class AutotuneFilter : MonoBehaviour
 
     // ── Inspector ─────────────────────────────────────────────────────────
     [Header("References")]
-    [Tooltip("Primary chord source — assign a CloudChordController for the cloud scene.")]
-    public CloudChordController ChordSource;
+    [Tooltip("Primary chord source — assign a CloudChordPlayer for the cloud scene.")]
+    public CloudChordPlayer ChordSource;
 
     [Tooltip("Legacy chord source — used when ChordSource is null (VocoderController pipeline).")]
     public CarrierSynth Carrier;
