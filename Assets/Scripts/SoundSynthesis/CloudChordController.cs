@@ -88,13 +88,12 @@ public class CloudChordController : MonoBehaviour
 
     // ── Public state (read by AutotuneFilter) ─────────────────────────────
     /// <summary>The four note frequencies of the currently active chord.</summary>
-    public float[] CurrentChordFrequencies { get; private set; } = new float[4];
+    public float[] CurrentChordFrequencies { get; private set; } = System.Array.Empty<float>();
 
     /// <summary>Which chord-tone index (0–3) AutotuneFilter should target right now.</summary>
     public int WordNoteIndex => _wordNoteIndex;
 
     // ── Private ───────────────────────────────────────────────────────────
-    private float[]   _previousFreqs = System.Array.Empty<float>();
     private Coroutine _arpeggioRoutine;
 
     // ── Interval tables ───────────────────────────────────────────────────
@@ -123,6 +122,11 @@ public class CloudChordController : MonoBehaviour
         Actions.ChooseCloud -= OnChooseCloud;
         if (Speaker.Instance != null)
             Speaker.Instance.OnSpeakCurrentWordString -= OnWordSpoken;
+    }
+
+    private void OnDestroy()
+    {
+        StopArpeggio();
     }
 
     private void Start()
@@ -183,7 +187,11 @@ public class CloudChordController : MonoBehaviour
         }
 
         StopArpeggio();
-        ReleaseAll();
+
+        // NoteOff every note that is currently playing before switching chords.
+        // CurrentChordFrequencies always reflects what is live, so this is immediate
+        // and never one step behind.
+        foreach (float f in CurrentChordFrequencies) Synth.NoteOff(f);
 
         int[]   intervals = BuildIntervals(type, inv);
         float[] freqs     = IntervalsToFreqs(rootMidi, intervals);
@@ -223,11 +231,12 @@ public class CloudChordController : MonoBehaviour
         {
             for (int i = 0; i < freqs.Length; i++)
             {
+                if (Synth == null) yield break;
                 if (i > 0) Synth.NoteOff(freqs[i - 1]);
                 Synth.NoteOn(freqs[i]);
                 yield return new WaitForSeconds(ArpeggioNoteDuration);
             }
-            Synth.NoteOff(freqs[freqs.Length - 1]);
+            if (Synth != null) Synth.NoteOff(freqs[freqs.Length - 1]);
         }
         while (ArpeggioLoop);
     }
@@ -237,13 +246,6 @@ public class CloudChordController : MonoBehaviour
         if (_arpeggioRoutine == null) return;
         StopCoroutine(_arpeggioRoutine);
         _arpeggioRoutine = null;
-    }
-
-    // NoteOff the previous chord so voices are freed before the new chord starts.
-    private void ReleaseAll()
-    {
-        foreach (float f in _previousFreqs) Synth.NoteOff(f);
-        _previousFreqs = CurrentChordFrequencies;
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────

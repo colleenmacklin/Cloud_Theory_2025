@@ -83,6 +83,9 @@ namespace Synthic
         private int _voiceOrder = 0;
         private int _sampleRate;
         private NativeBox<SynthBuffer> _voiceBuffer;
+        // volatile so the audio thread sees the write from OnDestroy immediately,
+        // preventing access to the native buffer after it has been freed.
+        private volatile bool _alive = false;
 
         private float _freqLfoRate, _freqLfoDepth, _freqLfoBase;
         private int   _freqLfoWaveform;
@@ -91,7 +94,8 @@ namespace Synthic
 
         private void Awake()
         {
-            _sampleRate    = AudioSettings.outputSampleRate;
+            _alive      = true;
+            _sampleRate = AudioSettings.outputSampleRate;
             _burstSine     ??= BurstCompiler.CompileFunctionPointer<BurstVoiceDelegate>(BurstSine).Invoke;
             _burstSaw      ??= BurstCompiler.CompileFunctionPointer<BurstVoiceDelegate>(BurstSaw).Invoke;
             _burstSquare   ??= BurstCompiler.CompileFunctionPointer<BurstVoiceDelegate>(BurstSquare).Invoke;
@@ -137,6 +141,12 @@ namespace Synthic
 
         private void OnDestroy()
         {
+            // Signal the audio thread to exit ProcessBuffer before freeing native memory.
+            _alive = false;
+            // Silence all voices so the audio thread skips the inner loop
+            // even in the unlikely case it passes the _alive check one last time.
+            for (int i = 0; i < VoiceCount; i++)
+                _voices[i].stage = EnvelopeStage.Off;
             if (_voiceBuffer is { Allocated: true }) _voiceBuffer.Dispose();
         }
 
@@ -278,6 +288,8 @@ namespace Synthic
 
         protected override void ProcessBuffer(ref SynthBuffer buffer)
         {
+            if (!_alive) { buffer.Clear(); return; }
+
             if (_voiceBuffer == null || !_voiceBuffer.Allocated)
                 _voiceBuffer = SynthBuffer.Construct(buffer.Length);
             if (_voiceBuffer.Data.Length != buffer.Length)
