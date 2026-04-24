@@ -36,6 +36,8 @@ public class NewNarrator : MonoBehaviour
     //public TextMeshProUGUI Role;
     public int numWords;
     public VoiceHandler voice;
+    [Tooltip("Optional RVC voice converter. When assigned, speech is routed through the RVC service instead of RTVoice.")]
+    public RVCVoiceConverter RvcVoice;
     public SentenceSplitter sentenceSplitter;
     public String PromptAddition;
 
@@ -45,16 +47,22 @@ public class NewNarrator : MonoBehaviour
 
     private void OnEnable()
     {
-        Actions.ChooseCloud += LookAtCloud;  
+        Actions.ChooseCloud += LookAtCloud;
         Actions.ChooseTheme += setTheme;
-        voice.OnSpeechComplete += OnLineComplete;
+        if (RvcVoice != null)
+            RvcVoice.OnSpeechComplete += OnLineComplete;
+        else
+            voice.OnSpeechComplete += OnLineComplete;
     }
 
     private void OnDisable()
     {
-        Actions.ChooseCloud -= LookAtCloud;  
+        Actions.ChooseCloud -= LookAtCloud;
         Actions.ChooseTheme -= setTheme;
-        voice.OnSpeechComplete -= OnLineComplete;
+        if (RvcVoice != null)
+            RvcVoice.OnSpeechComplete -= OnLineComplete;
+        else
+            voice.OnSpeechComplete -= OnLineComplete;
     }
     public void AddTopPrompt(string s)
     {
@@ -115,7 +123,10 @@ public class NewNarrator : MonoBehaviour
         if (lines.Count > 0)
         {
             string nextLine = lines.Dequeue();
-            voice.SpeakLine(nextLine);
+            if (RvcVoice != null)
+                RvcVoice.SpeakLine(nextLine);
+            else
+                voice.SpeakLine(nextLine);
             printSubtitle(nextLine);
         }
         else
