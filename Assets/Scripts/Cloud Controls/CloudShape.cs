@@ -56,9 +56,9 @@ public class CloudShape : MonoBehaviour
     public float changeTimeMax;
 
     [Tooltip("default was 10.0f")]
-    public float minScale = 1;
-    public float maxScale = 10;
-    public float scale = 1;
+    public float minScale = 8;
+    public float maxScale = 8;
+    public float scale = 8;
     public float currScale;
     [SerializeField]
     public Vector3 scaleRatio;
@@ -244,9 +244,26 @@ public class CloudShape : MonoBehaviour
         Highlighter.SetActive(true);
         MeshRenderer quadRenderer = Highlighter.GetComponent<MeshRenderer>();
         Material quadMaterial = quadRenderer.material;
-        quadMaterial.mainTexture = myShape;
+        quadMaterial.SetTexture("_MainTex", myShape);
         Actions.FadeIn50?.Invoke(Highlighter);
-        Debug.Log("ShowShape");
+        Debug.Log($"[ShowShape] texture={(myShape ? myShape.name : "NULL - no texture on ps.shape!")} " +
+                  $"scale={Highlighter.transform.localScale} shader={quadMaterial.shader.name} " +
+                  $"mainTex={(quadMaterial.GetTexture("_MainTex") ? quadMaterial.GetTexture("_MainTex").name : "null")} rendererEnabled={quadRenderer.enabled}");
+    }
+
+    [ContextMenu("Force Show Shape (Debug)")]
+    private void ForceShowShape()
+    {
+        Texture2D myShape = ps.shape.texture;
+        Highlighter.transform.localScale = ScaleToShape(myShape);
+        Highlighter.SetActive(true);
+        MeshRenderer quadRenderer = Highlighter.GetComponent<MeshRenderer>();
+        Material quadMaterial = quadRenderer.material;
+        quadMaterial.mainTexture = myShape;
+        quadMaterial.color = new Color(1f, 1f, 1f, 1f);
+        quadRenderer.enabled = true;
+        Debug.Log($"[ForceShowShape] texture={myShape?.name} shader={quadMaterial.shader.name} " +
+                  $"scale={Highlighter.transform.localScale} color={quadMaterial.color}");
     }
     public void HideShape()//should this be public?
     {
@@ -293,6 +310,8 @@ public class CloudShape : MonoBehaviour
         var srcWidth = shape.width;
         var srcHeight = shape.height;
         Vector3 textureScaleAdjustment = CalculateSquareScaleRatio(srcWidth, srcHeight);
+        Debug.Log($"[ScaleToShape] shape={shape.name} srcWidth={srcWidth} srcHeight={srcHeight} " +
+                  $"scaleAdjustment={textureScaleAdjustment}");
         return textureScaleAdjustment;
     }
 
@@ -421,7 +440,8 @@ public class CloudShape : MonoBehaviour
         //{
             //currScale = scale; //just surfacing to the interface for debugging
         //}
-        var ratio = Mathf.Max(scale / srcWidth, scale / srcHeight);
+        // Fit the longest edge to `scale` so neither axis exceeds it.
+        var ratio = Mathf.Min(scale / srcWidth, scale / srcHeight);
 
         var newsize = new Vector3(srcWidth * ratio, srcHeight * ratio, 1f);
 
