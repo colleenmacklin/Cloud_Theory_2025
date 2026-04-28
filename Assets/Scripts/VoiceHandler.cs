@@ -20,6 +20,7 @@ public AudioSource SpeakerAudio;
 public event Action OnSpeechComplete;
 private bool isSpeaking = false;
 public TMPro.TMP_Dropdown voiceDropdown;
+public string currentVoiceName;
 
 
 public bool UseNative;
@@ -58,7 +59,7 @@ private void OnDisable()
 {
 if (Speaker.Instance != null)
 {
-Actions.ChooseVoice += SetVoice;
+Actions.ChooseVoice -= SetVoice;
 
 // Unsubscribe event listeners
 Speaker.Instance.OnVoicesReady -= voicesReady;
