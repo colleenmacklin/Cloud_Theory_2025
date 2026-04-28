@@ -90,6 +90,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &5234495423069331522
 BoxCollider:
@@ -155,7 +156,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.99, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4001077985832519558}
@@ -192,10 +193,10 @@ MonoBehaviour:
   timeLeft: 0
   changeTimeMin: 70
   changeTimeMax: 100
-  minScale: 10
-  maxScale: 15
-  scale: 5
-  currScale: 0
+  minScale: 1
+  maxScale: 2
+  scale: 1
+  currScale: 1
   scaleRatio: {x: 0, y: 0, z: 0}
   cloudVisX: -80
   shapeRenderer: {fileID: 4001077985846721382}
@@ -343,6 +344,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &9049134385330599261
 MeshCollider:
@@ -390,6 +392,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_Name
       value: CloudSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalPosition.x

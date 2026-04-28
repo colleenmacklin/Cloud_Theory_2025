@@ -240,13 +240,13 @@ public class CloudShape : MonoBehaviour
     private void ShowShape()
     {
         Texture2D myShape = ps.shape.texture;
+        Highlighter.transform.localScale = ScaleToShape(myShape);
         Highlighter.SetActive(true);
-        Actions.FadeIn50?.Invoke(Highlighter);
-
         MeshRenderer quadRenderer = Highlighter.GetComponent<MeshRenderer>();
-        quadRenderer.bounds = matchBounds(ps.shape, Highlighter);
         Material quadMaterial = quadRenderer.material;
         quadMaterial.mainTexture = myShape;
+        Actions.FadeIn50?.Invoke(Highlighter);
+        Debug.Log("ShowShape");
     }
     public void HideShape()//should this be public?
     {

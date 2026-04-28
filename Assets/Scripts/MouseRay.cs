@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections;
 using System;
 
@@ -84,7 +85,7 @@ public class MouseRay : MonoBehaviour
         
         if (_isProcessingCloud || _cooldown > 0f) return;
 
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             switch (state)

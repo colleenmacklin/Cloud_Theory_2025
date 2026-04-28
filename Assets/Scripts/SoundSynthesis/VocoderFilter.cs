@@ -201,7 +201,8 @@ public class VocoderFilter : MonoBehaviour
     {
         VocoderEnabled = false;
         // Reset envelope state so there's no bleed when re-enabling.
-        System.Array.Clear(_envelope, 0, NumBands);
+        if (_envelope != null)
+            System.Array.Clear(_envelope, 0, NumBands);
     }
 
     /// <summary>Toggle vocoder on/off.</summary>

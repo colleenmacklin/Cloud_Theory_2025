@@ -11,7 +11,7 @@ public class FadeObject : MonoBehaviour
         Actions.FadeIn += FadeInGO;
         Actions.FadeIn50 += FadeInGO50;
         Actions.FadeOut += FadeOutGO;
-        Actions.FadeOut50 += FadeInGO50;
+        Actions.FadeOut50 += FadeOutGO50;
     }
 
     void OnDisable()
@@ -19,7 +19,7 @@ public class FadeObject : MonoBehaviour
         Actions.FadeIn -= FadeInGO;
         Actions.FadeIn50 -= FadeInGO50;
         Actions.FadeOut -= FadeOutGO;
-        Actions.FadeOut50 -= FadeInGO50;
+        Actions.FadeOut50 -= FadeOutGO50;
 
     }
     public void FadeInGO(GameObject _go)
@@ -79,7 +79,7 @@ private IEnumerator Fade(float startAlpha, float endAlpha)
             {
                 timer += Time.deltaTime;
                 float newAlpha = Mathf.Lerp(startAlpha, endAlpha, timer / fadeDuration);
-                material.color = new Color(currentColor.r, currentColor.g, currentColor.b, endAlpha);
+                material.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
                 yield return null; //wait for next frame
             }
 

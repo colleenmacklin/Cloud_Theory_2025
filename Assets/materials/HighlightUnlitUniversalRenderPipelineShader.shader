@@ -3,12 +3,17 @@ Shader "Custom/InvertSpriteColor"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Color ("Tint", Color) = (1,1,1,0.5) // Change initial alpha to 0.5 for semi-transparency
+        _Color ("Tint", Color) = (1,1,1,0.5)
     }
 
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        Tags
+        {
+            "RenderPipeline" = "UniversalPipeline"
+            "RenderType" = "Transparent"
+            "Queue" = "Transparent"
+        }
         LOD 100
 
         Blend SrcAlpha OneMinusSrcAlpha
@@ -16,59 +21,56 @@ Shader "Custom/InvertSpriteColor"
 
         Pass
         {
+            Name "Unlit"
+            Tags { "LightMode" = "UniversalForward" }
+
             Cull Off
-            CGPROGRAM
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-
-            struct appdata_t
+            struct Attributes
             {
-                float4 vertex : POSITION;
+                float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f
+            struct Varyings
             {
-                float4 vertex : SV_POSITION;
+                float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            sampler2D _MainTex;
-            fixed4 _Color;
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
 
-            v2f vert (appdata_t v)
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST;
+                half4 _Color;
+            CBUFFER_END
+
+            Varyings vert(Attributes v)
             {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = v.uv;
+                Varyings o;
+                o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            half4 frag(Varyings i) : SV_Target
             {
-                // Get the original color from the texture
-                fixed4 originalCol = tex2D(_MainTex, i.uv);
+                half4 originalCol = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
 
-                // Invert the RGB channels: (1.0 - red, 1.0 - green, 1.0 - blue)
-                // This formula correctly inverts the colors.
-                fixed4 invertedCol;
+                half4 invertedCol;
                 invertedCol.rgb = 1.0 - originalCol.rgb;
-
-                // Apply the alpha from the material's _Color property
-                // This allows you to control the overall transparency in the Inspector.
                 invertedCol.a = _Color.a;
-
-                // To combine the inverted colors with the sprite's original transparency,
-                // and correctly handle the new material transparency, multiply them together.
-                // This preserves the transparent parts of the original sprite.
                 invertedCol *= originalCol.a;
 
-                // Set the final output color, applying the tint from the material if desired
                 return invertedCol * _Color;
             }
-            ENDCG
+            ENDHLSL
         }
     }
 }

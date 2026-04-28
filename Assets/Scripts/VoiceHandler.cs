@@ -25,6 +25,7 @@ public string currentVoiceName;
 
 public bool UseNative;
 public bool Running;
+public bool SkipDropdown;
 
 [Range(0f, 3f)] public float Rate = 1f;
 
@@ -107,16 +108,23 @@ void Start()
             VoiceNames.Add($"{v.Name}  [{v.Culture}]");
             menu_voices.Add($"{v.Name}  [{v.Culture}]");
         }
-         voiceDropdown.ClearOptions();
-         voiceDropdown.AddOptions(menu_voices);
-         voiceDropdown.onValueChanged.RemoveAllListeners();
-         voiceDropdown.onValueChanged.AddListener(index =>
-         {
-             VoiceIndex = index;
-             RefreshSelectedName();
-         });
-        VoiceIndex = Mathf.Clamp(VoiceIndex, 0, Mathf.Max(0, _voices.Count - 1));
-        voiceDropdown.SetValueWithoutNotify(VoiceIndex);
+        if (!SkipDropdown && voiceDropdown != null)
+        {
+            voiceDropdown.ClearOptions();
+            voiceDropdown.AddOptions(menu_voices);
+            voiceDropdown.onValueChanged.RemoveAllListeners();
+            voiceDropdown.onValueChanged.AddListener(index =>
+            {
+                VoiceIndex = index;
+                RefreshSelectedName();
+            });
+            VoiceIndex = Mathf.Clamp(VoiceIndex, 0, Mathf.Max(0, _voices.Count - 1));
+            voiceDropdown.SetValueWithoutNotify(VoiceIndex);
+        }
+        else
+        {
+            VoiceIndex = Mathf.Clamp(VoiceIndex, 0, Mathf.Max(0, _voices.Count - 1));
+        }
         RefreshSelectedName();
         Debug.Log($"RT-Voice: {_voices.Count} voices ready. Selected: {SelectedVoiceName}");
     }
