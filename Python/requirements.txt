@@ -1,0 +1,30 @@
+# Cloud Theory — RVC Voice Service dependencies
+#
+# Setup order:
+#   1. Install PyTorch for your platform FIRST:
+#      https://pytorch.org/get-started/locally/
+#      (CPU-only is fine; GPU gives faster inference)
+#
+#   2. Install ffmpeg and add it to your PATH:
+#      Windows : https://ffmpeg.org/download.html
+#      Mac     : brew install ffmpeg
+#      Linux   : sudo apt install ffmpeg
+#
+#   3. Install these packages:
+#      pip install -r requirements.txt
+#
+#   4. Drop your RVC voice model files into Python/models/:
+#      voice.pth   — the trained RVC model  (required for conversion)
+#      voice.index — the feature index file  (optional, improves quality)
+#      Without a model the service runs in TTS-only mode.
+#
+#   5. Start the service:
+#      python rvc_service.py
+
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+edge-tts>=6.1.9          # Microsoft Edge TTS — no API key, good quality
+pydub>=0.25.1            # MP3 → PCM conversion (requires ffmpeg)
+soundfile>=0.12.1        # WAV I/O
+numpy>=1.23.0
+rvc-python>=0.1.0        # pip install rvc-python
