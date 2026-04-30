@@ -60,14 +60,12 @@ Shader "Custom/InvertSpriteColor"
                 float _FillMode;
             CBUFFER_END
 
-            // Shapes are black silhouettes on white backgrounds (no alpha).
-            // "Shape" pixels are dark (low luminance); "background" pixels are bright (high luminance).
-            // Returns 1 where shape is, 0 where background is.
+            // Shapes are black silhouettes on transparent backgrounds.
+            // Returns 1 where shape is (opaque), 0 where background is (transparent).
             half ShapePresence(float2 uv)
             {
                 half4 s = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
-                half lum = dot(s.rgb, half3(0.299, 0.587, 0.114));
-                return step(lum, 1.0 - _Threshold); // dark pixels score high
+                return step(_Threshold, s.a);
             }
 
             Varyings vert(Attributes v)
