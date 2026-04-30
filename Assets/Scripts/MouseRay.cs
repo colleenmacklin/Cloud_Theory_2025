@@ -48,14 +48,12 @@ public class MouseRay : MonoBehaviour
     void OnEnable()
     {
         Actions.ConversationEnded += StartGazeTracking;
-        Actions.Speak += StopGazeTracking;
         Actions.Cutscene += ReadingMode;
     }
 
     void OnDisable()
     {
         Actions.ConversationEnded -= StartGazeTracking;
-        Actions.Speak -= StopGazeTracking;
         Actions.Cutscene -= ReadingMode;
     }
 

@@ -29,17 +29,16 @@ public class MainCloudManager : MonoBehaviour
     public State gameState;
     private void OnEnable()
     {
-      Actions.ChooseCloud += changeCloudShape;  
       Actions.GetClickedCloud += GetClickedCloud;
       Actions.ConversationEnded += InactivateCloud;
+      Actions.Speak += OnNarratorSpeak;
     }
 
     private void OnDisable()
     {
-        Actions.ChooseCloud -= changeCloudShape;
         Actions.GetClickedCloud -= GetClickedCloud;
         Actions.ConversationEnded -= InactivateCloud;
-
+        Actions.Speak -= OnNarratorSpeak;
     }
     void Start()
     {
@@ -77,7 +76,7 @@ public class MainCloudManager : MonoBehaviour
 
     void changeCloudShape(string s)
     {
-        //Debug.Log("changing shape to: "+s);
+        Debug.Log("changing shape to: "+s);
         foreach (Texture2D shape in CloudShapes)
         {
             if (shape.name == s)
@@ -91,15 +90,19 @@ public class MainCloudManager : MonoBehaviour
 
     public void GetClickedCloud(GameObject c) //from Raycaster
     {
-        //write history code
         clickedCloud = c.GetComponent<CloudShape>();
         Debug.Log(c.name+" clicked: " + clickedCloud.CurrentShapeName);
-        Actions.ChooseCloud?.Invoke(clickedCloud.CurrentShapeName);
-        //Actions.ChooseCloud?.Invoke(c.name);
+        Actions.ChooseCloud?.Invoke(clickedCloud.CurrentShapeName); // sends name to narrator
 
         cloudsSelectedHistory.Add(clickedCloud.CurrentShapeName);
         cloudTargetsList.Remove(clickedCloud.currentShape);
         finalCloudTextures.Add(clickedCloud.currentShape);
+    }
+
+    private void OnNarratorSpeak()
+    {
+        if (clickedCloud != null)
+            clickedCloud.GlowCloud(clickedCloud.gameObject);
     }
 
     private void InactivateCloud()

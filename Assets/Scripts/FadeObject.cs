@@ -44,7 +44,18 @@ public class FadeObject : MonoBehaviour
 
     }
 
-private IEnumerator Fade(float startAlpha, float endAlpha)
+private static readonly string[] colorPropertyNames = { "_Color", "_BaseColor", "_GlowColor" };
+
+    private string GetColorProperty(Material mat)
+    {
+        foreach (string prop in colorPropertyNames)
+            if (mat.HasProperty(prop)) return prop;
+        return null;
+    }
+
+    private string[] colorProperties;
+
+    private IEnumerator Fade(float startAlpha, float endAlpha)
     {
         rendererObjects = GetComponentsInChildren<Renderer>();
 
@@ -63,28 +74,32 @@ private IEnumerator Fade(float startAlpha, float endAlpha)
         {
             //create a cache of colors if neccessary
             colors = new Color[rendererObjects.Length];
+            colorProperties = new string[rendererObjects.Length];
             //store the original colors for all the child objects
             for(int i=0; i< rendererObjects.Length; i++)
             {
-                colors[i]=rendererObjects[i].material.color;
+                colorProperties[i] = GetColorProperty(rendererObjects[i].material);
+                if (colorProperties[i] != null)
+                    colors[i] = rendererObjects[i].material.GetColor(colorProperties[i]);
             }
         }
 
         for(int i = 0; i<rendererObjects.Length; i++)
         {
+            if (colorProperties[i] == null) continue;
             Material material = rendererObjects[i].material;
-            Color currentColor = material.color;
+            Color currentColor = colors[i];
             float timer = 0f;
             while (timer < fadeDuration)
             {
                 timer += Time.deltaTime;
                 float newAlpha = Mathf.Lerp(startAlpha, endAlpha, timer / fadeDuration);
-                material.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+                material.SetColor(colorProperties[i], new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha));
                 yield return null; //wait for next frame
             }
 
             //Ensure that the final alpha is set Correctly (need to "snap" it)
-            material.color = new Color(currentColor.r, currentColor.g, currentColor.b, endAlpha);
+            material.SetColor(colorProperties[i], new Color(currentColor.r, currentColor.g, currentColor.b, endAlpha));
 
         }
 

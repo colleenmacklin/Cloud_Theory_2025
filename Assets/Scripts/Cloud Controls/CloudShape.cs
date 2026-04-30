@@ -89,8 +89,6 @@ public class CloudShape : MonoBehaviour
         Actions.StopClouds += StopCloud;
         //Actions.SharpenCloud += SharpenCloud;
         //Actions.BlurCloud += BlurCloud;
-        Actions.OnHoverOverTargetCloud += GlowCloud;
-        Actions.OnHoverExit += UnGlowCloud;
         Actions.LookAtCamera += lookatcamera;
         Actions.FadeInCloud += fadeInParticleSystem;
         Actions.FadeOutCloud += fadeOutParticleSystem;
@@ -107,8 +105,6 @@ public class CloudShape : MonoBehaviour
         Actions.StopClouds -= StopCloud;
         //Actions.SharpenCloud -= SharpenCloud;
         //Actions.BlurCloud -= BlurCloud;
-        Actions.OnHoverOverTargetCloud -= GlowCloud;
-        Actions.OnHoverExit -= UnGlowCloud;
         Actions.LookAtCamera -= lookatcamera;
         Actions.FadeInCloud -= fadeInParticleSystem;
         Actions.FadeOutCloud -= fadeOutParticleSystem;

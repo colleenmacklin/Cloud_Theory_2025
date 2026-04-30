@@ -13,6 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _FILLMODE_ON
   - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -115,12 +116,14 @@ Material:
     - _DstBlendAlpha: 10
     - _EnableExternalAlpha: 0
     - _EnvironmentReflections: 0
+    - _FillMode: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Intensity: 4
+    - _Intensity: 10
     - _Metallic: 0
     - _OcclusionStrength: 1
+    - _OutlineWidth: 8.2
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 0
@@ -131,6 +134,7 @@ Material:
     - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
+    - _Threshold: 0.5
     - _WorkflowMode: 0
     - _XRMotionVectorsPass: 1
     - _ZWrite: 0

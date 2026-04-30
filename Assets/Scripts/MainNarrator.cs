@@ -77,13 +77,14 @@ public class MainNarrator : MonoBehaviour
         List<string> splitLines = sentenceSplitter.SplitParagraphIntoSentences(Response);
 
         lines.Clear();
-        
+
         foreach (string line in splitLines)
         {
             if (!string.IsNullOrWhiteSpace(line))
                 lines.Enqueue(line);
         }
-        
+
+        Actions.Speak?.Invoke();
         SpeakNextLine();
     }
     
