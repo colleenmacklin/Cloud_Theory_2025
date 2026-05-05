@@ -7,19 +7,31 @@ using TMPro;
 
 public class MainNarrator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public List<string> cloudHistory;
-    public List<string> targetClouds;
+    public enum NarratorEngine { LLM, Tracery }
+
+    [Header("Engine")]
+    public NarratorEngine engine = NarratorEngine.LLM;
+
+    [Header("LLM Settings")]
     public LLM llm;
     public LLMAgent llmCharacter;
     public string Prompt = "...";
     public string Response = "";
+    public int numWords;
+    public String PromptAddition;
+
+    [Header("Tracery Settings")]
+    public TextAsset traceryGrammar;
+    public string traceryStartRule = "origin";
+    private TraceryEngine _tracery;
+
+    [Header("Shared")]
+    public List<string> cloudHistory;
+    public List<string> targetClouds;
     public string chosenCloud;
     public string chosenTheme;
-   public int numWords;
     public VoiceHandler voice;
     public SentenceSplitter sentenceSplitter;
-    public String PromptAddition;
     public Subtitle_Handler Subtitles;
 
     private Queue<string> lines = new Queue<string>();
@@ -52,8 +64,21 @@ public class MainNarrator : MonoBehaviour
     }
     public void respondToShape(string s)
     {
-        var prompt = CreatePrompt();
-        _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
+        if (engine == NarratorEngine.Tracery)
+        {
+            if (_tracery == null)
+            {
+                if (traceryGrammar == null) { Debug.LogError("[MainNarrator] No Tracery grammar assigned."); return; }
+                _tracery = TraceryEngine.FromTextAsset(traceryGrammar);
+            }
+            string result = _tracery.Generate(traceryStartRule, chosenCloud);
+            StartNarration(result);
+        }
+        else
+        {
+            var prompt = CreatePrompt();
+            _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
+        }
     }
     public void SetChatText(string text)
     {
@@ -74,7 +99,7 @@ public class MainNarrator : MonoBehaviour
 
     public void StartNarration(string paragraph)
     {
-        List<string> splitLines = sentenceSplitter.SplitParagraphIntoSentences(Response);
+        List<string> splitLines = sentenceSplitter.SplitParagraphIntoSentences(paragraph);
 
         lines.Clear();
 

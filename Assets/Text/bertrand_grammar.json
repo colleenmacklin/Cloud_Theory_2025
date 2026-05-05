@@ -1,0 +1,129 @@
+{
+  "origin": [
+    "There — #shapeName#. #reaction# #musing_short#",
+    "Look at that. #shapeName#. #reaction# #musing_short# #linger#",
+    "#exclamation# — #shapeName#, in the sky of all places. #musing_short#",
+    "Do you see it? #shapeName#. #musing_long#",
+    "Of course. #shapeName#. #musing_short# #linger#",
+    "I was just thinking about #concept#, and then — #shapeName#. #musing_short#",
+    "#shapeName#. #pause# #reaction# #musing_short#",
+    "The sky has decided to show us #shapeName# today. #musing_long#",
+    "Ha. #shapeName#. #musing_short# #linger#",
+    "Do you see that? #shapeName#. #musing_short# #linger#",
+    "There it is. #shapeName#. #musing_long#",
+    "#exclamation#. I was looking at the wrong patch of sky. But there — #shapeName#. #musing_short#"
+  ],
+
+  "reaction": [
+    "I love that the sky does this.",
+    "The clouds are in a strange mood today.",
+    "Extraordinary.",
+    "There it is.",
+    "Yes. Yes, I see it.",
+    "Of course it would be #shapeName#.",
+    "I'd recognize that anywhere."
+  ],
+
+  "musing_short": [
+    "You know, I think we see what we need to see.",
+    "The sky has always been #humanity#'s great canvas.",
+    "Every cloud is a Rorschach.",
+    "There is something #adj# about finding #shapeName# in all that formlessness.",
+    "The universe is not indifferent — it is just very, very patient.",
+    "We are pattern-seeking creatures. We cannot help it.",
+    "The ancients would have read an omen into this.",
+    "I think this is what people used to mean by the divine.",
+    "Nothing lasts — that's what makes it worth noticing.",
+    "The wind is already changing it. Look.",
+    "In a few minutes it will be something else entirely.",
+    "It's the impermanence that makes it beautiful, I think.",
+    "We are meaning-making animals, you and I.",
+    "Clouds don't care what they look like. That's what I envy about them.",
+    "The sky is #adj# that way — it gives everyone the same clouds and we all find something different.",
+    "I used to think randomness was cold. Now I find it #adj#.",
+    "There is more poetry in the accidental than in anything we plan.",
+    "I keep coming back to the idea that attention is itself a kind of love.",
+    "The mind is so hungry for shape. It will find one anywhere.",
+    "My grandmother would have made a wish on something like that.",
+    "You have to admire the commitment. #shapeName#, right up there, for anyone who cares to look."
+  ],
+
+  "musing_long": [
+    "I think about how many people have lain on hills exactly like this and looked up and seen something. Every generation finds its own shapes. And then the wind takes them.",
+    "You know what strikes me about #shapeName#? The sky didn't mean it. It just happened. And we, with our hungry minds, found it. That's all beauty ever is, really.",
+    "My grandmother used to say the clouds were messages. I thought that was superstition. Now I think she was just describing something true about the way attention works.",
+    "There's a certain solidarity to the sky, isn't there. It belongs to everyone. No one can fence it. No one can charge admission. It just gives, and gives, and gives.",
+    "The thing about finding #shapeName# up there is that it won't survive long enough to be owned by anyone. That might be the only truly free thing left.",
+    "Do you know what I think? I think the brain is so desperate for meaning that it will find it anywhere — in clouds, in strangers' faces, in the shape of history. It is not a weakness. It might be the most honest thing about us.",
+    "I read once that the Romantics believed clouds were evidence of a living world — that the atmosphere itself was breathing. I think I believe that on days like this.",
+    "There is something almost embarrassing about how moved I am by this. A trick of water vapor. And yet. Here we are, Colleen. Here we are.",
+    "The shapes we find in clouds say more about us than about the sky, I think. What does it mean that today, of all days, we see #shapeName#? I'm not sure. But I don't think it means nothing."
+  ],
+
+  "linger": [
+    "Don't you think?",
+    "...",
+    "Mmm.",
+    "What do you see in it?",
+    "Pass me that apple, would you.",
+    "I could lie here all afternoon.",
+    "Strange, isn't it.",
+    "Tell me what you think.",
+    "I wonder."
+  ],
+
+  "exclamation": [
+    "Ha",
+    "Oh",
+    "Ah",
+    "Well",
+    "Good lord",
+    "Would you look at that"
+  ],
+
+  "pause": [
+    "...",
+    "Hmm.",
+    "Yes.",
+    "Right.",
+    "Hah."
+  ],
+
+  "concept": [
+    "impermanence",
+    "the nature of labor",
+    "memory",
+    "the commons",
+    "what we owe each other",
+    "beauty",
+    "time",
+    "solidarity",
+    "grief",
+    "the ordinary",
+    "what it means to pay attention",
+    "whether hope is rational"
+  ],
+
+  "adj": [
+    "comforting",
+    "unsettling",
+    "profound",
+    "honest",
+    "tender",
+    "melancholy",
+    "generous",
+    "strange",
+    "democratic",
+    "quietly political",
+    "almost unbearable"
+  ],
+
+  "humanity": [
+    "humanity",
+    "the dispossessed",
+    "the dreaming mind",
+    "the working imagination",
+    "all of us",
+    "every restless person who ever lay in a field"
+  ]
+}

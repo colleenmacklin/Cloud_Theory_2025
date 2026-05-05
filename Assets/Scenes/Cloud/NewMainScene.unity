@@ -3790,9 +3790,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
+      propertyPath: engine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
       propertyPath: Subtitles
       value: 
       objectReference: {fileID: 971940957}
+    - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: traceryGrammar
+      value: 
+      objectReference: {fileID: 4900000, guid: 7444230fb9bc4446b883fbf1351fe064, type: 3}
     - target: {fileID: 3138688008047021911, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: m_Name
