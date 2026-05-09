@@ -29,7 +29,7 @@ public class FadeObject : MonoBehaviour
 
     public void FadeInGO50(GameObject _go)
     {
-        if(_go == this.gameObject){ StartCoroutine(Fade(1f, .5f)); }
+        if(_go == this.gameObject){ StartCoroutine(Fade(0f, .5f)); }
     }
 
 

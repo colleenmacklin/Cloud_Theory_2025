@@ -493,7 +493,6 @@ MonoBehaviour:
   cloudsSelectedHistory: []
   cloudsActiveHistory: []
   finalCloudTextures: []
-  cloudTargetsList: []
   gameState: 0
 --- !u!1001 &320545196
 PrefabInstance:
@@ -2093,6 +2092,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290351147}
   m_CullTransparentMesh: 1
+--- !u!1 &1345911972 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4297893422159887860, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2033620455}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1345911977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345911972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b273756bbef14430b16f47721f11307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReticuleGlow
+  fadeSpeed: 0.3
 --- !u!1001 &1491028153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2155,6 +2173,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433909663605435073, guid: 47466df784a8446dcb08284b843ca859,
+        type: 3}
+      propertyPath: fadeDuration
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2748,6 +2771,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1233461107623367435, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d0ca4533f8eb44640b5156a93a4de6c0, type: 2}
     - target: {fileID: 4297893422159887860, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
         type: 3}
       propertyPath: m_Layer
@@ -2856,6 +2884,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1840844932}
+    - targetCorrespondingSourceObject: {fileID: 4297893422159887860, guid: 8989f6b0cc6584f9b9429d1d63825cc4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1345911977}
   m_SourcePrefab: {fileID: 100100000, guid: 8989f6b0cc6584f9b9429d1d63825cc4, type: 3}
 --- !u!1001 &2052241053
 PrefabInstance:

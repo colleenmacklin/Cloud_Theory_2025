@@ -187,8 +187,7 @@ public class CloudShape : MonoBehaviour
     {
         if (c != null)
         {
-            transform.LookAt(c.transform.position, Vector3.back);
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x,transform.rotation.eulerAngles.y,0);
+            transform.LookAt(c.transform.position, Vector3.up);
         }
     }
     //checks to see if cloud is close to being offscreeen, and if it is, starts fade out and reposition sequence

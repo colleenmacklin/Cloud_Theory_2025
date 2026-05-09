@@ -11,7 +11,7 @@ public class MainCloudManager : MonoBehaviour
     public List<CloudShape> Clouds;
     public List<Texture2D> CloudShapes;
     public List<Texture2D> GenericCloudShapes;
-    public List<string> allClouds; //
+    public List<string> allClouds;
     public float CloudStartScale;
     public CloudShape clickedCloud;
     [SerializeField]
@@ -23,8 +23,8 @@ public class MainCloudManager : MonoBehaviour
     private List<string> cloudsActiveHistory;
     [SerializeField]
     private List<Texture2D> finalCloudTextures;
-    [SerializeField]
-    private List<Texture2D> cloudTargetsList; 
+
+    private Queue<Texture2D> _remainingTargets = new Queue<Texture2D>();
 
     public State gameState;
     private void OnEnable()
@@ -32,6 +32,7 @@ public class MainCloudManager : MonoBehaviour
       Actions.GetClickedCloud += GetClickedCloud;
       Actions.ConversationEnded += InactivateCloud;
       Actions.Speak += OnNarratorSpeak;
+      Actions.CloudIsReady += OnCloudReady;
     }
 
     private void OnDisable()
@@ -39,6 +40,7 @@ public class MainCloudManager : MonoBehaviour
         Actions.GetClickedCloud -= GetClickedCloud;
         Actions.ConversationEnded -= InactivateCloud;
         Actions.Speak -= OnNarratorSpeak;
+        Actions.CloudIsReady -= OnCloudReady;
     }
     void Start()
     {
@@ -60,32 +62,22 @@ public class MainCloudManager : MonoBehaviour
         Clouds.Shuffle();
         CloudShapes.Shuffle();
         GenericCloudShapes.Shuffle();
-        //foreach (CloudShape c in Clouds)
-        for (int i = 0; i<Clouds.Count; i++)
+
+        for (int i = 0; i < Clouds.Count; i++)
         {
-            Clouds[i].SetGenericShape(GenericCloudShapes[i]);
+            Clouds[i].SetGenericShape(GenericCloudShapes[i % GenericCloudShapes.Count]);
             Clouds[i].TurnOffCollider();
         }
 
-        for (int i = 0; i<numberOfTargetsToGenerate; i++)
+        for (int i = 0; i < numberOfTargetsToGenerate; i++)
         {
             Clouds[i].SetShape(CloudShapes[i]);
         }
 
-    }
-
-    void changeCloudShape(string s)
-    {
-        Debug.Log("changing shape to: "+s);
-        foreach (Texture2D shape in CloudShapes)
-        {
-            if (shape.name == s)
-            {
-                Debug.Log("changing shape to: "+s);
-                Actions.ChangeCloudShape?.Invoke(shape);
-            }
-        }
-
+        // Queue up the remaining target shapes for later reassignment
+        _remainingTargets.Clear();
+        for (int i = numberOfTargetsToGenerate; i < CloudShapes.Count; i++)
+            _remainingTargets.Enqueue(CloudShapes[i]);
     }
 
     public void GetClickedCloud(GameObject c) //from Raycaster
@@ -95,7 +87,6 @@ public class MainCloudManager : MonoBehaviour
         Actions.ChooseCloud?.Invoke(clickedCloud.CurrentShapeName); // sends name to narrator
 
         cloudsSelectedHistory.Add(clickedCloud.CurrentShapeName);
-        cloudTargetsList.Remove(clickedCloud.currentShape);
         finalCloudTextures.Add(clickedCloud.currentShape);
     }
 
@@ -103,6 +94,14 @@ public class MainCloudManager : MonoBehaviour
     {
         if (clickedCloud != null)
             clickedCloud.GlowCloud(clickedCloud.gameObject);
+    }
+
+    private void OnCloudReady(CloudShape cloud)
+    {
+        if (_remainingTargets.Count > 0)
+            cloud.SetShape(_remainingTargets.Dequeue());
+        else
+            cloud.SetGenericShape(GenericCloudShapes[Random.Range(0, GenericCloudShapes.Count)]);
     }
 
     private void InactivateCloud()
