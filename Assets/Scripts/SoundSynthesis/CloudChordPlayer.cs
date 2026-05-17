@@ -22,7 +22,7 @@ using Synthic;
 /// The component auto-creates four child AudioSources in Awake. Route them to
 /// a Unity Audio Mixer group via OutputMixer to add reverb, chorus, etc.
 /// </summary>
-public class CloudChordPlayer : MonoBehaviour
+public class CloudChordPlayer : MonoBehaviour, IChordSource
 {
     // ── Types ─────────────────────────────────────────────────────────────
     public enum TetraType

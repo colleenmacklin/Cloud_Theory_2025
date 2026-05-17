@@ -149,6 +149,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!136 &4706507320527402148
 CapsuleCollider:
@@ -187,6 +188,8 @@ GameObject:
   - component: {fileID: 4706507320812834634}
   - component: {fileID: 4706507320812834632}
   - component: {fileID: 8805152180946627518}
+  - component: {fileID: 3591120907557131011}
+  - component: {fileID: 5829309720863329685}
   m_Layer: 2
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -202,8 +205,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4706507320812834737}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.20000005, y: 0.9200001, z: 0.29999992}
+  m_LocalRotation: {x: -0.055148922, y: -0.021178348, z: -0.24989781, w: 0.9664684}
+  m_LocalPosition: {x: 2.443916, y: -22.24762, z: 1.6799488}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -412,6 +415,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &3591120907557131011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4706507320812834737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
+--- !u!114 &5829309720863329685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4706507320812834737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576c91031fbe14592a90f1a996c736b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseRay
+  cam: {fileID: 4706507320812834639}
+  gazeMover: {fileID: 4706507320812834632}
+  focusInSpeed: 0.01
+  focusOutSpeed: 0.01
+  dwellTimeRequired: 1.5
 --- !u!1001 &5371919647513000880
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -424,6 +458,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Reticule
+      objectReference: {fileID: 0}
+    - target: {fileID: 3888007874651583982, guid: 28c707272418248b4b01eea8e37650a6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598554256399313083, guid: 28c707272418248b4b01eea8e37650a6,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d0ca4533f8eb44640b5156a93a4de6c0, type: 2}
+    - target: {fileID: 8154272071667926596, guid: 28c707272418248b4b01eea8e37650a6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8647551871653299658, guid: 28c707272418248b4b01eea8e37650a6,
         type: 3}
@@ -478,7 +527,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8154272071667926596, guid: 28c707272418248b4b01eea8e37650a6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5176019815243114065}
   m_SourcePrefab: {fileID: 100100000, guid: 28c707272418248b4b01eea8e37650a6, type: 3}
 --- !u!4 &3643028271833874042 stripped
 Transform:
@@ -486,3 +539,22 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5371919647513000880}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4297893422159887860 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8154272071667926596, guid: 28c707272418248b4b01eea8e37650a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5371919647513000880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5176019815243114065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4297893422159887860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b273756bbef14430b16f47721f11307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReticuleGlow
+  fadeSpeed: 0.3

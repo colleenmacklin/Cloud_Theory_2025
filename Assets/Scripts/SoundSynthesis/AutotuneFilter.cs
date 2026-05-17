@@ -29,10 +29,11 @@ public class AutotuneFilter : MonoBehaviour
 
     // ── Inspector ─────────────────────────────────────────────────────────
     [Header("References")]
-    [Tooltip("Primary chord source — assign a CloudChordPlayer for the cloud scene.")]
-    public CloudChordPlayer ChordSource;
+    [Tooltip("Assign any MonoBehaviour that implements IChordSource (FMODChordPlayer or CloudChordPlayer).")]
+    [SerializeField] private MonoBehaviour _chordSourceObject;
+    private IChordSource ChordSource => _chordSourceObject as IChordSource;
 
-    [Tooltip("Legacy chord source — used when ChordSource is null (VocoderController pipeline).")]
+    [Tooltip("Legacy carrier — unused when ChordSource is assigned.")]
     public CarrierSynth Carrier;
 
     [Header("On/Off")]
