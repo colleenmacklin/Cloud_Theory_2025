@@ -1096,58 +1096,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 622338735}
   m_CullTransparentMesh: 1
---- !u!1 &630901469 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 528800093094462406, guid: 4359c6319f47243f98a1804e5587bf7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 4759354738968218851}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &630901470 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1559385210682358501, guid: 4359c6319f47243f98a1804e5587bf7a,
     type: 3}
   m_PrefabInstance: {fileID: 4759354738968218851}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 630901469}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81a71653cd77949acbd28b4ffd116f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarrierSynth
---- !u!114 &630901476
+--- !u!114 &630901476 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4759354738968218851}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 630901469}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5003db3a445284019a2484f7a002e909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FMODChordPlayer
-  NoteEvent:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  MidiNoteParam: MidiNote
-  CloudChords:
-  - cloudName: Abraham Lincoln
-    rootMidi: 55
-    chordType: 0
-    inversion: 0
-    playStyle: 2
-  DefaultRootMidi: 60
-  DefaultChordType: 0
-  DefaultInversion: 0
-  DefaultPlayStyle: 0
-  ArpeggioNoteDuration: 0.3
-  ArpeggioLoop: 1
-  _activeChordLabel: 
-  _wordNoteIndex: 0
 --- !u!1 &750257648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,7 +2240,7 @@ MonoBehaviour:
     Path: event:/Environment/Birds
   Event: 
   EventPlayTrigger: 1
-  EventStopTrigger: 2
+  EventStopTrigger: 0
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
@@ -2287,6 +2259,69 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 75.6171, y: 69.24483, z: -57.53989}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1596687606
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1596687608}
+  - component: {fileID: 1596687607}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1596687607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596687606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
+--- !u!4 &1596687608
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596687606}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 220.31966, y: -0.00003, z: -65.10082}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3802,59 +3837,91 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 700746900093398887, guid: 4359c6319f47243f98a1804e5587bf7a,
-        type: 3}
-      propertyPath: SkipDropdown
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2510773381008344100, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
+    - target: {fileID: 1017034340704720628, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
-      propertyPath: engine
+      propertyPath: CloudChords.Array.data[0].rootMidi
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: TestNoteNow
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: NoteEvent.Path
+      value: event:/Instruments/SynthNote
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: DefaultChordType
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: NoteEvent.Guid.Data1
+      value: -1941629931
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: NoteEvent.Guid.Data2
+      value: 1328345956
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: NoteEvent.Guid.Data3
+      value: -10517351
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: NoteEvent.Guid.Data4
+      value: 1702511477
+      objectReference: {fileID: 0}
+    - target: {fileID: 2296074680071205647, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: m_Volume
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2296074680071205647, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 6363231552525925804, guid: 0915aef0bc9b64f8fb4329f282bf36f0,
+        type: 2}
     - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: Subtitles
       value: 
       objectReference: {fileID: 971940957}
-    - target: {fileID: 2921896378705599919, guid: 4359c6319f47243f98a1804e5587bf7a,
-        type: 3}
-      propertyPath: traceryGrammar
-      value: 
-      objectReference: {fileID: 4900000, guid: 7444230fb9bc4446b883fbf1351fe064, type: 3}
     - target: {fileID: 3138688008047021911, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: m_Name
       value: AIFriend_Vocoder
       objectReference: {fileID: 0}
-    - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
+    - target: {fileID: 4831245042515268691, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
-      propertyPath: Mode
+      propertyPath: BypassFMOD
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
-      propertyPath: _chordSourceObject
+      propertyPath: Carrier
       value: 
       objectReference: {fileID: 630901470}
+    - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: _chordSourceObject
+      value: 
+      objectReference: {fileID: 630901476}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 528800093094462406, guid: 4359c6319f47243f98a1804e5587bf7a,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 630901476}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4359c6319f47243f98a1804e5587bf7a, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -3871,3 +3938,4 @@ SceneRoots:
   - {fileID: 2143039592}
   - {fileID: 1010127519}
   - {fileID: 1556492557}
+  - {fileID: 1596687608}

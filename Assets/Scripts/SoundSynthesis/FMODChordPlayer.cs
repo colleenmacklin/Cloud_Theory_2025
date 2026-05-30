@@ -56,6 +56,8 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     [Tooltip("FMOD parameter name that selects the note (integer MIDI number, 36–84).")]
     public string MidiNoteParam = "MidiNote";
 
+    [Range(0f, 1f)] public float NoteVolume = 0.5f;
+
     // ── Chord mapping ──────────────────────────────────────────────────────
     [Header("Cloud → Chord Mapping")]
     public List<CloudChordEntry> CloudChords = new();
@@ -70,7 +72,9 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     [Range(0.05f, 2f)] public float ArpeggioNoteDuration = 0.3f;
     public bool ArpeggioLoop = true;
 
-    [Header("Debug (read-only)")]
+    [Header("Debug")]
+    [Tooltip("Click in play mode to fire one test note (middle C = 60) and confirm the FMOD event makes sound.")]
+    public bool TestNoteNow = false;
     [SerializeField] private string _activeChordLabel;
     [SerializeField] private int    _wordNoteIndex;
 
@@ -115,6 +119,22 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
         PlayChord(DefaultRootMidi, DefaultChordType, DefaultInversion, DefaultPlayStyle);
     }
 
+    private void Update()
+    {
+        if (!TestNoteNow) return;
+        TestNoteNow = false;
+        if (NoteEvent.IsNull) { Debug.LogWarning("[FMODChordPlayer] NoteEvent not assigned."); return; }
+        Debug.Log("[FMODChordPlayer] Firing test note (MIDI 60 = middle C).");
+        try
+        {
+            EventInstance t = RuntimeManager.CreateInstance(NoteEvent);
+            t.setParameterByName(MidiNoteParam, 60);
+            t.start();
+            t.release(); // one-shot: FMOD cleans it up after it finishes
+        }
+        catch (System.Exception e) { Debug.LogError($"[FMODChordPlayer] Test note failed: {e.Message}"); }
+    }
+
     private void OnDestroy()
     {
         StopArpeggio();
@@ -137,6 +157,7 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
         {
             EventInstance inst = RuntimeManager.CreateInstance(NoteEvent);
             inst.setParameterByName(MidiNoteParam, midiNote);
+            inst.setVolume(NoteVolume);
             inst.start();
             _voices[voiceIndex] = inst;
         }

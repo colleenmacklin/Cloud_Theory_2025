@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8538800569276664298}
   - component: {fileID: 1017034340704720628}
   - component: {fileID: 2510773381008344100}
+  - component: {fileID: 2026535922611946927}
   m_Layer: 0
   m_Name: CarrierSynth
   m_TagString: Untagged
@@ -218,7 +219,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 528800093094462406}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dcb2cf80bdfcf4770ad2033728b2c3eb, type: 3}
   m_Name: 
@@ -241,6 +242,40 @@ MonoBehaviour:
   DefaultChordType: 0
   DefaultInversion: 0
   DefaultPlayStyle: 2
+  ArpeggioNoteDuration: 0.3
+  ArpeggioLoop: 1
+  _activeChordLabel: 
+  _wordNoteIndex: 0
+--- !u!114 &2026535922611946927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528800093094462406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5003db3a445284019a2484f7a002e909, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMODChordPlayer
+  NoteEvent:
+    Guid:
+      Data1: -1941629931
+      Data2: 1328345956
+      Data3: -10517351
+      Data4: 1702511477
+    Path: event:/Instruments/SynthNote
+  MidiNoteParam: MidiNote
+  CloudChords:
+  - cloudName: Abraham Lincoln
+    rootMidi: 55
+    chordType: 0
+    inversion: 0
+    playStyle: 2
+  DefaultRootMidi: 60
+  DefaultChordType: 0
+  DefaultInversion: 0
+  DefaultPlayStyle: 0
   ArpeggioNoteDuration: 0.3
   ArpeggioLoop: 1
   _activeChordLabel: 
@@ -328,6 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 161848072625854854}
   - component: {fileID: 3549221480580132393}
+  - component: {fileID: -1334526923112822230}
   m_Layer: 2
   m_Name: AIFriend_Vocoder
   m_TagString: Untagged
@@ -360,7 +396,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3138688008047021911}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8b36b77c02f047d791f775d5d756a33, type: 3}
   m_Name: 
@@ -373,6 +409,37 @@ MonoBehaviour:
   AutotuneActive: 1
   RootNote: 60
   StartingChord: 0
+--- !u!114 &-1334526923112822230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3138688008047021911}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1 &4512248341850765705
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,18 +487,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028045bc707f54f819e5004e52f6d37c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  cloudHistory: []
-  targetClouds: []
+  engine: 1
   llm: {fileID: 7865544462905744963}
   llmCharacter: {fileID: 2477724697070230291}
   Prompt: ...
   Response: 
+  numWords: 0
+  PromptAddition: 
+  traceryGrammar: {fileID: 4900000, guid: 7444230fb9bc4446b883fbf1351fe064, type: 3}
+  traceryStartRule: origin
+  cloudHistory: []
+  targetClouds: []
   chosenCloud: 
   chosenTheme: 
-  numWords: 0
   voice: {fileID: 700746900093398887}
   sentenceSplitter: {fileID: 5517552835559820581}
-  PromptAddition: 
   Subtitles: {fileID: 0}
 --- !u!114 &5517552835559820581
 MonoBehaviour:
@@ -501,7 +571,7 @@ MonoBehaviour:
   _parallelPrompts: -1
   _contextSize: 2048
   _batchSize: 512
-  _model: tinyllama-1.1b-chat-v1.0.Q3_K_M.gguf
+  _model: Qwen3-1.7B-Q4_K_M.gguf
   _flashAttention: 0
   _reasoning: 0
   _lora: 
@@ -510,7 +580,7 @@ MonoBehaviour:
   _embeddingsOnly: 0
   _embeddingLength: 2048
   minContextLength: 0
-  maxContextLength: 2048
+  maxContextLength: 40960
 --- !u!1 &7425142166812052302
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,6 +594,7 @@ GameObject:
   - component: {fileID: 700746900093398887}
   - component: {fileID: 5972097854802383484}
   - component: {fileID: 4201503539263341516}
+  - component: {fileID: 4831245042515268691}
   m_Layer: 2
   m_Name: Voice
   m_TagString: Untagged
@@ -665,6 +736,7 @@ MonoBehaviour:
   currentVoiceName: 
   UseNative: 0
   Running: 0
+  SkipDropdown: 1
   Rate: 1
   Pitch: 1
   Volume: 1
@@ -683,7 +755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6d565d9577d44e6aa69f6bdb8462bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutotuneFilter
-  ChordSource: {fileID: 2510773381008344100}
+  _chordSourceObject: {fileID: 1559385210682358501}
   Carrier: {fileID: 1559385210682358501}
   AutotuneEnabled: 1
   Mode: 0
@@ -716,3 +788,17 @@ MonoBehaviour:
   EnvRelease: 0.12
   OutputGain: 2.5
   MidBoost: 1.8
+--- !u!114 &4831245042515268691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425142166812052302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040d14f603ab24af3b37049e640d021b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMODVoiceBridge
+  BusPath: bus:/Voice
+  Volume: 1

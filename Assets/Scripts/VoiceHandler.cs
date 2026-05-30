@@ -50,10 +50,10 @@ private bool playing;
 private void OnEnable()
 {
    Actions.ChooseVoice += SetVoice;
-// Subscribe event listeners
 Speaker.Instance.OnVoicesReady += voicesReady;
 Speaker.Instance.OnSpeakStart += speakStart;
 Speaker.Instance.OnSpeakComplete += speakComplete;
+Speaker.Instance.OnErrorInfo += speakError;
 }
 
 private void OnDisable()
@@ -61,17 +61,17 @@ private void OnDisable()
 if (Speaker.Instance != null)
 {
 Actions.ChooseVoice -= SetVoice;
-
-// Unsubscribe event listeners
 Speaker.Instance.OnVoicesReady -= voicesReady;
 Speaker.Instance.OnSpeakStart -= speakStart;
 Speaker.Instance.OnSpeakComplete -= speakComplete;
+Speaker.Instance.OnErrorInfo -= speakError;
 }
 }
 
 void Start()
 {
-      SpeakLine("hey Colleen, let's make this game amazing!");
+      // Removed startup test line — calling Speak before voices are ready causes RTVoice
+      // to error without firing OnSpeakComplete, permanently locking isSpeaking = true.
         // RTVoice may have already fired OnVoicesReady before this component
         // enabled (common when Speaker is a scene singleton that starts first).
         // Poll as a fallback, and keep trying via coroutine until voices arrive.
@@ -260,14 +260,20 @@ Debug.Log($"RT-Voice: speak started: {wrapper}");
 
 private void speakComplete(Wrapper wrapper)
 {
-if (wrapper.Uid == uid) //Only write the log message if it's "our" speech
+if (wrapper.Uid == uid)
 Debug.Log($"RT-Voice: speak completed: {wrapper}");
-//TODO:
-//action to tell narrator and subtitle text that the line has been spoken, and to go to the next line, if available
 isSpeaking = false;
-OnSpeechComplete?.Invoke(); // Notify Narrator
-Debug.Log("Speak Complete");
-//playing = false;
-//Actions.DoneSpeaking();
+OnSpeechComplete?.Invoke();
+}
+
+private void speakError(Wrapper wrapper, string error)
+{
+// RTVoice fires OnErrorInfo instead of OnSpeakComplete on failure,
+// so we must reset isSpeaking here or all future speech calls are blocked.
+if (wrapper.Uid == uid)
+{
+Debug.LogWarning($"RT-Voice error (resetting isSpeaking): {error}");
+isSpeaking = false;
+}
 }
 }

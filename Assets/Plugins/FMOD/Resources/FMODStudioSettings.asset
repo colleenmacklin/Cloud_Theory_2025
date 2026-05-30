@@ -553,8 +553,12 @@ MonoBehaviour:
   - Master
   Banks:
   - Environment
+  - Environment.assets
   - Instruments
+  - Instruments.assets
+  - Master.assets
   - SFX
+  - SFX.assets
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0
