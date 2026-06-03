@@ -20,6 +20,8 @@ namespace Synthic
         public float MasterTimer  => _masterTimer;
         public float BeatDuration => 60f / bpm;
 
+        public event System.Action OnBeat;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -65,6 +67,8 @@ namespace Synthic
 
         private void OnQuarterNote()
         {
+            OnBeat?.Invoke();
+
             // start any platters waiting for sync
             foreach (var platter in _platters)
             {

@@ -5,6 +5,7 @@ using FMOD.Studio;
 using FMODUnity;
 using Crosstales.RTVoice;
 using Crosstales.RTVoice.Model;
+using Synthic;
 
 /// <summary>
 /// Replaces CloudChordPlayer for the FMOD audio pipeline.
@@ -63,7 +64,7 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     public List<CloudChordEntry> CloudChords = new();
 
     [Header("Default Chord")]
-    [Range(36, 84)] public int DefaultRootMidi = 60;
+    [Range(36, 84)] public int DefaultRootMidi = 69;
     public TetraType DefaultChordType = TetraType.Major7;
     public Inversion DefaultInversion = Inversion.Root;
     public PlayStyle DefaultPlayStyle = PlayStyle.Block;
@@ -71,6 +72,12 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     [Header("Arpeggio")]
     [Range(0.05f, 2f)] public float ArpeggioNoteDuration = 0.3f;
     public bool ArpeggioLoop = true;
+
+    [Header("Metronome Sync")]
+    [Tooltip("When enabled, arpeggio steps are clocked by RhythmicMasterClock instead of ArpeggioNoteDuration.")]
+    public bool SyncToMasterClock = false;
+    [Tooltip("Quarter-note beats between arpeggio steps (1 = quarter, 2 = half, 4 = whole).")]
+    [Min(1)] public int BeatsPerStep = 1;
 
     [Header("Debug")]
     [Tooltip("Click in play mode to fire one test note (middle C = 60) and confirm the FMOD event makes sound.")]
@@ -86,6 +93,11 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     private const int VoiceCount = 4;
     private readonly EventInstance[] _voices = new EventInstance[VoiceCount];
     private Coroutine _arpeggioRoutine;
+
+    // beat-synced arpeggio state
+    private int[]  _syncedNotes;
+    private int    _arpeggioStep;
+    private int    _beatCount;
 
     private static readonly Dictionary<TetraType, int[]> BaseIntervals = new()
     {
@@ -117,6 +129,8 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     private void Start()
     {
         PlayChord(DefaultRootMidi, DefaultChordType, DefaultInversion, DefaultPlayStyle);
+        if (RhythmicMasterClock.Instance != null)
+            RhythmicMasterClock.Instance.OnBeat += OnClockBeat;
     }
 
     private void Update()
@@ -137,6 +151,8 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
 
     private void OnDestroy()
     {
+        if (RhythmicMasterClock.Instance != null)
+            RhythmicMasterClock.Instance.OnBeat -= OnClockBeat;
         StopArpeggio();
         for (int i = 0; i < VoiceCount; i++)
             ReleaseVoice(i, immediate: true);
@@ -205,7 +221,17 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
                 break;
 
             case PlayStyle.Arpeggio:
-                _arpeggioRoutine = StartCoroutine(ArpeggioRoutine(midiNotes));
+                if (SyncToMasterClock && RhythmicMasterClock.Instance != null)
+                {
+                    _syncedNotes  = midiNotes;
+                    _arpeggioStep = 0;
+                    _beatCount    = 0;
+                    NoteOn(0, midiNotes[0]);
+                }
+                else
+                {
+                    _arpeggioRoutine = StartCoroutine(ArpeggioRoutine(midiNotes));
+                }
                 break;
         }
     }
@@ -228,9 +254,24 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
 
     private void StopArpeggio()
     {
-        if (_arpeggioRoutine == null) return;
-        StopCoroutine(_arpeggioRoutine);
-        _arpeggioRoutine = null;
+        if (_arpeggioRoutine != null)
+        {
+            StopCoroutine(_arpeggioRoutine);
+            _arpeggioRoutine = null;
+        }
+        _syncedNotes = null;
+    }
+
+    private void OnClockBeat()
+    {
+        if (!SyncToMasterClock || _syncedNotes == null || _syncedNotes.Length == 0) return;
+        if (++_beatCount < BeatsPerStep) return;
+        _beatCount = 0;
+
+        int prev = _arpeggioStep;
+        _arpeggioStep = (_arpeggioStep + 1) % _syncedNotes.Length;
+        ReleaseVoice(prev, immediate: false);
+        NoteOn(_arpeggioStep, _syncedNotes[_arpeggioStep]);
     }
 
     // ── Event handlers ─────────────────────────────────────────────────────

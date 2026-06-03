@@ -202,6 +202,7 @@ MonoBehaviour:
   shapeRenderer: {fileID: 4001077985846721382}
   isGameLoop: 0
   keepDebugObjectsVisible: 1
+  SkyCenter: {fileID: 0}
 --- !u!54 &857159031385798982
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -380,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec82f4683316473a9ac98319e694e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeObject
-  fadeDuration: 3
+  fadeDuration: 10
 --- !u!1001 &4001077985832131846
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -289,6 +289,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -744,6 +748,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -955,6 +963,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -1573,6 +1585,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -1659,6 +1675,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -1820,6 +1840,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -1906,6 +1930,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -2110,6 +2138,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290351147}
   m_CullTransparentMesh: 1
+--- !u!1 &1350702776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1350702777}
+  m_Layer: 0
+  m_Name: skycenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1350702777
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350702776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 200, z: -65.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1491028153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2118,6 +2177,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -2172,11 +2235,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7433909663605435073, guid: 47466df784a8446dcb08284b843ca859,
-        type: 3}
-      propertyPath: fadeDuration
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2273,45 +2331,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1596687608}
-  - component: {fileID: 1596687607}
+  - component: {fileID: 1596687609}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: BPM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1596687607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596687606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
-  CollisionTag: 
-  EventReference:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  Event: 
-  EventPlayTrigger: 0
-  EventStopTrigger: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  NonRigidbodyVelocity: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
 --- !u!4 &1596687608
 Transform:
   m_ObjectHideFlags: 0
@@ -2327,6 +2354,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1596687609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596687606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2733a440ce5c44f869b85cf7331f1db2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Synthic.RhythmicMasterClock
+  bpm: 120
+  sequencer: {fileID: 0}
 --- !u!1001 &1629408018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2335,6 +2376,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -3447,6 +3492,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -3611,6 +3660,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: SkyCenter
+      value: 
+      objectReference: {fileID: 1350702777}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -3855,32 +3908,42 @@ PrefabInstance:
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Path
-      value: event:/Instruments/SynthNote
+      value: event:/Instruments/SynthNote2
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: DefaultChordType
-      value: 6
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: DefaultPlayStyle
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: SyncToMasterClock
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data1
-      value: -1941629931
+      value: -1606164033
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data2
-      value: 1328345956
+      value: 1334014239
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data3
-      value: -10517351
+      value: 129703850
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data4
-      value: 1702511477
+      value: 1285891024
       objectReference: {fileID: 0}
     - target: {fileID: 2296074680071205647, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
@@ -3910,9 +3973,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
+      propertyPath: Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
       propertyPath: Carrier
       value: 
       objectReference: {fileID: 630901470}
+    - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5972097854802383484, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: _chordSourceObject
@@ -3939,3 +4012,4 @@ SceneRoots:
   - {fileID: 1010127519}
   - {fileID: 1556492557}
   - {fileID: 1596687608}
+  - {fileID: 1350702777}

@@ -77,6 +77,10 @@ public class CloudShape : MonoBehaviour
     private bool _cloudIsBusyResetting = false;
     public bool keepDebugObjectsVisible = false;
 
+    [Header("Sky Orientation")]
+    [Tooltip("Clouds orient their top toward this point. Create an empty GameObject high in the sky above the scene centre and assign it here. Leave unset to default to (0, 1000, 0).")]
+    public Transform SkyCenter;
+
     //to be set by the fadeobject in/out object (not very elegant)
     //public bool IsFading;
 
@@ -185,10 +189,18 @@ public class CloudShape : MonoBehaviour
 */
     private void lookatcamera(Camera c)
     {
-        if (c != null)
-        {
-            transform.LookAt(c.transform.position, Vector3.up);
-        }
+        if (c == null) return;
+
+        Vector3 toCamera = (c.transform.position - transform.position).normalized;
+
+        Vector3 skyPoint = SkyCenter != null ? SkyCenter.position : new Vector3(0f, 1000f, 0f);
+        Vector3 toSky = (skyPoint - transform.position).normalized;
+
+        // If the sky point is nearly co-linear with the camera direction, fall back to world forward.
+        if (Mathf.Abs(Vector3.Dot(toCamera, toSky)) > 0.99f)
+            toSky = Vector3.forward;
+
+        transform.rotation = Quaternion.LookRotation(toCamera, toSky);
     }
     //checks to see if cloud is close to being offscreeen, and if it is, starts fade out and reposition sequence
     //bool to prevent it from calling once sequence has started
