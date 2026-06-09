@@ -3907,8 +3907,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
+      propertyPath: TestChordNow
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: TestPlayStyle
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
       propertyPath: NoteEvent.Path
       value: event:/Instruments/SynthNote2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: DefaultRootMidi
+      value: 57
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
@@ -3944,6 +3959,211 @@ PrefabInstance:
         type: 3}
       propertyPath: NoteEvent.Guid.Data4
       value: 1285891024
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[1].rootMidi
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[2].rootMidi
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[3].rootMidi
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[4].rootMidi
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[5].rootMidi
+      value: 47
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[6].rootMidi
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[7].rootMidi
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[8].rootMidi
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[9].rootMidi
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[0].playStyle
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[1].chordType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[1].cloudName
+      value: a banana
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[1].playStyle
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[2].chordType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[2].cloudName
+      value: a bucket
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[2].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[3].chordType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[3].cloudName
+      value: a businesswoman
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[3].inversion
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[3].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[4].cloudName
+      value: a candle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[4].inversion
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[4].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[5].cloudName
+      value: a coelacanth
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[5].inversion
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[5].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[6].cloudName
+      value: a crescent moon
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[6].inversion
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[6].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[7].cloudName
+      value: a dancing spider
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[7].inversion
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[7].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[8].chordType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[8].cloudName
+      value: a duck
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[8].inversion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[8].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[9].cloudName
+      value: a candle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[9].inversion
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[9].playStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
+        type: 3}
+      propertyPath: CloudChords.Array.data[1].arpeggioOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2296074680071205647, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}

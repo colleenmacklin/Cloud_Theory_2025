@@ -35,18 +35,29 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
         MajAdd9,     // 0-4-7-14
     }
 
-    public enum Inversion { Root, First, Second, Third }
-    public enum PlayStyle  { Block, Toggle, Arpeggio }
+    public enum Inversion     { Root, First, Second, Third }
+    public enum PlayStyle     { Block, Toggle, Arpeggio }
+    public enum ArpeggioOrder
+    {
+        Up,        // 1 2 3 4
+        Down,      // 4 3 2 1
+        RootHigh,  // 1 4 2 3
+        HighRoot,  // 4 1 3 2
+        SkipUp,    // 1 3 2 4
+        SkipDown,  // 4 2 3 1
+    }
 
     [System.Serializable]
     public class CloudChordEntry
     {
         [Tooltip("Cloud name from Actions.ChooseCloud. Case-insensitive; substring match used as fallback.")]
         public string cloudName = "";
+        // C3=48  D3=50  E3=52  F3=53  G3=55  A3=57  B3=59  C4=60
         [Range(36, 84)] public int rootMidi = 60;
-        public TetraType chordType = TetraType.Major7;
-        public Inversion inversion = Inversion.Root;
-        public PlayStyle playStyle = PlayStyle.Block;
+        public TetraType    chordType      = TetraType.Major7;
+        public Inversion    inversion      = Inversion.Root;
+        public PlayStyle    playStyle      = PlayStyle.Block;
+        public ArpeggioOrder arpeggioOrder = ArpeggioOrder.Up;
     }
 
     // ── FMOD ──────────────────────────────────────────────────────────────
@@ -64,6 +75,7 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     public List<CloudChordEntry> CloudChords = new();
 
     [Header("Default Chord")]
+    // C3=48  D3=50  E3=52  F3=53  G3=55  A3=57  B3=59  C4=60
     [Range(36, 84)] public int DefaultRootMidi = 69;
     public TetraType DefaultChordType = TetraType.Major7;
     public Inversion DefaultInversion = Inversion.Root;
@@ -71,7 +83,8 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
 
     [Header("Arpeggio")]
     [Range(0.05f, 2f)] public float ArpeggioNoteDuration = 0.3f;
-    public bool ArpeggioLoop = true;
+    public bool          ArpeggioLoop  = true;
+    public ArpeggioOrder Order         = ArpeggioOrder.Up;
 
     [Header("Metronome Sync")]
     [Tooltip("When enabled, arpeggio steps are clocked by RhythmicMasterClock instead of ArpeggioNoteDuration.")]
@@ -82,6 +95,13 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     [Header("Debug")]
     [Tooltip("Click in play mode to fire one test note (middle C = 60) and confirm the FMOD event makes sound.")]
     public bool TestNoteNow = false;
+    [Tooltip("Click in play mode to immediately play the chord defined by the Test fields below.")]
+    public bool TestChordNow = false;
+    // C3=48  D3=50  E3=52  F3=53  G3=55  A3=57  B3=59  C4=60
+    [Range(36, 84)] public int      TestRootMidi  = 60;
+    public TetraType                TestChordType = TetraType.Major7;
+    public Inversion                TestInversion = Inversion.Root;
+    public PlayStyle                TestPlayStyle = PlayStyle.Block;
     [SerializeField] private string _activeChordLabel;
     [SerializeField] private int    _wordNoteIndex;
 
@@ -98,6 +118,16 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     private int[]  _syncedNotes;
     private int    _arpeggioStep;
     private int    _beatCount;
+
+    private static readonly Dictionary<ArpeggioOrder, int[]> OrderSequences = new()
+    {
+        { ArpeggioOrder.Up,       new[] { 0, 1, 2, 3 } },
+        { ArpeggioOrder.Down,     new[] { 3, 2, 1, 0 } },
+        { ArpeggioOrder.RootHigh, new[] { 0, 3, 1, 2 } },
+        { ArpeggioOrder.HighRoot, new[] { 3, 0, 2, 1 } },
+        { ArpeggioOrder.SkipUp,   new[] { 0, 2, 1, 3 } },
+        { ArpeggioOrder.SkipDown, new[] { 3, 1, 2, 0 } },
+    };
 
     private static readonly Dictionary<TetraType, int[]> BaseIntervals = new()
     {
@@ -135,18 +165,27 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
 
     private void Update()
     {
-        if (!TestNoteNow) return;
-        TestNoteNow = false;
-        if (NoteEvent.IsNull) { Debug.LogWarning("[FMODChordPlayer] NoteEvent not assigned."); return; }
-        Debug.Log("[FMODChordPlayer] Firing test note (MIDI 60 = middle C).");
-        try
+        if (TestNoteNow)
         {
-            EventInstance t = RuntimeManager.CreateInstance(NoteEvent);
-            t.setParameterByName(MidiNoteParam, 60);
-            t.start();
-            t.release(); // one-shot: FMOD cleans it up after it finishes
+            TestNoteNow = false;
+            if (NoteEvent.IsNull) { Debug.LogWarning("[FMODChordPlayer] NoteEvent not assigned."); return; }
+            Debug.Log("[FMODChordPlayer] Firing test note (MIDI 60 = middle C).");
+            try
+            {
+                EventInstance t = RuntimeManager.CreateInstance(NoteEvent);
+                t.setParameterByName(MidiNoteParam, 60);
+                t.start();
+                t.release();
+            }
+            catch (System.Exception e) { Debug.LogError($"[FMODChordPlayer] Test note failed: {e.Message}"); }
         }
-        catch (System.Exception e) { Debug.LogError($"[FMODChordPlayer] Test note failed: {e.Message}"); }
+
+        if (TestChordNow)
+        {
+            TestChordNow = false;
+            Debug.Log($"[FMODChordPlayer] Test chord: root={TestRootMidi} {TestChordType} inv={TestInversion} [{TestPlayStyle}]");
+            PlayChord(TestRootMidi, TestChordType, TestInversion, TestPlayStyle);
+        }
     }
 
     private void OnDestroy()
@@ -226,7 +265,7 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
                     _syncedNotes  = midiNotes;
                     _arpeggioStep = 0;
                     _beatCount    = 0;
-                    NoteOn(0, midiNotes[0]);
+                    NoteOn(0, midiNotes[OrderSequences[Order][0]]);
                 }
                 else
                 {
@@ -238,14 +277,15 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
 
     private IEnumerator ArpeggioRoutine(int[] midiNotes)
     {
-        int prev = -1;
+        int[] seq  = OrderSequences[Order];
+        int   prev = -1;
         do
         {
-            for (int i = 0; i < midiNotes.Length; i++)
+            for (int step = 0; step < midiNotes.Length; step++)
             {
                 if (prev >= 0) ReleaseVoice(prev, immediate: false);
-                NoteOn(i, midiNotes[i]);
-                prev = i;
+                NoteOn(step, midiNotes[seq[step]]);
+                prev = step;
                 yield return new WaitForSeconds(ArpeggioNoteDuration);
             }
         }
@@ -271,7 +311,7 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
         int prev = _arpeggioStep;
         _arpeggioStep = (_arpeggioStep + 1) % _syncedNotes.Length;
         ReleaseVoice(prev, immediate: false);
-        NoteOn(_arpeggioStep, _syncedNotes[_arpeggioStep]);
+        NoteOn(_arpeggioStep, _syncedNotes[OrderSequences[Order][_arpeggioStep]]);
     }
 
     // ── Event handlers ─────────────────────────────────────────────────────

@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Environment.assets.bank
   Name: Environment.assets
   StudioPath: bank:/Environment.assets
-  lastModified: 639156908015616066
+  lastModified: 639161880043609329
   FileSizes: []
   Exists: 1
 --- !u!114 &-7835260304542791820
@@ -61,7 +61,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.assets.bank
   Name: Master.assets
   StudioPath: bank:/Master.assets
-  lastModified: 639156925267711154
+  lastModified: 639161888262641880
   FileSizes: []
   Exists: 1
 --- !u!114 &-7330823879048831837
@@ -487,7 +487,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 1134484694525158492}
   cacheVersion: 131859
-  cacheTime: 639160900175134849
+  cacheTime: 639161888262645668
   SerializableEventsDict:
   - key: event:/Environment/New Event 2
     index: 0
@@ -536,7 +536,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 639156908015490212
+  lastModified: 639161880043459676
   FileSizes: []
   Exists: 1
 --- !u!114 &1134484694525158492
@@ -554,10 +554,10 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639156925267713324
+  lastModified: 639161888262645668
   FileSizes:
   - Name: 
-    Value: 1528
+    Value: 1570
   Exists: 1
 --- !u!114 &1202106710892654856
 MonoBehaviour:
@@ -636,7 +636,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.bank
   Name: Instruments
   StudioPath: bank:/Instruments
-  lastModified: 639160900174993545
+  lastModified: 639161880807460864
   FileSizes: []
   Exists: 1
 --- !u!114 &2220986955537619405
@@ -654,7 +654,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.assets.bank
   Name: Instruments.assets
   StudioPath: bank:/Instruments.assets
-  lastModified: 639160900175134849
+  lastModified: 639161880807609160
   FileSizes: []
   Exists: 1
 --- !u!114 &2856251056417772967
@@ -897,7 +897,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639156925267707669
+  lastModified: 639161888262637748
   FileSizes: []
   Exists: 1
 --- !u!114 &8915606884590502789

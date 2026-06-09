@@ -76,6 +76,7 @@ public class CloudShape : MonoBehaviour
     //bool to be set to true when cloud is nearing edge of screen and moved to the other side
     private bool _cloudIsBusyResetting = false;
     public bool keepDebugObjectsVisible = false;
+    private Coroutine _changeCoroutine;
 
     [Header("Sky Orientation")]
     [Tooltip("Clouds orient their top toward this point. Create an empty GameObject high in the sky above the scene centre and assign it here. Leave unset to default to (0, 1000, 0).")]
@@ -232,15 +233,16 @@ public class CloudShape : MonoBehaviour
         if(this.gameObject == cloud)
         {
             Debug.Log("GLOWCLOUD" + this.CurrentShapeName);
+            isHighlighted = true;
+            // Pause the shape-change countdown so the cloud won't morph while the narrator is talking about it.
+            if (_changeCoroutine != null) { StopCoroutine(_changeCoroutine); _changeCoroutine = null; }
             ShowShape();
-            //outline.SetActive(true); //TODO: add a script to the outline for greater control
         }
-
     }
+
     public void UnGlowCloud()
     {
-        //Debug.Log("UNGLOWCLOUD: "+ this.CurrentShapeName);
-        //outline.SetActive(false); //TODO: add a script to the outline for greater control
+        isHighlighted = false;
         HideShape();
     }
 
@@ -344,6 +346,7 @@ public class CloudShape : MonoBehaviour
     //this also sets the collider size to update with it
     public void SetShape(Texture2D shapeTexture)
     {
+        if (isHighlighted) return;
         TurnOnCollider(); //makes this cloud seeable by the raycaster
         incomingShape = shapeTexture;
         psShape.scale = ScaleToShape(incomingShape);
@@ -354,12 +357,12 @@ public class CloudShape : MonoBehaviour
         adjustScaleRatio();
 
         CurrentShapeName = currentShape.name;
-        StartCoroutine(TimeToChange());
-
+        _changeCoroutine = StartCoroutine(TimeToChange());
     }
 
-        public void SetGenericShape(Texture2D shapeTexture)
+    public void SetGenericShape(Texture2D shapeTexture)
     {
+        if (isHighlighted) return;
         TurnOffCollider();
         incomingShape = shapeTexture;
         psShape.scale = ScaleToShape(incomingShape);
@@ -370,9 +373,7 @@ public class CloudShape : MonoBehaviour
         adjustScaleRatio();
 
         CurrentShapeName = currentShape.name;
-
-        StartCoroutine(TimeToChange());
-
+        _changeCoroutine = StartCoroutine(TimeToChange());
     }
 
     private void adjustScaleRatio()

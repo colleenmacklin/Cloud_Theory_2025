@@ -33,6 +33,11 @@ public bool SkipDropdown;
 
 [Range(0f, 1f)] public float Volume = 1f;
 
+    [Tooltip("Voice name to select on startup (case-insensitive, partial match). Leave blank to keep VoiceIndex.")]
+    public string PreferredVoiceName = "Grandma";
+    [Tooltip("Culture/language filter applied alongside PreferredVoiceName (e.g. \"en\"). Leave blank to match any language.")]
+    public string PreferredCulture = "en";
+
 private string uid; //Unique id of the speech
 private bool playing;
     // ── Voice selection (inspector-only) ─────────────────────────────────
@@ -108,6 +113,20 @@ void Start()
             VoiceNames.Add($"{v.Name}  [{v.Culture}]");
             menu_voices.Add($"{v.Name}  [{v.Culture}]");
         }
+        if (!string.IsNullOrEmpty(PreferredVoiceName))
+        {
+            int nameOnly = -1;
+            for (int i = 0; i < _voices.Count; i++)
+            {
+                bool nameMatch    = _voices[i].Name.IndexOf(PreferredVoiceName, StringComparison.OrdinalIgnoreCase) >= 0;
+                bool cultureMatch = string.IsNullOrEmpty(PreferredCulture) ||
+                                    _voices[i].Culture.IndexOf(PreferredCulture, StringComparison.OrdinalIgnoreCase) >= 0;
+                if (nameMatch && cultureMatch) { VoiceIndex = i; nameOnly = -1; break; }
+                if (nameMatch && nameOnly < 0)  nameOnly = i;
+            }
+            if (nameOnly >= 0) VoiceIndex = nameOnly; // fallback: name matched but no culture match
+        }
+
         if (!SkipDropdown && voiceDropdown != null)
         {
             voiceDropdown.ClearOptions();
