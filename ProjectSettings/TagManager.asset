@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Cloud
+  - CinemachineTarget
+  - platterObject
   layers:
   - Default
   - TransparentFX
@@ -12,7 +14,7 @@ TagManager:
   - Clouds
   - Water
   - UI
-  - 
+  - Platters
   - 
   - 
   - 

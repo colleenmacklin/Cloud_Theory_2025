@@ -5,7 +5,6 @@ using LLMUnity;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 //using UnityEngine.XR;
 
 public class ChatHandler : MonoBehaviour

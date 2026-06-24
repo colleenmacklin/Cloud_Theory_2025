@@ -11,15 +11,16 @@ GameObject:
   - component: {fileID: 7124540367528839543}
   - component: {fileID: 7912278476689987263}
   - component: {fileID: 7406398429554510590}
-  - component: {fileID: 2248124320166570719}
   - component: {fileID: 6528095652114258367}
   - component: {fileID: 916979123210676221}
   - component: {fileID: 6938331292414774555}
   - component: {fileID: 8122879699849839081}
   - component: {fileID: 8760320667686279111}
-  m_Layer: 3
+  - component: {fileID: 7267416925088445450}
+  - component: {fileID: 8455921061287068997}
+  m_Layer: 6
   m_Name: BearKick
-  m_TagString: Untagged
+  m_TagString: platterObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,103 +97,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!82 &2248124320166570719
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8737761635228296135}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1671118285934712633, guid: 6c152e30a230e437bbf0a53c528ed9f4, type: 2}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 69ed9a966222d444aa5ee2e26bff37e3, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!54 &6528095652114258367
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -232,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 410ec487b85cf405eac4da8afb9a2944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Synthic.PlatterObject
-  volume: 1
+  config: {fileID: 11400000, guid: b2d51e73f0dd343d1ae665ce36f737d5, type: 2}
 --- !u!135 &6938331292414774555
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -279,10 +183,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81f8625b10a545c1b75cdad3b281adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScaleFromAudioClip
-  source: {fileID: 2248124320166570719}
+  fmodBus: {fileID: 8455921061287068997}
+  source: {fileID: 0}
+  detector: {fileID: 8122879699849839081}
   minScale: {x: 1.5, y: 1.5, z: 1.5}
   maxScale: {x: 6, y: 6, z: 6}
-  detector: {fileID: 8122879699849839081}
   loudnessSensitivity: 300
   threshHold: 0.1
   smoothSpeed: 20
+--- !u!114 &7267416925088445450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8737761635228296135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: Untagged
+  EventReference:
+    Guid:
+      Data1: -1189454495
+      Data2: 1141321040
+      Data3: -20083545
+      Data4: -367589439
+    Path: event:/Instruments/BearKick
+  Event: 
+  EventPlayTrigger: 3
+  EventStopTrigger: 4
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &8455921061287068997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8737761635228296135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed8ca78b4d9945449cd24002611e3cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMODBusLoudness
+  Emitter: {fileID: 7267416925088445450}
+  BusPath: bus:/platter2
+  _debugRms: 0

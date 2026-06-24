@@ -1,75 +1,86 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioClip defaultAmbiance;
+    [EventRef]
+    public string defaultAmbiance;
     public static AudioManager instance;
-    private AudioSource track01, track02;
-    private bool isPLayingTrack01;
+
+    private EventInstance _trackA;
+    private EventInstance _trackB;
+    private bool _isOnA = true;
 
     public void Awake()
     {
-        if (instance == null){
+        if (instance == null)
             instance = this;
-        }
     }
 
     private void Start()
     {
-        track01 = gameObject.AddComponent<AudioSource>();
-        track02 = gameObject.AddComponent<AudioSource>();
-        isPLayingTrack01 = true;
-        swapTrack(defaultAmbiance);
+        if (string.IsNullOrEmpty(defaultAmbiance)) return;
+        _trackA = RuntimeManager.CreateInstance(defaultAmbiance);
+        _trackA.setVolume(1f);
+        _trackA.start();
     }
-    public void swapTrack(AudioClip newClip)
+
+    public void swapTrack(string newEvent)
     {
         StopAllCoroutines();
-        StartCoroutine(FadeTrack(newClip));
-
-        isPLayingTrack01 = !isPLayingTrack01;
-
+        StartCoroutine(CrossFade(newEvent));
     }
-    public void returnToDefaul() {
+
+    public void returnToDefault()
+    {
         swapTrack(defaultAmbiance);
     }
-    private IEnumerator FadeTrack(AudioClip newClip)
+
+    private IEnumerator CrossFade(string newEvent)
     {
         float timeToFade = 2.25f;
-        float timeElapsed = 0;
+        float elapsed = 0f;
 
-        if (isPLayingTrack01)
-        {
-            track02.clip = newClip;
-            track02.Play();
-            track02.loop = true;
-            while (timeElapsed < timeToFade)
-            {
-                track02.volume = Mathf.Lerp(0, 1, timeElapsed / timeToFade);
-                track01.volume = Mathf.Lerp(1, 0, timeElapsed / timeToFade);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-            track01.Stop();
-        }
+        EventInstance incoming = RuntimeManager.CreateInstance(newEvent);
+        incoming.setVolume(0f);
+        incoming.start();
+
+        EventInstance outgoing = _isOnA ? _trackA : _trackB;
+
+        if (_isOnA)
+            _trackB = incoming;
         else
+            _trackA = incoming;
+        _isOnA = !_isOnA;
+
+        while (elapsed < timeToFade)
         {
-            track01.clip = newClip;
-            track01.Play();
-            track01.loop = true;
-
-            while (timeElapsed < timeToFade)
-            {
-                track01.volume = Mathf.Lerp(0, 1, timeElapsed / timeToFade);
-                track02.volume = Mathf.Lerp(1, 0, timeElapsed / timeToFade);
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            track02.Stop();
+            float t = elapsed / timeToFade;
+            incoming.setVolume(t);
+            outgoing.setVolume(1f - t);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
-        isPLayingTrack01 = !isPLayingTrack01;
 
+        incoming.setVolume(1f);
+        outgoing.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        outgoing.release();
+    }
+
+    private void OnDestroy()
+    {
+        StopInstance(ref _trackA);
+        StopInstance(ref _trackB);
+    }
+
+    private static void StopInstance(ref EventInstance inst)
+    {
+        if (inst.isValid())
+        {
+            inst.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+            inst.release();
+        }
     }
 }

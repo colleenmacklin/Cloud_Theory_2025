@@ -1,29 +1,33 @@
 using UnityEngine;
+using FMODUnity;
 
-namespace Synthic
+public class PlatterObject : MonoBehaviour
 {
-    [RequireComponent(typeof(AudioSource))]
-    public class PlatterObject : MonoBehaviour
+    [Tooltip("Drag a PlatterConfig asset here to set this object's mesh and sound.")]
+    public PlatterConfig config;
+
+    private void Awake()
     {
-        [SerializeField, Range(0f, 1f)] private float volume = 1f;
+        if (config == null) return;
 
-        private AudioSource _audioSource;
+        var mf = GetComponentInChildren<MeshFilter>();
+        var mr = GetComponentInChildren<MeshRenderer>();
 
-        private void Awake()
-        {
-            _audioSource = GetComponent<AudioSource>();
+        if (mf != null && config.mesh != null)
+            mf.sharedMesh = config.mesh;
 
-            // configure AudioSource for one-shot playback
-            _audioSource.playOnAwake  = false;
-            _audioSource.loop         = false;
-            _audioSource.spatialBlend = 0f; // 2D audio, adjust to 1f for 3D
-            _audioSource.volume       = volume;
-        }
+        if (mr != null && config.materials != null && config.materials.Length > 0)
+            mr.sharedMaterials = config.materials;
+    }
 
-        public void Trigger()
-        {
-            if (_audioSource == null || _audioSource.clip == null) return;
-            _audioSource.PlayOneShot(_audioSource.clip, volume);
-        }
+    public void Trigger()
+    {
+        if (config == null || config.fmodEvent.IsNull) return;
+
+        var inst = RuntimeManager.CreateInstance(config.fmodEvent);
+        inst.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+        inst.setVolume(config.volume);
+        inst.start();
+        inst.release();
     }
 }

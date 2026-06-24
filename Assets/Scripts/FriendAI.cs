@@ -8,7 +8,6 @@ using LLMUnity;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine.UI;
-using UnityEditor.Build.Reporting;
 public class FriendAI : MonoBehaviour
 {
 

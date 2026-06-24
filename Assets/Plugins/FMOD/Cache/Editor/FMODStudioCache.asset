@@ -61,9 +61,36 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.assets.bank
   Name: Master.assets
   StudioPath: bank:/Master.assets
-  lastModified: 639161888262641880
+  lastModified: 639178469015401104
   FileSizes: []
   Exists: 1
+--- !u!114 &-7699958840671564738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/PlatterHihats
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/PlatterHihats
+  Guid:
+    Data1: 1631038514
+    Data2: 1146897730
+    Data3: 2057645490
+    Data4: 1092612585
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 197
 --- !u!114 &-7330823879048831837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +137,33 @@ MonoBehaviour:
   lastModified: 639156045324236788
   FileSizes: []
   Exists: 1
+--- !u!114 &-6531854665267407364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/PlatterKick
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/PlatterKick
+  Guid:
+    Data1: -1711841003
+    Data2: 1205648796
+    Data3: 1822316161
+    Data4: 620864039
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 459
 --- !u!114 &-5868313101142617821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +270,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 3000
+--- !u!114 &-4104842965942747569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/BearKick
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/BearKick
+  Guid:
+    Data1: -1189454495
+    Data2: 1141321040
+    Data3: -20083545
+    Data4: -367589439
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 459
 --- !u!114 &-3949644168090440568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +344,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1058
   Exists: 1
+--- !u!114 &-3488745390682699497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/PlatterRim
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/PlatterRim
+  Guid:
+    Data1: 1770988453
+    Data2: 1283680169
+    Data3: -1288161642
+    Data4: 991732465
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 211
 --- !u!114 &-3115990869172545601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,13 +589,19 @@ MonoBehaviour:
   - {fileID: -4697901741179949579}
   - {fileID: -7330823879048831837}
   - {fileID: -7835260304542791820}
+  - {fileID: 1030264609208752923}
+  - {fileID: -6531854665267407364}
+  - {fileID: -7699958840671564738}
+  - {fileID: 4626023795726962819}
+  - {fileID: -3488745390682699497}
+  - {fileID: -4104842965942747569}
   EditorParameters: []
   MasterBanks:
   - {fileID: 8848480231496342160}
   StringsBanks:
   - {fileID: 1134484694525158492}
   cacheVersion: 131859
-  cacheTime: 639161888262645668
+  cacheTime: 639178469015403387
   SerializableEventsDict:
   - key: event:/Environment/New Event 2
     index: 0
@@ -503,6 +617,16 @@ MonoBehaviour:
     index: 5
   - key: event:/Instruments/SynthNote2
     index: 6
+  - key: event:/Instruments/PlatterSnap
+    index: 7
+  - key: event:/Instruments/PlatterKick
+    index: 8
+  - key: event:/Instruments/PlatterHihats
+    index: 9
+  - key: event:/Instruments/PlatterSnare
+    index: 10
+  - key: event:/Instruments/PlatterRim
+    index: 11
 --- !u!114 &183528295010630767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,6 +663,33 @@ MonoBehaviour:
   lastModified: 639161880043459676
   FileSizes: []
   Exists: 1
+--- !u!114 &1030264609208752923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/PlatterSnap
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/PlatterSnap
+  Guid:
+    Data1: 1845647020
+    Data2: 1266229394
+    Data3: -2085958255
+    Data4: -1395876912
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1092
 --- !u!114 &1134484694525158492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,10 +705,10 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639161888262645668
+  lastModified: 639178469015403387
   FileSizes:
   - Name: 
-    Value: 1570
+    Value: 1896
   Exists: 1
 --- !u!114 &1202106710892654856
 MonoBehaviour:
@@ -636,7 +787,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.bank
   Name: Instruments
   StudioPath: bank:/Instruments
-  lastModified: 639161880807460864
+  lastModified: 639178469015250622
   FileSizes: []
   Exists: 1
 --- !u!114 &2220986955537619405
@@ -654,7 +805,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.assets.bank
   Name: Instruments.assets
   StudioPath: bank:/Instruments.assets
-  lastModified: 639161880807609160
+  lastModified: 639178469015379830
   FileSizes: []
   Exists: 1
 --- !u!114 &2856251056417772967
@@ -741,6 +892,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 3500
+--- !u!114 &4626023795726962819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/PlatterSnare
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/PlatterSnare
+  Guid:
+    Data1: 1373412710
+    Data2: 1300458996
+    Data3: 1219217574
+    Data4: 1835070074
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 102
 --- !u!114 &5090543356781164510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -897,7 +1075,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639161888262637748
+  lastModified: 639178469015398672
   FileSizes: []
   Exists: 1
 --- !u!114 &8915606884590502789

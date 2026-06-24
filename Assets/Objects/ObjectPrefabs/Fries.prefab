@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 173585638554935851}
   - component: {fileID: 2467660149268505277}
   - component: {fileID: 3601984417934830636}
+  - component: {fileID: 797596461724033539}
+  - component: {fileID: 2177804840387329202}
   m_Layer: 3
   m_Name: Fries
   m_TagString: Untagged
@@ -130,9 +132,10 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7608605310754641051}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1671118285934712633, guid: 6c152e30a230e437bbf0a53c528ed9f4, type: 2}
+  OutputAudioMixerGroup: {fileID: -1671118285934712633, guid: 6c152e30a230e437bbf0a53c528ed9f4,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: d848338c7359c4bac9dd57be6b229308, type: 3}
   m_PlayOnAwake: 0
@@ -240,7 +243,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7608605310754641051}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ceb2f541bc8640ceba75bfd566cd80f, type: 3}
   m_Name: 
@@ -253,17 +256,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7608605310754641051}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f81f8625b10a545c1b75cdad3b281adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScaleFromAudioClip
+  fmodBus: {fileID: 2177804840387329202}
   source: {fileID: 1990962261232153474}
-  minScale: {x: 0.1, y: 0.1, z: 0.1}
-  maxScale: {x: 0.2, y: 0.2, z: 0.2}
   detector: {fileID: 173585638554935851}
-  loudnessSensitivity: 100
+  minScale: {x: 0.1, y: 0.1, z: 0.1}
+  maxScale: {x: 0.5, y: 0.5, z: 0.5}
+  loudnessSensitivity: 200
   threshHold: 0.1
+  smoothSpeed: 10
 --- !u!135 &3601984417934830636
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -279,9 +284,54 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 1
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 8.093698
-  m_Center: {x: -0.38453552, y: 8.093698, z: -1.2012012}
+  m_Center: {x: 0, y: 10.51, z: 0}
+--- !u!114 &797596461724033539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7608605310754641051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: Untagged
+  EventReference:
+    Guid:
+      Data1: 1845647020
+      Data2: 1266229394
+      Data3: -2085958255
+      Data4: -1395876912
+    Path: event:/Instruments/PlatterSNap
+  Event: 
+  EventPlayTrigger: 3
+  EventStopTrigger: 4
+  AllowFadeout: 0
+  TriggerOnce: 0
+  Preload: 1
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &2177804840387329202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7608605310754641051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed8ca78b4d9945449cd24002611e3cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMODBusLoudness
+  BusPath: bus:/platterSounds
+  _debugRms: 0

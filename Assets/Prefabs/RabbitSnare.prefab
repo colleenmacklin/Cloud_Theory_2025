@@ -11,15 +11,16 @@ GameObject:
   - component: {fileID: 7905229948919187832}
   - component: {fileID: 8555091068058290058}
   - component: {fileID: 2444826573591599580}
-  - component: {fileID: 8651984539761744262}
   - component: {fileID: 661781511092810759}
   - component: {fileID: 5138991058422369254}
   - component: {fileID: 3207811577752178105}
   - component: {fileID: 1420950650970370364}
   - component: {fileID: 2667365383422624691}
-  m_Layer: 3
+  - component: {fileID: 6402256598390852147}
+  - component: {fileID: 7599964720160540958}
+  m_Layer: 6
   m_Name: RabbitSnare
-  m_TagString: Untagged
+  m_TagString: platterObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,103 +97,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!82 &8651984539761744262
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2602516029398941874}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1671118285934712633, guid: 6c152e30a230e437bbf0a53c528ed9f4, type: 2}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: a247caf7542ac4d1a87b9659311db08e, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 0.605
-  m_Pitch: 1.26
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!54 &661781511092810759
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -232,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 410ec487b85cf405eac4da8afb9a2944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Synthic.PlatterObject
-  volume: 1
+  config: {fileID: 11400000, guid: 17630a530e8de47a4bd9c9a3d96676d1, type: 2}
 --- !u!135 &3207811577752178105
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -279,10 +183,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81f8625b10a545c1b75cdad3b281adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScaleFromAudioClip
-  source: {fileID: 8651984539761744262}
+  fmodBus: {fileID: 6402256598390852147}
+  source: {fileID: 0}
+  detector: {fileID: 1420950650970370364}
   minScale: {x: 1.5, y: 1.5, z: 1.5}
   maxScale: {x: 4, y: 4, z: 4}
-  detector: {fileID: 1420950650970370364}
   loudnessSensitivity: 300
   threshHold: 0.1
   smoothSpeed: 20
+--- !u!114 &6402256598390852147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602516029398941874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed8ca78b4d9945449cd24002611e3cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMODBusLoudness
+  Emitter: {fileID: 7599964720160540958}
+  BusPath: bus:/platter2
+  _debugRms: 0
+--- !u!114 &7599964720160540958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602516029398941874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: Untagged
+  EventReference:
+    Guid:
+      Data1: 1373412710
+      Data2: 1300458996
+      Data3: 1219217574
+      Data4: 1835070074
+    Path: event:/Instruments/PlatterSnare
+  Event: 
+  EventPlayTrigger: 3
+  EventStopTrigger: 4
+  AllowFadeout: 0
+  TriggerOnce: 0
+  Preload: 1
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20

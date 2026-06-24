@@ -1,10 +1,12 @@
 using UnityEngine;
+using FMODUnity;
+using FMOD.Studio;
 
-[RequireComponent(typeof(AudioSource))]
 public class soundCollision : MonoBehaviour
 {
     [Header("Sound Settings")]
-    public AudioClip collisionSound;
+    [EventRef]
+    public string collisionEvent;
 
     [Range(0f, 1f)]
     public float volume = 1f;
@@ -12,22 +14,17 @@ public class soundCollision : MonoBehaviour
     [Tooltip("Minimum impact force required to trigger the sound")]
     public float minImpactForce = 0.5f;
 
-    private AudioSource audioSource;
-
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.playOnAwake = false;
-    }
-
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collision on: "+this.name);
         float impactForce = collision.relativeVelocity.magnitude;
 
-        if (collisionSound != null && impactForce >= minImpactForce)
+        if (!string.IsNullOrEmpty(collisionEvent) && impactForce >= minImpactForce)
         {
-            audioSource.PlayOneShot(collisionSound, volume);
+            EventInstance inst = RuntimeManager.CreateInstance(collisionEvent);
+            inst.setVolume(volume);
+            inst.set3DAttributes(RuntimeUtils.To3DAttributes(transform.position));
+            inst.start();
+            inst.release();
         }
     }
 }

@@ -5,8 +5,11 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Cloud/Testing/NewNarratorTest.unity
     guid: fb1b087f304164c97a49230f496a762b
+  - enabled: 1
+    path: Assets/Scenes/Pong/Room2.unity
+    guid: b2a13d9bccf5f4ae2b732261885e1c51
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

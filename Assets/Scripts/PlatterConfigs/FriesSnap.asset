@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e863f2fed124cc68defbf8d54a08d3, type: 3}
+  m_Name: FriesSnap
+  m_EditorClassIdentifier: Assembly-CSharp::PlatterConfig
+  mesh: {fileID: 2271666911128578606, guid: 39a6f8fdc217f4e14bec8f8bdc5b9fba, type: 3}
+  materials:
+  - {fileID: 2100000, guid: b38cb331b406b4ddc86a13e2d97faeb7, type: 2}
+  fmodEvent:
+    Guid:
+      Data1: 1845647020
+      Data2: 1266229394
+      Data3: -2085958255
+      Data4: -1395876912
+    Path: event:/Instruments/PlatterSnap
+  volume: 1

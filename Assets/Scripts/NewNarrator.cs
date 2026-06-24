@@ -8,7 +8,6 @@ using LLMUnity;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine.UI;
-using UnityEditor.Build.Reporting;
 using Crosstales.RTVoice;
 using Crosstales.RTVoice.Model;
 using UnityEngine.Android;
