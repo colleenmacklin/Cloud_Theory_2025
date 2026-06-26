@@ -296,7 +296,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 459
+  Length: 431
 --- !u!114 &-3949644168090440568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,7 +601,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 1134484694525158492}
   cacheVersion: 131859
-  cacheTime: 639178469015403387
+  cacheTime: 639178586915354600
   SerializableEventsDict:
   - key: event:/Environment/New Event 2
     index: 0
@@ -627,6 +627,8 @@ MonoBehaviour:
     index: 10
   - key: event:/Instruments/PlatterRim
     index: 11
+  - key: event:/Instruments/BearKick
+    index: 12
 --- !u!114 &183528295010630767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -787,7 +789,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.bank
   Name: Instruments
   StudioPath: bank:/Instruments
-  lastModified: 639178469015250622
+  lastModified: 639178586915224758
   FileSizes: []
   Exists: 1
 --- !u!114 &2220986955537619405
@@ -805,7 +807,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.assets.bank
   Name: Instruments.assets
   StudioPath: bank:/Instruments.assets
-  lastModified: 639178469015379830
+  lastModified: 639178586915354600
   FileSizes: []
   Exists: 1
 --- !u!114 &2856251056417772967

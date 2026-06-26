@@ -34,10 +34,10 @@ public class PlatterLayout : MonoBehaviour
     private GameObject[][]   _objects;
     private GameObject[][]   _markers;
 
-    private static readonly Color ColEmpty    = new Color(0.3f, 0.3f, 0.3f);
     private static readonly Color ColOccupied = new Color(0.2f, 0.8f, 0.8f);
     private static readonly Color ColHovered  = Color.white;
 
+    private Color[] _ringColors;
     private int _hoveredRing = -1;
     private int _hoveredSlot = -1;
 
@@ -49,15 +49,19 @@ public class PlatterLayout : MonoBehaviour
 
     private void InitArrays()
     {
-        _configs = new PlatterConfig[rings.Count][];
-        _objects = new GameObject[rings.Count][];
-        _markers = new GameObject[rings.Count][];
+        _configs    = new PlatterConfig[rings.Count][];
+        _objects    = new GameObject[rings.Count][];
+        _markers    = new GameObject[rings.Count][];
+        _ringColors = new Color[rings.Count];
         for (int r = 0; r < rings.Count; r++)
         {
             int n = rings[r].slotCount;
             _configs[r] = new PlatterConfig[n];
             _objects[r] = new GameObject[n];
             _markers[r] = new GameObject[n];
+
+            float hue = rings.Count > 1 ? (float)r / (rings.Count - 1) * 0.5f : 0.5f;
+            _ringColors[r] = Color.HSVToRGB(hue, 0.7f, 0.6f);
         }
     }
 
@@ -115,11 +119,9 @@ public class PlatterLayout : MonoBehaviour
             SlotLocalPosition(ring, slot),
             Quaternion.Euler(0f, slot * (360f / rings[ring].slotCount), 0f));
 
-        // scale to fit slot spacing so objects don't overlap on dense rings
-        float spacing = 2f * Mathf.PI * rings[ring].radius / rings[ring].slotCount;
-        go.transform.localScale = Vector3.one * Mathf.Clamp(spacing * 0.8f, 0.05f, 2f);
-
-        go.GetComponent<PlatterObject>().config = config;
+        var po = go.GetComponent<PlatterObject>();
+        po.config = config;
+        po.Apply(); // Awake ran before config was set, so apply it now
 
         _configs[ring][slot] = config;
         _objects[ring][slot] = go;
@@ -134,7 +136,7 @@ public class PlatterLayout : MonoBehaviour
         _objects[ring][slot] = null;
         _configs[ring][slot] = null;
         bool isHovered = ring == _hoveredRing && slot == _hoveredSlot;
-        SetMarkerColor(ring, slot, isHovered ? ColHovered : ColEmpty);
+        SetMarkerColor(ring, slot, isHovered ? ColHovered : _ringColors[ring]);
     }
 
     // ── Hover highlight ───────────────────────────────────────────────────
@@ -145,7 +147,7 @@ public class PlatterLayout : MonoBehaviour
 
         if (_hoveredRing >= 0 && _hoveredSlot >= 0)
             SetMarkerColor(_hoveredRing, _hoveredSlot,
-                IsOccupied(_hoveredRing, _hoveredSlot) ? ColOccupied : ColEmpty);
+                IsOccupied(_hoveredRing, _hoveredSlot) ? ColOccupied : _ringColors[_hoveredRing]);
 
         _hoveredRing = ring;
         _hoveredSlot = slot;
@@ -158,7 +160,7 @@ public class PlatterLayout : MonoBehaviour
     {
         if (_hoveredRing < 0) return;
         SetMarkerColor(_hoveredRing, _hoveredSlot,
-            IsOccupied(_hoveredRing, _hoveredSlot) ? ColOccupied : ColEmpty);
+            IsOccupied(_hoveredRing, _hoveredSlot) ? ColOccupied : _ringColors[_hoveredRing]);
         _hoveredRing = -1;
         _hoveredSlot = -1;
     }
@@ -182,7 +184,7 @@ public class PlatterLayout : MonoBehaviour
                 m.transform.localScale    = Vector3.one * size;
                 Destroy(m.GetComponent<SphereCollider>());
                 _markers[r][i] = m;
-                SetMarkerColor(r, i, ColEmpty);
+                SetMarkerColor(r, i, _ringColors[r]);
             }
         }
     }

@@ -15,6 +15,7 @@ MonoBehaviour:
   mesh: {fileID: -1959728139914534498, guid: 39a6f8fdc217f4e14bec8f8bdc5b9fba, type: 3}
   materials:
   - {fileID: 2100000, guid: b178d90b821c34181966facce3b30ea8, type: 2}
+  targetSize: 1
   fmodEvent:
     Guid:
       Data1: -1711841003

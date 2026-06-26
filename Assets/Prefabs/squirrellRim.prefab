@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4270652826170869591
+--- !u!1 &4164053348138612201
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6033814183846070625}
-  - component: {fileID: 308310192837357020}
-  - component: {fileID: 1472465320529460293}
-  - component: {fileID: 4532882862630405182}
-  - component: {fileID: 5912722131204912100}
-  - component: {fileID: 8132961406789276702}
-  - component: {fileID: 334629992124336983}
-  - component: {fileID: 8338234447120069697}
-  - component: {fileID: 4023643906578736927}
-  - component: {fileID: 8081411946276393274}
+  - component: {fileID: 560631474240606520}
+  - component: {fileID: 8412024080804289686}
+  - component: {fileID: 1421975972989585091}
+  - component: {fileID: 753146522024931350}
+  - component: {fileID: 7946105280083948192}
+  - component: {fileID: 8075012491389691463}
+  - component: {fileID: 4423473468197107664}
+  - component: {fileID: 4038034819605139422}
+  - component: {fileID: 5703734546526256956}
+  - component: {fileID: 3335746242985059552}
   m_Layer: 6
-  m_Name: hats
+  m_Name: squirrellRim
   m_TagString: platterObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6033814183846070625
+--- !u!4 &560631474240606520
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.985815, z: 0, w: -0.16783546}
-  m_LocalPosition: {x: -5.34, y: 0.531, z: -2.07}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalRotation: {x: 0, y: 0.87198365, z: -0, w: -0.48953497}
+  m_LocalPosition: {x: 0.009999515, y: 0.531, z: 2.9000018}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -199.324, z: 0}
---- !u!33 &308310192837357020
+  m_LocalEulerAnglesHint: {x: 0, y: -481.38, z: 0}
+--- !u!33 &8412024080804289686
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
-  m_Mesh: {fileID: -1619192588233291803, guid: 4fe00fa7351da42ed8db9994fea27097, type: 3}
---- !u!23 &1472465320529460293
+  m_GameObject: {fileID: 4164053348138612201}
+  m_Mesh: {fileID: 9170508726124771659, guid: 632e36fcff2594f4cb2fc061efc6be6b, type: 3}
+--- !u!23 &1421975972989585091
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -73,7 +73,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6b0c15ebd2fa0244e9cebaba1bea40d4, type: 2}
+  - {fileID: 2100000, guid: 8af46a88534bc4c44a781f005a7cfd52, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,13 +97,13 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &4532882862630405182
+--- !u!54 &753146522024931350
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
@@ -124,26 +124,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5912722131204912100
+--- !u!114 &7946105280083948192
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 410ec487b85cf405eac4da8afb9a2944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Synthic.PlatterObject
-  config: {fileID: 11400000, guid: b9ae29d0c7596416fbb0bc0cb8fda724, type: 2}
---- !u!135 &8132961406789276702
+  config: {fileID: 11400000, guid: 7831c7680426c45689a8bbf0efd05280, type: 2}
+--- !u!135 &8075012491389691463
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -158,46 +158,61 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.66
   m_Center: {x: 0, y: 0.29, z: 0}
---- !u!114 &334629992124336983
+--- !u!114 &4423473468197107664
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ceb2f541bc8640ceba75bfd566cd80f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioLoudnessDetection
   sampleWindow: 64
---- !u!114 &8338234447120069697
+--- !u!114 &4038034819605139422
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f81f8625b10a545c1b75cdad3b281adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScaleFromAudioClip
-  fmodBus: {fileID: 0}
+  fmodBus: {fileID: 5703734546526256956}
   source: {fileID: 0}
-  detector: {fileID: 334629992124336983}
-  minScale: {x: 0.5, y: 0.5, z: 0.5}
-  maxScale: {x: 3, y: 3, z: 3}
+  detector: {fileID: 4423473468197107664}
+  minScale: {x: 1, y: 1, z: 1}
+  maxScale: {x: 4, y: 4, z: 4}
   loudnessSensitivity: 500
   threshHold: 0.1
   smoothSpeed: 20
---- !u!114 &4023643906578736927
+--- !u!114 &5703734546526256956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
+  m_GameObject: {fileID: 4164053348138612201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed8ca78b4d9945449cd24002611e3cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FMODBusLoudness
+  Emitter: {fileID: 3335746242985059552}
+  BusPath: bus:/platter2
+  _debugRms: 0
+--- !u!114 &3335746242985059552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164053348138612201}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
@@ -206,11 +221,11 @@ MonoBehaviour:
   CollisionTag: Untagged
   EventReference:
     Guid:
-      Data1: 1631038514
-      Data2: 1146897730
-      Data3: 2057645490
-      Data4: 1092612585
-    Path: event:/Instruments/PlatterHihats
+      Data1: 1770988453
+      Data2: 1283680169
+      Data3: -1288161642
+      Data4: 991732465
+    Path: event:/Instruments/PlatterRim
   Event: 
   EventPlayTrigger: 3
   EventStopTrigger: 4
@@ -222,18 +237,3 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20
---- !u!114 &8081411946276393274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270652826170869591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aed8ca78b4d9945449cd24002611e3cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FMODBusLoudness
-  Emitter: {fileID: 4023643906578736927}
-  BusPath: bus:/platter2
-  _debugRms: 0

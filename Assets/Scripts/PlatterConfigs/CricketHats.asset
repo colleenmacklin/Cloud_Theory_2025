@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e863f2fed124cc68defbf8d54a08d3, type: 3}
   m_Name: CricketHats
   m_EditorClassIdentifier: Assembly-CSharp::PlatterConfig
-  mesh: {fileID: 0}
+  mesh: {fileID: -1619192588233291803, guid: 4fe00fa7351da42ed8db9994fea27097, type: 3}
   materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6b0c15ebd2fa0244e9cebaba1bea40d4, type: 2}
+  targetSize: 0.5
   fmodEvent:
     Guid:
       Data1: 1631038514

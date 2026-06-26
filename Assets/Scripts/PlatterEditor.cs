@@ -131,14 +131,14 @@ public class PlatterEditor : MonoBehaviour
             _ghost = Instantiate(prefab, layout.transform);
             _ghost.name = "PlacementGhost";
 
-            // manually apply the mesh from config (bypasses PlatterObject.Awake)
-            var mf = _ghost.GetComponentInChildren<MeshFilter>();
-            if (mf != null && config.mesh != null)
-                mf.sharedMesh = config.mesh;
+            // apply mesh + auto-scale via Apply() so the ghost matches the placed object exactly
+            var ghostPO = _ghost.GetComponent<PlatterObject>();
+            if (ghostPO != null) { ghostPO.config = config; ghostPO.Apply(); }
 
-            // ghost should be purely visual — remove scripts and colliders
-            foreach (var c in _ghost.GetComponentsInChildren<Collider>()) Destroy(c);
-            foreach (var p in _ghost.GetComponentsInChildren<PlatterObject>()) Destroy(p);
+            // ghost should be purely visual — disable colliders and PlatterObject immediately
+            // (Destroy is deferred and can cause ghost to trigger StylusDetector before end of frame)
+            foreach (var c in _ghost.GetComponentsInChildren<Collider>()) c.enabled = false;
+            foreach (var p in _ghost.GetComponentsInChildren<PlatterObject>()) p.enabled = false;
 
             // apply semi-transparent material to every renderer
             Material mat = GetGhostMaterial();
@@ -151,13 +151,10 @@ public class PlatterEditor : MonoBehaviour
 
         // snap to slot position (local space — moves with spinning disc)
         float slotAngle = 360f / layout.rings[ring].slotCount;
-        float spacing   = 2f * Mathf.PI * layout.rings[ring].radius / layout.rings[ring].slotCount;
-        float scale     = Mathf.Clamp(spacing * 0.8f, 0.05f, 2f);
 
         _ghost.transform.SetLocalPositionAndRotation(
             layout.SlotLocalPosition(ring, slot),
             Quaternion.Euler(0f, slot * slotAngle, 0f));
-        _ghost.transform.localScale = Vector3.one * scale;
     }
 
     private void DestroyGhost()
