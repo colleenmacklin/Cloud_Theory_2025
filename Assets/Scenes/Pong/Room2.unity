@@ -10707,6 +10707,11 @@ PrefabInstance:
       propertyPath: noteInput
       value: 
       objectReference: {fileID: 1308920499}
+    - target: {fileID: 6799767704499439259, guid: 9d2a5e7edb9764987b9814d9e5decc98,
+        type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7920106816385648394, guid: 9d2a5e7edb9764987b9814d9e5decc98,
         type: 3}
       propertyPath: m_Name
