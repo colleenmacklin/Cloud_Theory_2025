@@ -4348,7 +4348,7 @@ PrefabInstance:
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Path
-      value: event:/Instruments/SynthNote2
+      value: event:/Instruments/SynthNote_blend
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
@@ -4373,22 +4373,22 @@ PrefabInstance:
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data1
-      value: -1606164033
+      value: -1624300575
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data2
-      value: 1334014239
+      value: 1178050446
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data3
-      value: 129703850
+      value: 946601377
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}
       propertyPath: NoteEvent.Guid.Data4
-      value: 1285891024
+      value: 489434017
       objectReference: {fileID: 0}
     - target: {fileID: 2026535922611946927, guid: 4359c6319f47243f98a1804e5587bf7a,
         type: 3}

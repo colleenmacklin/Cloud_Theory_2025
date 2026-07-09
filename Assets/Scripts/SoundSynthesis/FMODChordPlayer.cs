@@ -119,6 +119,10 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     private int    _arpeggioStep;
     private int    _beatCount;
 
+    // shared notes array read by the running ArpeggioRoutine each step
+    private int[]     _currentArpeggioNotes;
+    private PlayStyle _currentStyle = PlayStyle.Block;
+
     private static readonly Dictionary<ArpeggioOrder, int[]> OrderSequences = new()
     {
         { ArpeggioOrder.Up,       new[] { 0, 1, 2, 3 } },
@@ -158,7 +162,6 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
 
     private void Start()
     {
-        PlayChord(DefaultRootMidi, DefaultChordType, DefaultInversion, DefaultPlayStyle);
         if (RhythmicMasterClock.Instance != null)
             RhythmicMasterClock.Instance.OnBeat += OnClockBeat;
     }
@@ -239,17 +242,35 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
     // ── Chord player ───────────────────────────────────────────────────────
     private void PlayChord(int rootMidi, TetraType type, Inversion inv, PlayStyle style)
     {
-        StopArpeggio();
-        AllNotesOff();
-
         int[] intervals = BuildIntervals(type, inv);
         int[] midiNotes = new int[intervals.Length];
         for (int i = 0; i < intervals.Length; i++)
             midiNotes[i] = rootMidi + intervals[i];
 
         CurrentChordFrequencies = MidiNotesToFreqs(midiNotes);
-        _wordNoteIndex           = 0;
-        _activeChordLabel        = $"{rootMidi % 12} {type} inv{(int)inv} [{style}]";
+        _wordNoteIndex    = 0;
+        _activeChordLabel = $"{rootMidi % 12} {type} inv{(int)inv} [{style}]";
+
+        // If we're already arpeggiated in the same mode, swap the notes in-place so the
+        // running coroutine/clock picks them up on its next step without resetting timing.
+        if (_currentStyle == PlayStyle.Arpeggio && style == PlayStyle.Arpeggio)
+        {
+            if (SyncToMasterClock && _syncedNotes != null)
+            {
+                _syncedNotes = midiNotes;   // _arpeggioStep and _beatCount stay put
+                return;
+            }
+            if (_arpeggioRoutine != null)
+            {
+                _currentArpeggioNotes = midiNotes;  // coroutine reads this on next step
+                return;
+            }
+        }
+
+        // Full restart for any style change or first play.
+        StopArpeggio();
+        AllNotesOff();
+        _currentStyle = style;
 
         switch (style)
         {
@@ -269,22 +290,25 @@ public class FMODChordPlayer : MonoBehaviour, IChordSource
                 }
                 else
                 {
-                    _arpeggioRoutine = StartCoroutine(ArpeggioRoutine(midiNotes));
+                    _currentArpeggioNotes = midiNotes;
+                    _arpeggioRoutine = StartCoroutine(ArpeggioRoutine());
                 }
                 break;
         }
     }
 
-    private IEnumerator ArpeggioRoutine(int[] midiNotes)
+    // Reads _currentArpeggioNotes each step so a chord change mid-pattern just
+    // updates the shared array — the coroutine continues from its current position.
+    private IEnumerator ArpeggioRoutine()
     {
         int[] seq  = OrderSequences[Order];
         int   prev = -1;
         do
         {
-            for (int step = 0; step < midiNotes.Length; step++)
+            for (int step = 0; step < VoiceCount; step++)
             {
                 if (prev >= 0) ReleaseVoice(prev, immediate: false);
-                NoteOn(step, midiNotes[seq[step]]);
+                NoteOn(step, _currentArpeggioNotes[seq[step]]);
                 prev = step;
                 yield return new WaitForSeconds(ArpeggioNoteDuration);
             }
