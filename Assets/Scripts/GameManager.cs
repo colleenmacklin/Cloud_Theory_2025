@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         //test keys for state!
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SetGameState(State.GameLoop);
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
         {
             SetGameState(State.Climax);
         }
+        */
     }
     private void TriggerClimax()
     {

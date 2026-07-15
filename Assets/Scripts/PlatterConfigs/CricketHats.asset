@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlatterConfig
   mesh: {fileID: -1619192588233291803, guid: 4fe00fa7351da42ed8db9994fea27097, type: 3}
   materials:
-  - {fileID: 2100000, guid: 6b0c15ebd2fa0244e9cebaba1bea40d4, type: 2}
+  - {fileID: 2100000, guid: 6b24a819377da42f98555abea33fa58f, type: 2}
   targetSize: 0.5
   fmodEvent:
     Guid:

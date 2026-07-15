@@ -160,10 +160,12 @@ public class ObjectManager : MonoBehaviour
     private void Update()
     {
         //test key
+        /*
         if (Input.GetKeyDown(KeyCode.O))
         {
             DropObject();
         }
+        */
 
 
        // if (_movingObjectsToRoof)

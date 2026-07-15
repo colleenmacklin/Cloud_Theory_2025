@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3341158758675981148}
   - component: {fileID: 3819110964787323466}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3341158758675981148
 Transform:
   m_ObjectHideFlags: 0
@@ -6215,7 +6215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8475113256893773834}
   - component: {fileID: 7477334871259288679}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ReflectionProbe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6281,7 +6281,7 @@ GameObject:
   - component: {fileID: 5553300962112440702}
   - component: {fileID: 3024795037274934944}
   - component: {fileID: 3799769424059520568}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MediumRain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6423,7 +6423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2810077051257341298}
   - component: {fileID: 6810380819494943827}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9073,22 +9073,22 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 6.5
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          time: 7.9000015
+          value: 0.5476227
+          inSlope: 0.016718095
+          outSlope: 0.016718095
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 1
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 17.5
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          time: 15.599991
+          value: 0.5404701
+          inSlope: -0.017423116
+          outSlope: -0.017423116
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.53246707
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 18
@@ -9303,20 +9303,20 @@ MonoBehaviour:
       m_gradientData:
         serializedVersion: 2
         key0: {r: 0.16078432, g: 0.2784314, b: 0.4627451, a: 1}
-        key1: {r: 1, g: 0.51724136, b: 0, a: 1}
-        key2: {r: 1, g: 1, b: 1, a: 0}
-        key3: {r: 1, g: 1, b: 1, a: 0}
-        key4: {r: 1, g: 0.51724136, b: 0, a: 0}
-        key5: {r: 0.15917587, g: 0.27900153, b: 0.46226418, a: 0}
-        key6: {r: 0, g: 0, b: 0, a: 0}
+        key1: {r: 1, g: 0.19916238, b: 0, a: 1}
+        key2: {r: 1, g: 0.7372549, b: 0.65882355, a: 0}
+        key3: {r: 1, g: 0.9137255, b: 0.94509804, a: 0}
+        key4: {r: 1, g: 0.7372549, b: 0.65882355, a: 0}
+        key5: {r: 1, g: 0.18947057, b: 0, a: 0}
+        key6: {r: 0.15917587, g: 0.27900153, b: 0.46226418, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 14745
+        ctime0: 11372
         ctime1: 17694
-        ctime2: 24248
-        ctime3: 41287
-        ctime4: 47841
-        ctime5: 50790
-        ctime6: 0
+        ctime2: 27756
+        ctime3: 33539
+        ctime4: 39128
+        ctime5: 47841
+        ctime6: 52621
         ctime7: 0
         atime0: 0
         atime1: 65535
@@ -9328,7 +9328,7 @@ MonoBehaviour:
         atime7: 0
         m_Mode: 0
         m_ColorSpace: 0
-        m_NumColorKeys: 6
+        m_NumColorKeys: 7
         m_NumAlphaKeys: 2
       m_vector3Data: {x: 0, y: 0, z: 0}
       m_weatherPropertyOwner:
@@ -9533,16 +9533,16 @@ MonoBehaviour:
         time: 0
         value: 0
         inSlope: 0
-        outSlope: 1
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 1
+        value: 0.75476074
         inSlope: 1
-        outSlope: 0
+        outSlope: 1
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -12789,7 +12789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3701604041762352059}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SunTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12804,7 +12804,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509639894520734616}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000028588618, y: 0.99785894, z: -0.06540313, w: -0.0000000436178}
+  m_LocalRotation: {x: 0.6672808, y: 0.21484612, z: -0.21039286, w: 0.6814047}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12820,7 +12820,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6255840395601179683}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MoonTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12835,7 +12835,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1590880602106836547}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.06540313, y: -4.9940766e-16, z: 0.0000000057177236, w: 0.99785894}
+  m_LocalRotation: {x: -0.21039289, y: -0.68140477, z: -0.6672808, w: 0.2148461}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12852,13 +12852,13 @@ GameObject:
   m_Component:
   - component: {fileID: 549163761211826536}
   - component: {fileID: 9032459709689423003}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Storm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &549163761211826536
 Transform:
   m_ObjectHideFlags: 0
@@ -19057,13 +19057,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8221774097030137123}
   - component: {fileID: 1130721336886955522}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Rain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8221774097030137123
 Transform:
   m_ObjectHideFlags: 0
@@ -25264,7 +25264,7 @@ GameObject:
   - component: {fileID: 1974823580454898308}
   - component: {fileID: 4055571998922016943}
   - component: {fileID: -5809132258814154861}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AzureCoreSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25313,22 +25313,22 @@ MonoBehaviour:
     m_timeMode: 0
     m_timeDirection: 0
     m_timeLoop: 0
-    m_timeline: 6.5
+    m_timeline: 11.92
     m_latitude: 0
     m_longitude: 0
     m_utc: 0
-    m_day: 1
-    m_month: 1
-    m_year: 2024
+    m_day: 21
+    m_month: 7
+    m_year: 2025
     m_startTime: 6.5
     m_dayLength: 24
     m_minLightAltitude: 0
     m_dawnTime: 6
     m_duskTime: 18
-    m_timeOfDay: 6.5
-    m_hour: 6
-    m_minute: 30
-    m_evaluationTime: 6.5
+    m_timeOfDay: 11.92
+    m_hour: 11
+    m_minute: 55
+    m_evaluationTime: 11.92
     m_timeLengthCurve:
       serializedVersion: 2
       m_Curve:
@@ -25374,6 +25374,7 @@ MonoBehaviour:
     m_celestialBodiesList: []
     m_dayNumberList:
     - 
+    - 
     - 1
     - 2
     - 3
@@ -25414,8 +25415,7 @@ MonoBehaviour:
     - 
     - 
     - 
-    - 
-    m_selectedCalendarDay: 1
+    m_selectedCalendarDay: 22
   m_weatherSystem:
     m_weatherPropertyGroupList:
     - m_name: Scattering
@@ -28721,8 +28721,8 @@ MonoBehaviour:
       m_position: {x: 0, y: 0, z: 0}
     m_currentWeatherPreset: {fileID: 6810380819494943827}
     m_weatherZoneTrigger: {fileID: 0}
-    m_evaluationTime: 6.5
-    m_evaluationTimeGradient: 0.27083334
+    m_evaluationTime: 11.92
+    m_evaluationTimeGradient: 0.49666667
     m_weatherTransitionProgress: 0
   m_eventSystem:
     m_onMinuteChangeEvent:
@@ -28833,8 +28833,8 @@ MonoBehaviour:
   m_scattering: 15
   m_skyLuminance: 0.1
   m_exposure: 2
-  m_rayleighColor: {r: 0.69147414, g: 0.8595676, b: 1, a: 1}
-  m_mieColor: {r: 0.9622642, g: 0.71845603, b: 0.32226774, a: 1}
+  m_rayleighColor: {r: 1, g: 1, b: 1, a: 1}
+  m_mieColor: {r: 0.9993696, g: 0.9952969, b: 0.9886786, a: 1}
   m_sunSize: 1
   m_sunOpacity: 1
   m_sunColor: {r: 1, g: 1, b: 1, a: 1}
@@ -28859,15 +28859,15 @@ MonoBehaviour:
   m_heightFogStartAltitude: 0
   m_heightFogEndAltitude: 50
   m_fogBluishIntensity: 0.15
-  m_heightFogScatteringMultiplier: 0.049479164
+  m_heightFogScatteringMultiplier: 0.5
   m_dynamicCloudAltitude: 7.5
   m_dynamicCloudDirection: 0
   m_dynamicCloudSpeed: 0.1
   m_dynamicCloudDensity: 0.75
-  m_dynamicCloudColor1: {r: 0.33682236, g: 0.474402, b: 0.70014304, a: 1}
-  m_dynamicCloudColor2: {r: 1, g: 0.6044206, b: 0.18058558, a: 1}
+  m_dynamicCloudColor1: {r: 0.4217128, g: 0.50172997, b: 0.73529416, a: 1}
+  m_dynamicCloudColor2: {r: 1, g: 1, b: 1, a: 1}
   m_updateMode: 1
-  m_cloudMode: 1
+  m_cloudMode: 0
 --- !u!114 &-5809132258814154861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28911,7 +28911,7 @@ GameObject:
   - component: {fileID: 6243864509781852387}
   - component: {fileID: 6455884222929891978}
   - component: {fileID: 1855535041635501257}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Storm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33497,7 +33497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3636515518579686919}
   - component: {fileID: 5357347807222445194}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sunny-Constallation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39900,7 +39900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8072675007389474763}
   - component: {fileID: 7496194973537726388}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fogness
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46086,7 +46086,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3756805197963162199}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GlobalWeathers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46128,7 +46128,7 @@ GameObject:
   - component: {fileID: 8462004920410529380}
   - component: {fileID: 3473809185251887444}
   - component: {fileID: 408251733322913382}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CalmWind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46270,7 +46270,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9063230162086782788}
   - component: {fileID: 6157664555825808682}
-  m_Layer: 0
+  - component: {fileID: 2636245318140237999}
+  m_Layer: 2
   m_Name: DirectionalLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46285,7 +46286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4380352413285918650}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000028588618, y: 0.99785894, z: -0.06540313, w: -0.0000000436178}
+  m_LocalRotation: {x: -0.000000030583266, y: 0.7144731, z: -0.69966286, w: -0.00000003123064}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -46302,8 +46303,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 1, g: 0.5212972, b: 0.008401358, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 1, g: 0.8835168, b: 0.89609283, a: 1}
+  m_Intensity: 0.5766364
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -46357,6 +46358,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &2636245318140237999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4380352413285918650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &4673466415899893252
 GameObject:
   m_ObjectHideFlags: 0
@@ -46366,7 +46396,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5698724984123594899}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Transforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46401,7 +46431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 770782502393591410}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SoundFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46439,13 +46469,13 @@ GameObject:
   m_Component:
   - component: {fileID: 349054710717334439}
   - component: {fileID: 362876110297086496}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CalmRain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &349054710717334439
 Transform:
   m_ObjectHideFlags: 0
@@ -52643,13 +52673,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3046948938937595931}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WeatherZones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3046948938937595931
 Transform:
   m_ObjectHideFlags: 0
@@ -52676,7 +52706,7 @@ GameObject:
   - component: {fileID: 6361289558979698737}
   - component: {fileID: 5403121538328690507}
   - component: {fileID: 7264296030878294272}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ripple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57582,7 +57612,7 @@ GameObject:
   - component: {fileID: 4699225860776151949}
   - component: {fileID: 7670061703716436236}
   - component: {fileID: 3323205501261642662}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StormRain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57725,7 +57755,7 @@ GameObject:
   - component: {fileID: 9086384499946237516}
   - component: {fileID: 5775482957496693925}
   - component: {fileID: 6039362271817879685}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MediumWind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57868,7 +57898,7 @@ GameObject:
   - component: {fileID: 221054730389457965}
   - component: {fileID: 5859333160812410264}
   - component: {fileID: 4592443327244073185}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CalmRain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58011,7 +58041,7 @@ GameObject:
   - component: {fileID: 9132112039584430611}
   - component: {fileID: 7811862139815269556}
   - component: {fileID: 442601909177036066}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Splash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62917,7 +62947,7 @@ GameObject:
   - component: {fileID: 2150875077959980986}
   - component: {fileID: 3267302829510151972}
   - component: {fileID: 1733909064765204452}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StormWind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63059,7 +63089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8290732001435050306}
   - component: {fileID: 4009417010013188137}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sunny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65709,8 +65739,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 6.5
-          value: 1
+          time: 7.2000046
+          value: 0.70238113
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -65718,8 +65748,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 17.5
-          value: 1
+          time: 16.399994
+          value: 0.70000076
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -65940,8 +65970,8 @@ MonoBehaviour:
         serializedVersion: 2
         key0: {r: 0.16078432, g: 0.2784314, b: 0.4627451, a: 1}
         key1: {r: 1, g: 0.51724136, b: 0, a: 1}
-        key2: {r: 1, g: 1, b: 1, a: 0}
-        key3: {r: 1, g: 1, b: 1, a: 0}
+        key2: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 0}
+        key3: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 0}
         key4: {r: 1, g: 0.51724136, b: 0, a: 0}
         key5: {r: 0.15917587, g: 0.27900153, b: 0.46226418, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
@@ -65949,7 +65979,7 @@ MonoBehaviour:
         ctime0: 14745
         ctime1: 17694
         ctime2: 24248
-        ctime3: 41287
+        ctime3: 41441
         ctime4: 47841
         ctime5: 50790
         ctime6: 0
@@ -69426,7 +69456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4297334195987271457}
   - component: {fileID: 8879138907341591616}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Overcast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75633,7 +75663,7 @@ GameObject:
   - component: {fileID: 6629925686542372330}
   - component: {fileID: 2995660554497366502}
   - component: {fileID: 6911531854782828624}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Rain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80221,7 +80251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4103551949178911760}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StarfieldTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80236,7 +80266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7983001508026348327}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000028588618, y: 0.99785894, z: -0.06540313, w: -0.0000000436178}
+  m_LocalRotation: {x: 0.6672808, y: 0.21484613, z: -0.21039286, w: 0.68140477}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -80252,13 +80282,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3263152328698289747}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: VisualFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3263152328698289747
 Transform:
   m_ObjectHideFlags: 0
@@ -80289,7 +80319,7 @@ GameObject:
   - component: {fileID: 2574363738498524282}
   - component: {fileID: 3276216166571661154}
   - component: {fileID: 2549508232790894104}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Snow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84870,7 +84900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4791347190383301350}
   - component: {fileID: 6071653429691241620}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WindZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84885,7 +84915,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8952266597319863215}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.953717, z: -0, w: 0.30070582}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

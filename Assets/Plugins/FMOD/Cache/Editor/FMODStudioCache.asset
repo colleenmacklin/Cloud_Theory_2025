@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8395413961142618338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/Drone3
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/Drone3
+  Guid:
+    Data1: 171291666
+    Data2: 1205388341
+    Data3: 1570135966
+    Data4: 654364547
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-7912269079851029256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,7 +88,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.assets.bank
   Name: Master.assets
   StudioPath: bank:/Master.assets
-  lastModified: 639188914650735171
+  lastModified: 639193185467392519
   FileSizes: []
   Exists: 1
 --- !u!114 &-7699958840671564738
@@ -324,6 +351,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 5000
+--- !u!114 &-3821621073557257618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/Drone4
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/Drone4
+  Guid:
+    Data1: 1515074478
+    Data2: 1125869232
+    Data3: -1015918452
+    Data4: -1912504704
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-3744055800434566604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,13 +679,18 @@ MonoBehaviour:
   - {fileID: -3488745390682699497}
   - {fileID: -4104842965942747569}
   - {fileID: -189461152584736212}
+  - {fileID: -8395413961142618338}
+  - {fileID: 6954288044751202124}
+  - {fileID: 8518272808290123305}
+  - {fileID: 1655403546461985781}
+  - {fileID: -3821621073557257618}
   EditorParameters: []
   MasterBanks:
   - {fileID: 8848480231496342160}
   StringsBanks:
   - {fileID: 1134484694525158492}
   cacheVersion: 131859
-  cacheTime: 639188914650738491
+  cacheTime: 639193199139851447
   SerializableEventsDict:
   - key: event:/Environment/New Event 2
     index: 0
@@ -661,6 +720,16 @@ MonoBehaviour:
     index: 12
   - key: event:/Instruments/SynthNote_blend
     index: 13
+  - key: event:/Instruments/Drone3
+    index: 14
+  - key: event:/Instruments/Drone1
+    index: 15
+  - key: event:/Instruments/Drone2
+    index: 16
+  - key: event:/Instruments/Drone5
+    index: 17
+  - key: event:/Instruments/Drone4
+    index: 18
 --- !u!114 &183528295010630767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,10 +808,10 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639188914650738491
+  lastModified: 639193185467404889
   FileSizes:
   - Name: 
-    Value: 1992
+    Value: 2168
   Exists: 1
 --- !u!114 &1202106710892654856
 MonoBehaviour:
@@ -764,6 +833,33 @@ MonoBehaviour:
   - Name: Desktop
     Value: 824
   Exists: 1
+--- !u!114 &1655403546461985781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/Drone5
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/Drone5
+  Guid:
+    Data1: 1330959774
+    Data2: 1137912354
+    Data3: -365253704
+    Data4: 1760693075
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &1893542887691475905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,7 +917,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.bank
   Name: Instruments
   StudioPath: bank:/Instruments
-  lastModified: 639188914650565288
+  lastModified: 639193199139554724
   FileSizes: []
   Exists: 1
 --- !u!114 &2220986955537619405
@@ -839,7 +935,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.assets.bank
   Name: Instruments.assets
   StudioPath: bank:/Instruments.assets
-  lastModified: 639188914650713698
+  lastModified: 639193199139851447
   FileSizes: []
   Exists: 1
 --- !u!114 &2856251056417772967
@@ -1070,6 +1166,33 @@ MonoBehaviour:
   IsGlobal: 0
   Labels: []
   Exists: 1
+--- !u!114 &6954288044751202124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/Drone1
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/Drone1
+  Guid:
+    Data1: 790994318
+    Data2: 1333521410
+    Data3: 341769916
+    Data4: -1346762120
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &8175199959562698301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1111,6 +1234,33 @@ MonoBehaviour:
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8518272808290123305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Instruments/Drone2
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Instruments/Drone2
+  Guid:
+    Data1: 1153170833
+    Data2: 1129673674
+    Data3: 123326849
+    Data4: 1305801827
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -1157,7 +1307,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639188914650732503
+  lastModified: 639193185467390556
   FileSizes: []
   Exists: 1
 --- !u!114 &8915606884590502789
