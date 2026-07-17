@@ -11,7 +11,9 @@ Material:
   m_Shader: {fileID: 4800000, guid: 7bd9a74c0a3251f429b6131c73340f07, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _SPECULAR_SETUP
   m_InvalidKeywords:
   - _DOUBLESIDED_ON
   m_LightmapFlags: 4
@@ -20,6 +22,7 @@ Material:
   m_CustomRenderQueue: 2450
   stringTagMap:
     MotionVector: User
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - TransparentBackface
   - TransparentDepthPostpass
@@ -73,13 +76,19 @@ Material:
     - _AO: 1
     - _AORemapMax: 1
     - _AORemapMin: 0
+    - _AlphaClip: 1
     - _AlphaCutoff: 0.55
     - _AlphaCutoffEnable: 1
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
+    - _AlphaToMask: 1
+    - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _BumpScale: 1
+    - _CastShadows: 1
     - _ColorNoiseSpread: 2
+    - _Cull: 2
     - _CullFarDistance: 20
     - _CullFarStart: 60
     - _CullMode: 0
@@ -97,6 +106,7 @@ Material:
     - _NormalScale: 1
     - _QueueControl: 1
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
@@ -118,6 +128,7 @@ Material:
     - _StencilWriteMaskGBuffer: 14
     - _StencilWriteMaskMV: 40
     - _Stiffness: 0.93
+    - _Surface: 0
     - _SurfaceType: 0
     - _Thickness: 1
     - _TouchReactActive: 0
@@ -131,15 +142,17 @@ Material:
     - _WINDCOLORMIX: 0
     - _WindColorThreshold: 1
     - _WindNormalInfluence: 0
+    - _WorkflowMode: 0
+    - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 3
     - _ZTestTransparent: 4
     - _ZWrite: 1
+    - _ZWriteControl: 0
     - __dirty: 1
     m_Colors:
     - _ColorAdjustment: {r: 1, g: 1, b: 1, a: 0}
-    - _DiffusionProfileAsset: {r: 0.0000000018238335, g: 8.720024e-27, b: 0.07043165,
-        a: 1.1969789e-26}
+    - _DiffusionProfileAsset: {r: 0.0000000018238335, g: 8.720024e-27, b: 0.07043165, a: 1.1969789e-26}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _DryColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

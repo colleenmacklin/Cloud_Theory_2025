@@ -11,7 +11,9 @@ Material:
   m_Shader: {fileID: 4800000, guid: 7bd9a74c0a3251f429b6131c73340f07, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _SPECULAR_SETUP
   m_InvalidKeywords:
   - _DETALUSEUV3_ON
   - _DISABLE_DBUFFER
@@ -30,7 +32,8 @@ Material:
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -347,17 +350,23 @@ Material:
     - _AORemapMin3: 0
     - _ATDistance: 1
     - _AlbedoAffectEmissive: 0
+    - _AlphaClip: 1
     - _AlphaCutOut: 0.5
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 0
     - _AlphaCutoffPostpass: 0.5
     - _AlphaCutoffPrepass: 0.5
+    - _AlphaToMask: 1
     - _AmbientOcclusionPower: 1
     - _Anisotropy: 0
+    - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _BumpScale: 1
+    - _CastShadows: 1
     - _CoatMask: 0
     - _ColorNoiseSpread: 2
+    - _Cull: 2
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
@@ -515,6 +524,7 @@ Material:
     - _PreRefractionPass: 0
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _RefractionMode: 0
     - _ShiverDirectionality: 0.369
     - _ShiverDrag: 0
@@ -554,6 +564,7 @@ Material:
     - _SubsurfaceMask2: 1
     - _SubsurfaceMask3: 1
     - _SupportDBuffer: 0
+    - _Surface: 0
     - _SurfaceType: 0
     - _TessellationBackFaceCullEpsilon: -0.25
     - _TessellationFactor: 0
@@ -597,10 +608,13 @@ Material:
     - _UseMainLayerInfluence: 0
     - _VertexColorMode: 0
     - _WindNormalInfluence: 0
+    - _WorkflowMode: 0
+    - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestModeDistortion: 8
     - _ZWrite: 1
+    - _ZWriteControl: 0
     - __dirty: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

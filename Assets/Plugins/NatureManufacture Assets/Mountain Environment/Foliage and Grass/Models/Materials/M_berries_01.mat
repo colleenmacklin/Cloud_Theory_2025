@@ -12,7 +12,9 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHATEST_ON
   - _DISTANCEBLEND_ON
+  - _SPECULAR_SETUP
   - _WINDCOLORMIX_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -21,6 +23,7 @@ Material:
   m_CustomRenderQueue: 2450
   stringTagMap:
     MotionVector: User
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - DistortionVectors
   - TransparentBackface
@@ -164,6 +167,7 @@ Material:
     - _AORemapMin: 0
     - _ATDistance: 1
     - _AlbedoAffectEmissive: 0
+    - _AlphaClip: 1
     - _AlphaCutoff: 0.45
     - _AlphaCutoffEnable: 1
     - _AlphaCutoffPostpass: 0.5
@@ -172,11 +176,16 @@ Material:
     - _AlphaDrag: 0
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
+    - _AlphaToMask: 1
     - _Anisotropy: 0
+    - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _BumpScale: 1
+    - _CastShadows: 1
     - _CoatMask: 0
     - _ColorNoiseSpread: 30
+    - _Cull: 0
     - _CullFarDistance: 6
     - _CullFarStart: 40
     - _CullMode: 0
@@ -256,6 +265,7 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 1
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _ReceivesSSR: 1
     - _RefractionModel: 0
     - _RenderQueueType: 1
@@ -285,6 +295,7 @@ Material:
     - _Stiffness: 1.46
     - _SubsurfaceMask: 1
     - _SupportDecals: 1
+    - _Surface: 0
     - _SurfaceType: 0
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
@@ -308,11 +319,14 @@ Material:
     - _WindColorMix: 1
     - _WindColorThreshold: 0.225
     - _WindNormalInfluence: 0
+    - _WorkflowMode: 0
+    - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 3
     - _ZTestModeDistortion: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}

@@ -4,59 +4,66 @@ using UnityEngine;
 
 public class ParticleCollision : MonoBehaviour
 {
-    public int subEmmiterId;
-    new ParticleSystem particleSystem;
-    List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
-    ParticleSystem.Particle[] particles;
-    float lifetime;
+    public List<int> subEmmiterIds = new List<int>();
+    private ParticleSystem _particleSystem;
+    private List<ParticleCollisionEvent> _collisionEvents = new List<ParticleCollisionEvent>();
+    private ParticleSystem.Particle[] _particles;
+    private float _lifetime;
     public float particleDistanceCheck = 0.5f;
     public Vector3 offset = new Vector3(0, 0.3f, 0);
 
     public bool debug = false;
 
-    void Start()
+    private void Start()
     {
-        particleSystem = GetComponent<ParticleSystem>();
-        lifetime = particleSystem.main.startLifetime.constant;
+        _particleSystem = GetComponent<ParticleSystem>();
+        _lifetime = _particleSystem.main.startLifetime.constant;
         //Debug.Log(lifetime);
 
-        particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
-
+        _particles = new ParticleSystem.Particle[_particleSystem.main.maxParticles];
     }
 
-    void OnParticleCollision(GameObject other)
+    private void OnParticleCollision(GameObject other)
     {
-        int test = (int)(Random.value * 1000);
-        int numCollisionEvents = particleSystem.GetCollisionEvents(other, collisionEvents);
-        foreach (ParticleCollisionEvent coll in collisionEvents)
+        _particleSystem.GetCollisionEvents(other, _collisionEvents);
+
+        foreach (ParticleCollisionEvent coll in _collisionEvents)
         {
             if (coll.intersection != Vector3.zero)
             {
-                int numParticlesAlive = particleSystem.GetParticles(particles);
+                int numParticlesAlive = _particleSystem.GetParticles(_particles);
 
                 // Check only the particles that are alive
                 for (int i = 0; i < numParticlesAlive; i++)
                 {
-                    if (particles[i].startLifetime == lifetime)
-                    {
-                        //Debug.Log(test + " collision particle " + i + " " + Vector3.Magnitude(transform.TransformPoint(particles[i].position) - coll.intersection));
+                    if (debug)
+                        Debug.Log($"{_particles[i].startLifetime} {_lifetime} {Mathf.Abs(_particles[i].startLifetime - _lifetime) < 0.0001f}");
 
-                        if (Vector3.Magnitude(transform.TransformPoint(particles[i].position) - coll.intersection) < particleDistanceCheck)
+                    if (Mathf.Abs(_particles[i].startLifetime - _lifetime) < 0.0001f)
+                    {
+                        // Debug.Log(transform.TransformPoint(particles[i].position) - coll.intersection);
+                        if (Vector3.Magnitude(transform.TransformPoint(_particles[i].position) - coll.intersection) < particleDistanceCheck)
                         {
                             if (debug)
-                                Debug.Log("collision particle " + i + " " + particles[i].startLifetime);
+                                Debug.Log("collision particle " + i + " " + _particles[i].startLifetime);
 
-                            particles[i].startLifetime = particles[i].startLifetime - 0.01f;
+                            _particles[i].startLifetime -= 0.01f;
 
-                            particleSystem.SetParticles(particles);
 
-                            particles[i].position += offset;
-                            particleSystem.TriggerSubEmitter(subEmmiterId, ref particles[i]);
+                            _particles[i].position += offset;
+                            foreach (int subEmmiterId in subEmmiterIds)
+                            {
+                                if (debug)
+                                    Debug.Log($"Emitter triggered {subEmmiterId}");
+                                _particleSystem.TriggerSubEmitter(subEmmiterId, ref _particles[i]);
+                            }
+
                             break;
-
                         }
                     }
                 }
+
+                _particleSystem.SetParticles(_particles, numParticlesAlive);
             }
         }
     }
