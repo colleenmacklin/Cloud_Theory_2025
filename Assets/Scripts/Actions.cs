@@ -55,6 +55,7 @@ public static class Actions
     //time transitions
     public static Action Sunrise;
     public static Action Sunset;
+    public static Action Climax;
 
     // inter-actions
     public static Action Highlight;

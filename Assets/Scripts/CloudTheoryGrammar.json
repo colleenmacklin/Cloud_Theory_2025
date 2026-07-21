@@ -33,11 +33,11 @@
   ],
 
   "observation": [
-    "A #shapeName# cloud has no shadow of its own",
+    "I can see that #shapeName# cloud has no shadow of its own",
     "The #shapeName# is borrowed from somewhere else entirely",
     "That #shapeName# belongs to a different afternoon",
     "No photograph has ever captured a #shapeName# correctly",
-    "A #shapeName# at this hour means the wind is reconsidering",
+    "A #shapeName# at ths hour means the wind is reconsidering",
     "The #shapeName# is the cloud's way of apologizing",
     "Something about that #shapeName# is not finished yet",
     "A #shapeName# like that only forms over #place#"
@@ -95,12 +95,12 @@
   ],
 
   "relative_verb": [
-    "was afraid of the",
-    "collected drawings of the",
-    "claimed to have seen a",
-    "refused to discuss the",
-    "kept a jar shaped like a",
-    "left town after seeing a"
+    "was afraid of",
+    "collected drawings of",
+    "claimed to have seen",
+    "refused to discuss",
+    "kept a jar shaped like",
+    "left town after seeing"
   ],
 
   "relative_closer": [
@@ -140,7 +140,7 @@
   ],
 
   "place": [
-    "Inland towns",
+    "Places underwater",
     "Places where two rivers almost meet",
     "The space between radio towers",
     "Countries that no longer exist",
@@ -150,11 +150,11 @@
   ],
 
   "has": [
-    "a specific relationship with the",
+    "a specific relationship with",
     "always had more",
-    "a name for the",
-    "never trusted the",
-    "no word for the"
+    "a name for",
+    "never trusted",
+    "no word for"
   ],
 
   "definition": [

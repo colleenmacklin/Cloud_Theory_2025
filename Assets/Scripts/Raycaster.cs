@@ -208,14 +208,14 @@ public class Raycaster : MonoBehaviour
 
     public void StartCloudTalking()
     {
+        CloudShape cloud = hit.transform.GetComponent<CloudShape>()
+                        ?? hit.transform.GetComponentInParent<CloudShape>();
+        if (cloud == null || !cloud.isTarget) return;
+
         Debug.Log("Raycaster calls GetClickedCloud");
         Selected = hit.transform.gameObject;
 
-        GameObject c = Selected;
-
-        Actions.GetClickedCloud?.Invoke(c); //lets cloudmanager know which cloud has been clicked
-
-        //EventManager.TriggerEvent("Respond");
+        Actions.GetClickedCloud?.Invoke(Selected);
         Actions.Respond?.Invoke();
         state = MouseState.READING;
     }

@@ -73,8 +73,11 @@ public class CloudShape : MonoBehaviour
 
     public bool isGameLoop = true;
     private FadeObjectInOut _fadeObject;
+    private float _startX;               // world X at scene start
+    private float _wrapCooldown;         // seconds remaining before the respawn check is allowed
     //bool to be set to true when cloud is nearing edge of screen and moved to the other side
     private bool _cloudIsBusyResetting = false;
+    private bool _narratorSpeaking = false;
     public bool keepDebugObjectsVisible = false;
     private Coroutine _changeCoroutine;
 
@@ -82,8 +85,24 @@ public class CloudShape : MonoBehaviour
     [Tooltip("Clouds orient their top toward this point. Create an empty GameObject high in the sky above the scene centre and assign it here. Leave unset to default to (0, 1000, 0).")]
     public Transform SkyCenter;
 
-    //to be set by the fadeobject in/out object (not very elegant)
-    //public bool IsFading;
+    [Header("Wind Movement")]
+    [Tooltip("The WindZone used for wind speed (Prefab_Wind).")]
+    public WindZone windZone;
+    [Tooltip("Direction clouds travel. Defaults to left (-X). Does not have to match WindZone orientation.")]
+    public Vector3 windDirection = Vector3.left;
+    [Tooltip("Multiplier on the WindZone's main speed.")]
+    public float windSpeedMultiplier = 1f;
+    [Tooltip("World X at which the cloud is considered off-screen to the left and triggers a respawn.")]
+    public float leftExitX = -70f;
+    [Tooltip("World X at which the cloud reappears after wrapping around.")]
+    public float rightSpawnX = 210f;
+    [Tooltip("How quickly the cloud rotates to face the camera as it drifts. Higher = snappier.")]
+    [Range(0.1f, 10f)] public float rotationSpeed = 3f;
+    [Tooltip("Seconds for the cloud to fade out before wrapping, and fade in after respawning.")]
+    [Range(0.5f, 30f)] public float cloudFadeDuration = 5f;
+    [Tooltip("Z range for cloud placement. Randomized at startup and on each respawn to vary depth.")]
+    public float zMin = -30f;
+    public float zMax = 30f;
 
 
     private void OnEnable()
@@ -98,6 +117,8 @@ public class CloudShape : MonoBehaviour
         Actions.FadeInCloud += fadeInParticleSystem;
         Actions.FadeOutCloud += fadeOutParticleSystem;
         Actions.InactivateCloud += inactivateCloud;
+        Actions.Speak += OnNarratorSpeak;
+        Actions.ConversationEnded += OnConversationEnded;
         //Actions.SetRandomScale += scaleMe;
         //_fadeObject.ResetCloudPos += ResetCloudPos;
     }
@@ -114,6 +135,8 @@ public class CloudShape : MonoBehaviour
         Actions.FadeInCloud -= fadeInParticleSystem;
         Actions.FadeOutCloud -= fadeOutParticleSystem;
         Actions.InactivateCloud -= inactivateCloud;
+        Actions.Speak -= OnNarratorSpeak;
+        Actions.ConversationEnded -= OnConversationEnded;
         //Actions.SetRandomScale -= scaleMe;
         //_fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
@@ -125,8 +148,7 @@ public class CloudShape : MonoBehaviour
         psShape = ps.shape; // do not forget to set this first! will throw null reference exception
         psShape.texture = defaultShape;
         currentShape = psShape.texture;
-        //_fadeObject = GetComponent<FadeObjectInOut>();
-
+        _fadeObject = GetComponentInChildren<FadeObjectInOut>();
     }
 
     //In start we look at the camera and
@@ -147,37 +169,161 @@ public class CloudShape : MonoBehaviour
             Actions.FadeOut?.Invoke(collider_object);
             Actions.FadeOut50?.Invoke(Highlighter);
         }
-        
-        //rotate to look at the camera 
-       lookatcamera(Camera.main);
+
+        //rotate to look at the camera
+        lookatcamera(Camera.main);
+
+        _startX = transform.position.x;
+        _wrapCooldown = 1f; // prevent wrap check from firing on the very first frame
+
+        Debug.Log($"[CloudShape] {name}: Start pos.x={_startX:F1}  leftExitX={leftExitX}  fadeObject={(_fadeObject != null ? _fadeObject.gameObject.name : "NULL")}");
+
         //transform.LookAt(camera, Vector3.back);
         //adjustScaleRatio();
 
     
     }
 
+    private void OnNarratorSpeak() => _narratorSpeaking = true;
+    private void OnConversationEnded() => _narratorSpeaking = false;
+
     private void Update()
     {
+        if (!isHighlighted && !_narratorSpeaking)
+        {
+            MoveWithWind();
+            SmoothFaceCamera();
+            if (!_cloudIsBusyResetting)
+                CheckCloudVis();
+        }
+    }
 
-        //transform.LookAt(_camTransform, Vector3.back);
-        /*
-        if (!_cloudIsBusyResetting)
+    private void SmoothFaceCamera()
+    {
+        Camera c = Camera.main;
+        if (c == null) return;
+        Quaternion target = DomeOrientation(c.transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, target, rotationSpeed * Time.deltaTime);
+    }
+
+    // Computes a billboard rotation that faces toward viewerPos using a
+    // wind-axis reference for the dome "north" — this avoids the singularity
+    // that world-up causes when a cloud is near the apex directly overhead.
+    private Quaternion DomeOrientation(Vector3 viewerPos)
+    {
+        Vector3 outward = transform.position - viewerPos;
+        if (outward.sqrMagnitude < 0.001f) return transform.rotation;
+        outward.Normalize();
+        Vector3 toViewer = -outward;
+
+        // Use the axis perpendicular to the wind in the horizontal plane as the
+        // dome's "north" reference. Because this is horizontal, its projection
+        // onto the sphere tangent plane stays non-zero even at the apex (where
+        // outward ≈ Vector3.up), so overhead clouds never spin.
+        Vector3 northRef = Vector3.Cross(windDirection.normalized, Vector3.up);
+        if (northRef.sqrMagnitude < 0.001f)
+            northRef = Vector3.forward; // safety: wind was vertical
+        northRef.Normalize();
+
+        float dot = Vector3.Dot(northRef, outward);
+        Vector3 upOnDome = northRef - dot * outward;
+
+        // Fallback for the rare case where the cloud is directly along northRef
+        // from the viewer (e.g. straight ahead perpendicular to the wind).
+        if (upOnDome.sqrMagnitude < 0.01f)
         {
-            CheckCloudVis();
+            float dotUp = Vector3.Dot(Vector3.up, outward);
+            upOnDome = Vector3.up - dotUp * outward;
         }
-        else
+
+        if (upOnDome.sqrMagnitude < 0.001f)
+            return transform.rotation;
+
+        return Quaternion.LookRotation(toViewer, upOnDome.normalized);
+    }
+
+    private void MoveWithWind()
+    {
+        if (windZone == null) return;
+        float speed = windZone.windMain * windSpeedMultiplier;
+        transform.position += windDirection.normalized * speed * Time.deltaTime;
+    }
+
+    private void CheckCloudVis()
+    {
+        if (windZone == null) return;
+        if (_wrapCooldown > 0f) { _wrapCooldown -= Time.deltaTime; return; }
+
+        if (transform.position.x <= leftExitX)
         {
-          //  if(_fadeObject.IsFading)
-        //    { 
-                //in progress 
-           // }
+            Debug.Log($"[CloudShape] {name}: Respawn triggered. pos.x={transform.position.x:F1}");
+            _cloudIsBusyResetting = true;
+            StartCoroutine(RespawnCloud());
         }
-        
-        if (Input.GetKeyDown(KeyCode.C))
+    }
+
+    private IEnumerator RespawnCloud()
+    {
+        TurnOffCollider();
+
+        ParticleSystemRenderer psRenderer = ps.GetComponent<ParticleSystemRenderer>();
+
+        // Stop new particle emission, then fade existing particles out.
+        ps.Stop();
+        if (psRenderer != null)
+            yield return StartCoroutine(FadeCloudAlpha(psRenderer, 1f, 0f, cloudFadeDuration));
+
+        // Teleport by the full cycle width and pick a non-overlapping Z position.
+        float cycleWidth = rightSpawnX - leftExitX;
+        Vector3 pos = transform.position;
+        pos.x += cycleWidth;
+        pos.z = PickNonOverlappingZ(pos.x);
+        transform.position = pos;
+        _startX = pos.x;
+
+        lookatcamera(Camera.main);
+
+        // Restart emission, then fade back in.
+        ps.Play();
+        if (psRenderer != null)
+            yield return StartCoroutine(FadeCloudAlpha(psRenderer, 0f, 1f, cloudFadeDuration));
+
+        _cloudIsBusyResetting = false;
+    }
+
+    private float PickNonOverlappingZ(float atX)
+    {
+        Vector3 halfExtents = cloudCollider.bounds.extents;
+        float atY = transform.position.y;
+        for (int attempt = 0; attempt < 10; attempt++)
         {
-            fadeOutParticleSystem();
+            float z = Random.Range(zMin, zMax);
+            Collider[] hits = Physics.OverlapBox(new Vector3(atX, atY, z), halfExtents, Quaternion.identity);
+            bool overlapping = false;
+            foreach (Collider hit in hits)
+            {
+                if (hit.transform.root != transform.root)
+                { overlapping = true; break; }
+            }
+            if (!overlapping) return z;
         }
-        */
+        return Random.Range(zMin, zMax); // fallback if no clear spot found after 10 tries
+    }
+
+    private IEnumerator FadeCloudAlpha(ParticleSystemRenderer psRenderer, float from, float to, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            Color c = psRenderer.material.color;
+            c.a = Mathf.Lerp(from, to, elapsed / duration);
+            psRenderer.material.color = c;
+            yield return null;
+        }
+        Color final = psRenderer.material.color;
+        final.a = to;
+        psRenderer.material.color = final;
     }
     /*
     public void scaleMe(float scaleNum)
@@ -191,41 +337,7 @@ public class CloudShape : MonoBehaviour
     private void lookatcamera(Camera c)
     {
         if (c == null) return;
-
-        Vector3 toCamera = (c.transform.position - transform.position).normalized;
-
-        Vector3 skyPoint = SkyCenter != null ? SkyCenter.position : new Vector3(0f, 1000f, 0f);
-        Vector3 toSky = (skyPoint - transform.position).normalized;
-
-        // If the sky point is nearly co-linear with the camera direction, fall back to world forward.
-        if (Mathf.Abs(Vector3.Dot(toCamera, toSky)) > 0.99f)
-            toSky = Vector3.forward;
-
-        transform.rotation = Quaternion.LookRotation(toCamera, toSky);
-    }
-    //checks to see if cloud is close to being offscreeen, and if it is, starts fade out and reposition sequence
-    //bool to prevent it from calling once sequence has started
-    private void CheckCloudVis()
-    {
-        if (transform.position.x <= cloudVisX)
-        {
-            _cloudIsBusyResetting = true;
-            //_fadeObject.StopAllCoroutines();
-            //StartCoroutine(_fadeObject.FadeCloudInOut());
-        }
-    }
-
-    //moves cloud to other side of screen 
-    //sets flag to false so it starts checking for being offscreen again
-    private void ResetCloudPos()
-    {
-        Vector3 cloudPos = transform.position;
-        //todo: should probs think abt wind changing exponentially 
-        //like stronger when on sides of screen etc
-        //also to stop while u r watching cloud
-        cloudPos.x = 210;
-        transform.position = cloudPos;
-        _cloudIsBusyResetting = false;
+        transform.rotation = DomeOrientation(c.transform.position);
     }
 
     public void GlowCloud(GameObject cloud)
@@ -284,7 +396,7 @@ public class CloudShape : MonoBehaviour
     {
         if(this == c)
         {
-            HideShape();
+            UnGlowCloud();      // resets isHighlighted → resumes wind movement
             TurnOffCollider();
             StartCoroutine(resetMe());
         }
@@ -347,6 +459,7 @@ public class CloudShape : MonoBehaviour
     public void SetShape(Texture2D shapeTexture)
     {
         if (isHighlighted) return;
+        isTarget = true;
         TurnOnCollider(); //makes this cloud seeable by the raycaster
         incomingShape = shapeTexture;
         psShape.scale = ScaleToShape(incomingShape);
@@ -363,6 +476,7 @@ public class CloudShape : MonoBehaviour
     public void SetGenericShape(Texture2D shapeTexture)
     {
         if (isHighlighted) return;
+        isTarget = false;
         TurnOffCollider();
         incomingShape = shapeTexture;
         psShape.scale = ScaleToShape(incomingShape);

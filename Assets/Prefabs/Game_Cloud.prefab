@@ -156,7 +156,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.99, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 8}
+  m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4001077985832519558}
@@ -203,6 +203,15 @@ MonoBehaviour:
   isGameLoop: 0
   keepDebugObjectsVisible: 1
   SkyCenter: {fileID: 0}
+  windZone: {fileID: 0}
+  windDirection: {x: -1, y: 0, z: 0}
+  windSpeedMultiplier: 1
+  leftExitX: -600
+  rightSpawnX: 125
+  rotationSpeed: 3
+  cloudFadeDuration: 10
+  zMin: 157
+  zMax: 410
 --- !u!54 &857159031385798982
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -237,7 +246,7 @@ ConstantForce:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4001077985798978744}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Force: {x: -0.02, y: 0, z: 0}
   m_RelativeForce: {x: 0, y: 0, z: 0}
   m_Torque: {x: 0, y: 0, z: 0}
@@ -254,7 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec82f4683316473a9ac98319e694e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeObject
-  fadeDuration: 3
+  fadeDuration: 10
 --- !u!1 &4283325264062887905
 GameObject:
   m_ObjectHideFlags: 0

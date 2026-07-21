@@ -203,6 +203,10 @@ void StopGazeTracking()
 
     public void StartCloudTalking()
     {
+        CloudShape cloud = hit.transform.GetComponent<CloudShape>()
+                        ?? hit.transform.GetComponentInParent<CloudShape>();
+        if (cloud == null || !cloud.isTarget) return;
+
         // --- NEW: lock immediately so this can't be called again until released ---
         _isProcessingCloud = true;
 

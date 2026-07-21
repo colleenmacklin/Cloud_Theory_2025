@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LLMUnity;
@@ -26,6 +27,8 @@ public class MainNarrator : MonoBehaviour
     private TraceryEngine _tracery;
 
     [Header("Shared")]
+    [Tooltip("Seconds to wait after the last line before ending the conversation.")]
+    public float pauseAfterSpeaking = 3f;
     public List<string> cloudHistory;
     public List<string> targetClouds;
     public string chosenCloud;
@@ -125,13 +128,19 @@ public class MainNarrator : MonoBehaviour
         {
             isNarrating = false;
             fadeOutSubtitle();
-            Actions.ConversationEnded?.Invoke(); //tells system this cloud is no longer beng talked about
+            StartCoroutine(EndConversationAfterPause());
         }
     }
     
     private void OnLineComplete()
     {
-        SpeakNextLine(); // Speak the next line when current one finishes
+        SpeakNextLine();
+    }
+
+    private IEnumerator EndConversationAfterPause()
+    {
+        yield return new WaitForSeconds(pauseAfterSpeaking);
+        Actions.ConversationEnded?.Invoke();
     }
 
     //subtitle StartFadeSequence
@@ -149,6 +158,7 @@ public class MainNarrator : MonoBehaviour
     // Utilities
     public string parseName(string s)
     {
+        if (string.IsNullOrEmpty(s)) return "cloud";
         string name = s.Replace("_", " ");
         return name;
     }
