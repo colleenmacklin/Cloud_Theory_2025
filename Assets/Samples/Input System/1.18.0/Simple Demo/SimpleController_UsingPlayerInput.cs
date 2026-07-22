@@ -49,4 +49,12 @@ private void Look(Vector2 rotate)
     transform.localRotation = Quaternion.Euler(0, m_Rotation.y, 0);
 }
 
+// Called by StandUpController before enabling this component so the
+// accumulated yaw starts at the correct angle and doesn't snap on first input.
+public void InitializeYaw(float yawDegrees)
+{
+    m_Rotation.y = yawDegrees;
+    transform.localRotation = Quaternion.Euler(0f, m_Rotation.y, 0f);
+}
+
 }
