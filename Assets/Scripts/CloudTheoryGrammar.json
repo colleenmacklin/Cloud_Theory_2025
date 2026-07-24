@@ -7,18 +7,18 @@
     "The #adj# #shapeName# #action#.",
     "#place# #has# #shapeName#.",
     "#shapeName#: #definition#.",
-    "I once #past_encounter# a #shapeName#. #consequence#.",
+    "I once #past_encounter# #shapeName#. #consequence#.",
     "#warning#."
   ],
 
   "opener": [
     "This is the shape that arrives before",
-    "No one speaks about the",
+    "No one speaks about",
     "There is a word for",
     "My #relative# called it",
     "The correct name for this is",
-    "In certain counties, a",
-    "You only see a"
+    "In certain counties,",
+    "You only see"
   ],
 
   "closer": [
@@ -34,21 +34,21 @@
 
   "observation": [
     "I can see that #shapeName# cloud has no shadow of its own",
-    "The #shapeName# is borrowed from somewhere else entirely",
+    "#shapeName# is borrowed from somewhere else entirely",
     "That #shapeName# belongs to a different afternoon",
-    "No photograph has ever captured a #shapeName# correctly",
-    "A #shapeName# at ths hour means the wind is reconsidering",
-    "The #shapeName# is the cloud's way of apologizing",
+    "No photograph has ever captured #shapeName# correctly",
+    "#shapeName# at this hour means the wind is reconsidering",
+    "#shapeName# is the cloud's way of apologizing",
     "Something about that #shapeName# is not finished yet",
-    "A #shapeName# like that only forms over #place#"
+    "#shapeName# like that only forms over #place#"
   ],
 
   "everyone_knows": [
-    "Everyone knows a #shapeName# cloud means #consequence#",
+    "Everyone knows #shapeName# cloud means #consequence#",
     "It is well understood that #shapeName# clouds gather when #gather_reason#",
-    "The old explanation for the #shapeName# was #old_explanation#",
-    "Scientists once believed the #shapeName# was caused by #pseudoscience#",
-    "Everyone knows you should not point at a #shapeName#"
+    "The old explanation for #shapeName# was #old_explanation#",
+    "Scientists once believed #shapeName# was caused by #pseudoscience#",
+    "Everyone knows you should not point at #shapeName#"
   ],
 
   "gather_reason": [
@@ -186,11 +186,20 @@
   ],
 
   "warning": [
-    "Do not name a #shapeName# cloud or it will become something else",
-    "A #shapeName# before noon means the afternoon has already decided",
-    "If you see a #shapeName# from a moving vehicle, let it go",
-    "The #shapeName# is not for you specifically, but you should note it anyway",
-    "Some #adj# clouds are not clouds at all, but that is a different conversation"
+    "Do not name #shapeName# cloud or it will become something else",
+    "#shapeName# before noon means the afternoon has already decided",
+    "If you see #shapeName# from a moving vehicle, let it go",
+    "#shapeName# is not for you specifically, but you should note it anyway"
+  ],
+
+  "climax": [
+    "So: #shapeName#. That was the one I'll remember.",
+    "It ends, as these afternoons do, with #shapeName#.",
+    "After everything — #shapeName# is what stays with me.",
+    "And then #shapeName#, and then the light changed, and that was that.",
+    "I keep thinking about #shapeName#. But then, I always do.",
+    "We saw #shapeName# at the end. I think that means something, Colleen.",
+    "The sky gave us #shapeName# last. I'm choosing to take that as a sign."
   ],
 
   "shapeName": ["#shape#"],

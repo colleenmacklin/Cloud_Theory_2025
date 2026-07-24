@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7104675189635732304}
   - component: {fileID: 7413257242573998064}
   - component: {fileID: 6682410647521162999}
+  - component: {fileID: 7018123333078966552}
+  - component: {fileID: 6115068096846314583}
   m_Layer: 0
   m_Name: Player
   m_TagString: MainCamera
@@ -170,6 +172,46 @@ MonoBehaviour:
   wormTubeSides: 8
   wormGrowInterval: 0.12
   wormMaxSegments: 20
+--- !u!143 &7018123333078966552
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7920106816385648394}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 85.81
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6115068096846314583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7920106816385648394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d11d039952da14115ab294360f0925b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  moveSpeed: 5
+  lookSensitivity: 2
+  gravity: -9.81
 --- !u!1 &7927598469014579124
 GameObject:
   m_ObjectHideFlags: 0

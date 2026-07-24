@@ -40,19 +40,25 @@ public class MainNarrator : MonoBehaviour
     private Queue<string> lines = new Queue<string>();
     private bool isNarrating = false;
 
+    private void Start()
+    {
+        Subtitles.gameObject.SetActive(false);
+    }
 
         private void OnEnable()
     {
-        Actions.ChooseCloud += LookAtCloud;  
+        Actions.ChooseCloud += LookAtCloud;
         Actions.ChooseTheme += setTheme;
         voice.OnSpeechComplete += OnLineComplete;
+        Actions.StartClimaxNarration += OnStartClimaxNarration;
     }
 
     private void OnDisable()
     {
-        Actions.ChooseCloud -= LookAtCloud;  
+        Actions.ChooseCloud -= LookAtCloud;
         Actions.ChooseTheme -= setTheme;
         voice.OnSpeechComplete -= OnLineComplete;
+        Actions.StartClimaxNarration -= OnStartClimaxNarration;
     }
     public void setTheme(string theme) 
     {
@@ -83,6 +89,34 @@ public class MainNarrator : MonoBehaviour
             _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
         }
     }
+    private void OnStartClimaxNarration()
+    {
+        if (engine == NarratorEngine.Tracery)
+        {
+            if (_tracery == null)
+            {
+                if (traceryGrammar == null) { Debug.LogError("[MainNarrator] No Tracery grammar assigned."); return; }
+                _tracery = TraceryEngine.FromTextAsset(traceryGrammar);
+            }
+            // Use the last seen cloud as shapeName context; fall back to "clouds".
+            string context = cloudHistory.Count > 0 ? cloudHistory[cloudHistory.Count - 1] : "clouds";
+            string result = _tracery.Generate("climax", context);
+            StartNarration(result);
+        }
+        else
+        {
+            string allSeen = string.Join(", ", cloudHistory.ConvertAll(c => parseName(c)));
+            string prompt = "<start_of_turn>user\nAct as \"Bertrand,\" a thoughtful and slightly melancholic socialist philosopher. "
+                + "You are lying on a grassy hill with your lifelong friend, Colleen, and the afternoon is ending.\n"
+                + "TASK:\nWrite only Bertrand's side of a closing reflection. You have been watching clouds today and saw shapes like: "
+                + allSeen + ".\n"
+                + "CONSTRAINTS:\n1. Speak directly to Colleen.\n2. Weave in the philosophical theme of " + chosenTheme + "\n"
+                + "3. " + PromptAddition + "\n4. Keep your remarks to " + numWords + " words or less.\n"
+                + "<end_of_turn>\n<start_of_turn>model";
+            _ = llmCharacter.Chat(prompt, SetChatText, AIReplyComplete);
+        }
+    }
+
     public void SetChatText(string text)
     {
         //Debug.Log("setting Narration Text: " + text);

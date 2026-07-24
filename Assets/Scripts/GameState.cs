@@ -9,5 +9,6 @@ public class GameState : MonoBehaviour
     public bool Opening; //opening scene
     public bool Intro; //main scene, introductory dialogue
     public bool Gameloop;
-    public bool Ending;
+    public bool Climax;
+    public bool Ending; //ending scene, walking away from the clouds
 }

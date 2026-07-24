@@ -56,6 +56,8 @@ public static class Actions
     public static Action Sunrise;
     public static Action Sunset;
     public static Action Climax;
+    public static Action StartClimaxNarration; // narrator speaks freely about all clouds seen
+    public static Action StandUp;              // fires after clouds fade; triggers stand-up
 
     // inter-actions
     public static Action Highlight;

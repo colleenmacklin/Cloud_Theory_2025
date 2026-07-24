@@ -310,6 +310,20 @@ public class CloudShape : MonoBehaviour
         return Random.Range(zMin, zMax); // fallback if no clear spot found after 10 tries
     }
 
+    public IEnumerator FadeOutAndDeactivate(float duration)
+    {
+        _cloudIsBusyResetting = true;
+        TurnOffCollider();
+        ParticleSystemRenderer psRenderer = ps.GetComponent<ParticleSystemRenderer>();
+        if (psRenderer != null)
+        {
+            float currentAlpha = psRenderer.material.color.a;
+            yield return StartCoroutine(FadeCloudAlpha(psRenderer, currentAlpha, 0f, duration));
+        }
+        ps.Stop();
+        gameObject.SetActive(false);
+    }
+
     private IEnumerator FadeCloudAlpha(ParticleSystemRenderer psRenderer, float from, float to, float duration)
     {
         float elapsed = 0f;

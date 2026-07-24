@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AzureSky;
 
@@ -40,7 +41,7 @@ public class MainCloudManager : MonoBehaviour
 
     private Queue<Texture2D> _remainingTargets = new Queue<Texture2D>();
 
-    public State gameState;
+    public GameState gameState;
     private void OnEnable()
     {
       Actions.GetClickedCloud += GetClickedCloud;
@@ -158,20 +159,42 @@ public class MainCloudManager : MonoBehaviour
         }
     }
 
+    [Tooltip("Duration of the all-clouds fade-out before the player stands up.")]
+    public float endingFadeDuration = 5f;
+
     private void EnterClimaxState()
     {
-        gameState = State.Climax;
+        if (gameState != null) { gameState.Gameloop = false; gameState.Climax = true; }
         Actions.Climax?.Invoke();
-        Debug.Log("[MainCloudManager] Climax entered.");
+        Debug.Log("[MainCloudManager] Climax entered — waiting for last cloud narration to finish.");
 
-        // Reassign the first N clouds to the shapes the player identified,
-        // in the order they were selected.
+        // Reassign the first N clouds to the shapes the player identified, in order selected.
         int count = Mathf.Min(finalCloudTextures.Count, Clouds.Count);
         for (int i = 0; i < count; i++)
         {
             if (finalCloudTextures[i] != null)
                 Clouds[i].SetShape(finalCloudTextures[i]);
         }
+
+        // Do NOT start the climax narration yet — the narrator is still speaking about
+        // the last cloud. InactivateCloud() will fire when that narration ends and will
+        // detect _climaxEntered to kick off the closing monologue.
+    }
+
+    private void OnClimaxNarrationEnded()
+    {
+        Actions.ConversationEnded -= OnClimaxNarrationEnded;
+        StartCoroutine(FadeAllCloudsAndStandUp());
+    }
+
+    private IEnumerator FadeAllCloudsAndStandUp()
+    {
+        foreach (var cloud in Clouds)
+            if (cloud != null && cloud.gameObject.activeInHierarchy)
+                StartCoroutine(cloud.FadeOutAndDeactivate(endingFadeDuration));
+
+        yield return new WaitForSeconds(endingFadeDuration);
+        Actions.StandUp?.Invoke();
     }
 
     private void AdvanceSkyTime(int cloudsSelected)
@@ -204,6 +227,17 @@ public class MainCloudManager : MonoBehaviour
     private void InactivateCloud()
     {
         Actions.InactivateCloud?.Invoke(clickedCloud);
+
+        if (_climaxEntered)
+        {
+            // The last cloud narration just finished. Now start the climax monologue.
+            // Swap our ConversationEnded handler so the climax narration ending
+            // triggers the cloud fade-out and stand-up instead of another inactivation.
+            Actions.ConversationEnded -= InactivateCloud;
+            Actions.ConversationEnded += OnClimaxNarrationEnded;
+            Debug.Log("[MainCloudManager] Starting climax narration.");
+            Actions.StartClimaxNarration?.Invoke();
+        }
     }
 
 }

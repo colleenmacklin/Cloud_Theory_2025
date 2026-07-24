@@ -2,53 +2,78 @@ using System.Collections;
 using UnityEngine;
 using UnityTemplateProjects;
 
-// Attach to the player root GameObject.
-// Listens for Actions.Climax, waits a configurable delay, then smoothly
-// rises the camera from ground level to eye height, pivots to face the
-// forest path, and hands off control to the walking controller.
+// Attach to the player root GameObject (the lying-down rig).
+// On Climax: animates the camera rising from ground to standing height,
+// then activates the separate walking Player and deactivates this rig.
 public class StandUpController : MonoBehaviour
 {
-    [Header("References")]
-    [Tooltip("The Camera transform (child of this object).")]
+    [Header("Lying-Down Rig")]
+    [Tooltip("The Camera transform on the lying-down rig.")]
     public Transform playerCamera;
-    [Tooltip("The lying-down gaze controller to disable.")]
+    [Tooltip("The gaze controller to stop before animating.")]
     public SimpleCameraController gazeController;
-    [Tooltip("The walking controller to enable after standing.")]
-    public SimpleController_UsingPlayerInput walkController;
-    [Tooltip("MouseRay cloud-selection script to disable.")]
+    [Tooltip("MouseRay cloud-selection script to stop before animating.")]
     public MouseRay mouseRay;
+    [Tooltip("The root GameObject to deactivate after standing. Usually 'this' — drag in this object.")]
+    public GameObject lyingDownRig;
+
+    [Header("Walking Player")]
+    [Tooltip("The 'Player' prefab instance placed in the scene, starting disabled.")]
+    public GameObject walkingPlayer;
 
     [Header("Timing")]
-    [Tooltip("Seconds after Climax fires before the stand-up begins.")]
+    [Tooltip("Seconds after Climax fires before the stand-up animation begins.")]
     public float delayBeforeStanding = 3f;
-    [Tooltip("Duration of the stand-up animation in seconds.")]
+    [Tooltip("Duration of the rising animation in seconds.")]
     public float standUpDuration = 2.5f;
 
     [Header("Standing Pose")]
-    [Tooltip("World Y position of the camera when fully standing (eye height).")]
+    [Tooltip("World Y of the camera when fully standing (eye height above ground).")]
     public float standingEyeHeight = 1.7f;
-    [Tooltip("World Y rotation the player faces after standing. Set this to point toward the forest path entrance.")]
+    [Tooltip("World Y rotation the player faces after standing (toward the forest path).")]
     public float standingYaw = 0f;
 
-    private void OnEnable()  => Actions.Climax += OnClimax;
-    private void OnDisable() => Actions.Climax -= OnClimax;
+    [Header("Debug")]
+    [Tooltip("Tick in Play mode to trigger immediately without waiting for Climax.")]
+    public bool debugTriggerNow = false;
 
-    private void OnClimax() => StartCoroutine(StandUpSequence());
+    private bool _sequenceStarted = false;
+
+    private void OnEnable()  => Actions.StandUp += TriggerStandUp;
+    private void OnDisable() => Actions.StandUp -= TriggerStandUp;
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (debugTriggerNow)
+        {
+            debugTriggerNow = false;
+            TriggerStandUp();
+        }
+#endif
+    }
+
+    [ContextMenu("Debug: Trigger Stand Up")]
+    private void TriggerStandUp()
+    {
+        if (_sequenceStarted) return;
+        _sequenceStarted = true;
+        StartCoroutine(StandUpSequence());
+    }
 
     private IEnumerator StandUpSequence()
     {
         yield return new WaitForSeconds(delayBeforeStanding);
 
-        // Freeze gaze and cloud interaction.
-        if (gazeController != null) gazeController.enabled = false;
-        if (mouseRay       != null) mouseRay.enabled       = false;
+        KillGazeAndMouse();
 
         Vector3    startPos = playerCamera.position;
         Quaternion startRot = playerCamera.rotation;
         Vector3    endPos   = new Vector3(startPos.x, standingEyeHeight, startPos.z);
         Quaternion endRot   = Quaternion.Euler(0f, standingYaw, 0f);
 
-        // Smoothly rise and reorient using SmoothStep for an ease-in/ease-out feel.
+        Debug.Log($"[StandUp] Animation start. pos={startPos} rot={startRot.eulerAngles}");
+
         float elapsed = 0f;
         while (elapsed < standUpDuration)
         {
@@ -56,18 +81,58 @@ public class StandUpController : MonoBehaviour
             float t = Mathf.SmoothStep(0f, 1f, elapsed / standUpDuration);
             playerCamera.position = Vector3.Lerp(startPos, endPos, t);
             playerCamera.rotation = Quaternion.Slerp(startRot, endRot, t);
+            // Keep controllers dead in case something re-enables them mid-animation.
+            KillGazeAndMouse();
             yield return null;
         }
 
-        // Snap to exact final pose, then align root and camera separately
-        // so the walking controller inherits the correct yaw from the root.
-        transform.rotation             = Quaternion.Euler(0f, standingYaw, 0f);
-        playerCamera.localRotation     = Quaternion.identity;
-        playerCamera.localPosition     = new Vector3(0f, standingEyeHeight, 0f);
+        Debug.Log($"[StandUp] Animation done. Switching to walking player.");
 
-        // Prime the walking controller's accumulated yaw to match,
-        // preventing a snap on the player's first mouse move.
-        walkController.InitializeYaw(standingYaw);
-        walkController.enabled = true;
+        // Place the walking player at the same XZ, at ground level, facing standingYaw.
+        if (walkingPlayer != null)
+        {
+            Vector3 spawnPos = new Vector3(startPos.x, 0f, startPos.z);
+            Terrain terrain = Terrain.activeTerrain;
+            if (terrain != null)
+                spawnPos.y = terrain.SampleHeight(spawnPos) + terrain.transform.position.y;
+
+            walkingPlayer.transform.position = spawnPos;
+            walkingPlayer.transform.rotation = Quaternion.Euler(0f, standingYaw, 0f);
+            walkingPlayer.SetActive(true);
+            Debug.Log($"[StandUp] Walking player activated at {spawnPos}.");
+        }
+        else
+        {
+            Debug.LogWarning("[StandUp] walkingPlayer is not assigned!");
+        }
+
+        // Deactivate the lying-down rig (this also kills any remaining coroutines on it).
+        if (lyingDownRig != null)
+            lyingDownRig.SetActive(false);
+        else
+            gameObject.SetActive(false);
+    }
+
+    // Stops MouseRay coroutines (preventing CenterThenWaitForConversation from
+    // re-enabling gazeMover when ConversationEnded fires) and disables both controllers.
+    private void KillGazeAndMouse()
+    {
+        if (gazeController != null)
+            gazeController.enabled = false;
+        else
+            foreach (var c in GetComponentsInChildren<SimpleCameraController>())
+                c.enabled = false;
+
+        if (mouseRay != null)
+        {
+            mouseRay.StopAllCoroutines();
+            mouseRay.enabled = false;
+        }
+        else
+            foreach (var c in GetComponentsInChildren<MouseRay>())
+            {
+                c.StopAllCoroutines();
+                c.enabled = false;
+            }
     }
 }
