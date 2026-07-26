@@ -127,9 +127,12 @@ public class MainCloudManager : MonoBehaviour
         for (int i = 0; i < targetsToAssign; i++)
             Clouds[i].SetShape(CloudShapes[i]);
 
-        // Queue remaining target shapes for reassignment as clouds become ready.
+        // Queue the remaining shapes up to totalCloudsForDayArc.
+        // These are cycled in one-at-a-time as each target cloud is narrated about,
+        // so there are always exactly numberOfTargetsToGenerate targets in the sky.
+        int required = totalCloudsForDayArc > 0 ? totalCloudsForDayArc : CloudShapes.Count;
         _remainingTargets.Clear();
-        for (int i = targetsToAssign; i < CloudShapes.Count; i++)
+        for (int i = targetsToAssign; i < Mathf.Min(required, CloudShapes.Count); i++)
             _remainingTargets.Enqueue(CloudShapes[i]);
     }
 
@@ -218,15 +221,32 @@ public class MainCloudManager : MonoBehaviour
 
     private void OnCloudReady(CloudShape cloud)
     {
-        if (_remainingTargets.Count > 0)
-            cloud.SetShape(_remainingTargets.Dequeue());
-        else
+        // Only give a generic shape on wind-cycle respawn; never overwrite an active target.
+        if (!cloud.isTarget)
             cloud.SetGenericShape(GenericCloudShapes[Random.Range(0, GenericCloudShapes.Count)]);
+    }
+
+    private void PromoteNextTarget()
+    {
+        if (_remainingTargets.Count == 0) return;
+
+        // Pick a random cloud that is not currently a target and is not the one
+        // that was just used — so the new shape always appears somewhere fresh.
+        var candidates = Clouds.FindAll(c => !c.isTarget && c != clickedCloud);
+        if (candidates.Count == 0) return;
+
+        CloudShape next = candidates[Random.Range(0, candidates.Count)];
+        next.SetShape(_remainingTargets.Dequeue());
     }
 
     private void InactivateCloud()
     {
         Actions.InactivateCloud?.Invoke(clickedCloud);
+
+        // Immediately promote a different generic cloud to the next target shape,
+        // keeping exactly numberOfTargetsToGenerate targets visible at all times.
+        if (!_climaxEntered)
+            PromoteNextTarget();
 
         if (_climaxEntered)
         {

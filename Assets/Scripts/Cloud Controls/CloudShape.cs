@@ -410,6 +410,7 @@ public class CloudShape : MonoBehaviour
     {
         if(this == c)
         {
+            isTarget = false;   // clear before UnGlowCloud so OnCloudReady can assign generic
             UnGlowCloud();      // resets isHighlighted → resumes wind movement
             TurnOffCollider();
             StartCoroutine(resetMe());

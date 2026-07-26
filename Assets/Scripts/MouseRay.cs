@@ -229,13 +229,22 @@ void StopGazeTracking()
     // --- NEW: coroutine that waits for ConversationEnded before releasing the lock ---
 private IEnumerator CenterThenWaitForConversation()
 {
+    // Subscribe before the camera-centering wait, not after — if narration
+    // finishes while the camera is still turning (e.g. fast Tracery lines
+    // combined with a slow focusInSpeed), subscribing afterward can miss the
+    // event entirely and strand _isProcessingCloud = true forever, silently
+    // blocking all future raycasts.
+    bool conversationEnded = false;
+    Action onEnded = () => conversationEnded = true;
+    Actions.ConversationEnded += onEnded;
+
     // First, smoothly rotate to face the selected cloud
     Quaternion rot = Quaternion.LookRotation(
-        Selected.transform.position - Camera.main.transform.position, 
+        Selected.transform.position - Camera.main.transform.position,
         Camera.main.transform.up
     );
 
-    while (Quaternion.Angle(Camera.main.transform.rotation, rot) > 1f)
+    while (Quaternion.Angle(Camera.main.transform.rotation, rot) > 1f && !conversationEnded)
     {
         Camera.main.transform.rotation = Quaternion.Slerp(
             Camera.main.transform.rotation, rot, focusInSpeed
@@ -246,10 +255,6 @@ private IEnumerator CenterThenWaitForConversation()
     Debug.Log("Camera centered on cloud, waiting for conversation to end.");
 
     // Now wait for the narrator to finish
-    bool conversationEnded = false;
-    Action onEnded = () => conversationEnded = true;
-    Actions.ConversationEnded += onEnded;
-
     yield return new WaitUntil(() => conversationEnded);
 
     Actions.ConversationEnded -= onEnded;
