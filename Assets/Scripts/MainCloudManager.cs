@@ -26,6 +26,19 @@ public class MainCloudManager : MonoBehaviour
     [SerializeField]
     private List<Texture2D> finalCloudTextures;
 
+    [Header("Sky Dome Layout")]
+    [Tooltip("The player's fixed viewing position (e.g. the lying-down camera or body). Cloud placement angles are measured from this point, so clouds read as evenly spaced in the player's field of view rather than in flat world XZ.")]
+    public Transform playerViewpoint;
+    [Tooltip("Drag four empty GameObjects to mark the top, bottom, left, and right edges of the sky patch that's clear of trees, as seen from playerViewpoint. Position them visually in the Scene view — clouds are placed within the region these four points define, so this replaces tuning elevation/azimuth by hand.")]
+    public Transform topMarker;
+    public Transform bottomMarker;
+    public Transform leftMarker;
+    public Transform rightMarker;
+    [Tooltip("How much of a cloud's own visual radius its neighbors are allowed to overlap into. 0 = clouds may only just touch (no overlap); 1 = clouds may fully overlap. Required separation is computed from each cloud's actual size (CloudShape.EstimateVisualRadius), not a flat angle, since a fixed angle means nothing across clouds of very different apparent size.")]
+    [Range(0f, 1f)] public float allowedOverlapFraction = 0.35f;
+    [Tooltip("How many candidate positions to try before settling for the least-overlapping one found.")]
+    public int placementAttempts = 30;
+
     [Header("Sky Time Progression")]
     [Tooltip("Azure Core System to advance when clouds are selected.")]
     public AzureCoreSystem skySystem;
@@ -80,38 +93,47 @@ public class MainCloudManager : MonoBehaviour
         CloudShapes.Shuffle();
         GenericCloudShapes.Shuffle();
 
-        // Spread clouds across the sky using a 2D grid in XZ, with one cloud per cell.
-        // The grid aspect ratio matches the world range so cells are roughly square.
-        if (Clouds.Count > 0)
+        // Place clouds by sampling elevation/azimuth angles around the player's fixed
+        // viewpoint rather than a flat XZ grid. A flat grid looks uneven from a fixed
+        // viewpoint below it — cells near the zenith cover a wide angular swing while
+        // cells near the horizon barely change angle at all.
+        bool canDomePlace = playerViewpoint != null && topMarker != null && bottomMarker != null
+                            && leftMarker != null && rightMarker != null;
+        if (Clouds.Count > 0 && canDomePlace)
         {
-            float leftX  = Clouds[0].leftExitX;
-            float rightX = Clouds[0].rightSpawnX;
-            float zMinV  = Clouds[0].zMin;
-            float zMaxV  = Clouds[0].zMax;
-            float xRange = rightX - leftX;
-            float zRange = zMaxV - zMinV;
+            // Grid the region in BOTH elevation and azimuth (not just elevation), and give
+            // each cloud its own shuffled cell. Elevation-only banding guarantees even
+            // top-to-bottom coverage, but leaves azimuth to plain random sampling — with
+            // only a handful of clouds, that can easily leave the far left/right edges (or
+            // any specific direction) sparse or empty purely by chance. Gridding both axes
+            // fixes that the same way the original flat-grid system did, just correctly in
+            // angle-space instead of world XZ.
+            GetSkyRegionBounds(out float minElevation, out float maxElevation, out float azimuthCenter, out float azimuthRange);
+            ComputeGridDimensions(out int rows, out int cols);
 
-            int cols = Mathf.Max(1, Mathf.RoundToInt(Mathf.Sqrt(Clouds.Count * xRange / zRange)));
-            int rows = Mathf.CeilToInt((float)Clouds.Count / cols);
-            float xSlot = xRange / cols;
-            float zSlot = zRange / rows;
+            List<int> cellOrder = new List<int>(rows * cols);
+            for (int c = 0; c < rows * cols; c++) cellOrder.Add(c);
+            cellOrder.Shuffle();
 
-            // Shuffle cell indices so clouds get random cells, not sequential ones.
-            List<int> cells = new List<int>(cols * rows);
-            for (int ci = 0; ci < cols * rows; ci++) cells.Add(ci);
-            cells.Shuffle();
+            Debug.Log($"[MainCloudManager] Sky region: elevation {minElevation:F1}° to {maxElevation:F1}°, azimuth {azimuthCenter:F1}° ±{azimuthRange * 0.5f:F1}°, grid {rows}x{cols}");
 
+            var placed = new List<(Vector3 pos, float radius)>(Clouds.Count);
             for (int i = 0; i < Clouds.Count; i++)
             {
-                int col = cells[i] % cols;
-                int row = cells[i] / cols;
-                float x = leftX + (col + 0.5f) * xSlot + Random.Range(-xSlot * 0.3f, xSlot * 0.3f);
-                float z = zMinV + (row + 0.5f) * zSlot + Random.Range(-zSlot * 0.3f, zSlot * 0.3f);
-                Vector3 pos = Clouds[i].transform.position;
-                pos.x = x;
-                pos.z = z;
-                Clouds[i].transform.position = pos;
+                int cell = cellOrder[i];
+                Clouds[i].elevationBand = cell / cols;
+                Clouds[i].azimuthBand = cell % cols;
+
+                Vector3 chosen = PickDomePositionInCell(Clouds[i], rows, cols, placed);
+                Clouds[i].transform.position = chosen;
+                placed.Add((chosen, Clouds[i].EstimateVisualRadius()));
+
+                Debug.Log($"[MainCloudManager] {Clouds[i].name}: cell=({Clouds[i].elevationBand},{Clouds[i].azimuthBand}) elevation={ElevationOfPosition(chosen):F1}°");
             }
+        }
+        else if (Clouds.Count > 0)
+        {
+            Debug.LogWarning("[MainCloudManager] playerViewpoint and/or the four sky-region markers (topMarker/bottomMarker/leftMarker/rightMarker) are not fully assigned — clouds keep their authored positions instead of being dome-placed.");
         }
 
         // All clouds start as generic (no collider, not selectable).
@@ -134,6 +156,186 @@ public class MainCloudManager : MonoBehaviour
         _remainingTargets.Clear();
         for (int i = targetsToAssign; i < Mathf.Min(required, CloudShapes.Count); i++)
             _remainingTargets.Enqueue(CloudShapes[i]);
+    }
+
+    // Sizes an (elevation x azimuth) grid to roughly Clouds.Count cells. Deliberately
+    // balanced against cloud count alone rather than matched to the region's raw
+    // degree-aspect-ratio: azimuth range is typically much wider in degrees than elevation
+    // range, and matching that ratio directly (as the original flat-XZ grid did in world
+    // space) starves elevation down to very few rows — e.g. 2 rows for 13 clouds — leaving
+    // large gaps near the top/bottom regardless of how well azimuth is covered.
+    private void ComputeGridDimensions(out int rows, out int cols)
+    {
+        cols = Mathf.Max(1, Mathf.CeilToInt(Mathf.Sqrt(Clouds.Count)));
+        rows = Mathf.CeilToInt((float)Clouds.Count / cols);
+    }
+
+    // Picks an elevation/azimuth pair within this cloud's assigned grid cell (see
+    // CloudShape.elevationBand/azimuthBand), rejection-sampled against `others` for
+    // enough angular clearance (see MinAngularClearanceDeg) to avoid a major overlap.
+    // Falls back to the least-overlapping candidate found if no fully-clear position
+    // turns up within placementAttempts. Confining each cloud to its own cell (rather
+    // than letting all clouds compete for the full region) is what guarantees even
+    // coverage in both directions — see the comment in setUpInitialClouds.
+    private Vector3 PickDomePositionInCell(CloudShape cloud, int rows, int cols, List<(Vector3 pos, float radius)> others)
+    {
+        GetSkyRegionBounds(out float minElevation, out float maxElevation, out float azimuthCenter, out float azimuthRange);
+
+        float rowHeight = (maxElevation - minElevation) / rows;
+        int row = Mathf.Clamp(cloud.elevationBand, 0, rows - 1);
+        float bandMinElev = minElevation + row * rowHeight;
+        float bandMaxElev = bandMinElev + rowHeight;
+
+        float colWidth = azimuthRange / cols;
+        int col = Mathf.Clamp(cloud.azimuthBand, 0, cols - 1);
+        float azimuthMinEdge = azimuthCenter - azimuthRange * 0.5f;
+        float bandMinAz = azimuthMinEdge + col * colWidth;
+        float bandMaxAz = bandMinAz + colWidth;
+
+        float candidateRadius = cloud.EstimateVisualRadius();
+
+        Vector3 best = playerViewpoint.position + Vector3.forward; // safe fallback, overwritten below
+        float bestClearance = float.MinValue;
+
+        for (int attempt = 0; attempt < placementAttempts; attempt++)
+        {
+            float elevation = Random.Range(bandMinElev, bandMaxElev);
+            float azimuth = Random.Range(bandMinAz, bandMaxAz);
+            Vector3 candidate = DomeToWorldPosition(elevation, azimuth, cloud.transform.position.y);
+
+            float clearance = MinAngularClearanceDeg(candidate, candidateRadius, others);
+            if (clearance >= 0f) return candidate;
+            if (clearance > bestClearance) { bestClearance = clearance; best = candidate; }
+        }
+
+        return best;
+    }
+
+    // Derives the elevation/azimuth region clouds may occupy from the four marker
+    // transforms, as seen from playerViewpoint. Azimuth uses Mathf.DeltaAngle so the
+    // left/right span is always measured the short way around, regardless of which
+    // side of the 180°/-180° wraparound the markers happen to sit on.
+    private void GetSkyRegionBounds(out float minElevation, out float maxElevation, out float azimuthCenter, out float azimuthRange)
+    {
+        minElevation = ElevationOf(bottomMarker);
+        maxElevation = ElevationOf(topMarker);
+
+        float azLeft = AzimuthOf(leftMarker);
+        float azRight = AzimuthOf(rightMarker);
+        float delta = Mathf.DeltaAngle(azLeft, azRight);
+        azimuthCenter = azLeft + delta * 0.5f;
+        azimuthRange = Mathf.Abs(delta);
+    }
+
+    // Elevation angle (degrees above horizon) of a marker as seen from playerViewpoint.
+    private float ElevationOf(Transform marker) => ElevationOfPosition(marker.position);
+
+    // Elevation angle (degrees) of a world position as seen from playerViewpoint,
+    // for a LYING-DOWN player whose camera points up (+Y).
+    // X = screen left/right, Z = screen up/down, Y = altitude (depth into sky).
+    // "Elevation" here = screen-vertical angle: how far above/below screen centre.
+    private float ElevationOfPosition(Vector3 worldPos)
+    {
+        Vector3 offset = worldPos - playerViewpoint.position;
+        // Y is altitude (camera forward). XY-plane distance is the "horizontal" reference.
+        float horizontalDist = new Vector2(offset.x, offset.y).magnitude;
+        // Z deviation from the XY plane = screen up/down angle.
+        return Mathf.Atan2(offset.z, horizontalDist) * Mathf.Rad2Deg;
+    }
+
+    // Screen-horizontal angle (degrees) of a marker as seen from playerViewpoint.
+    // X = screen left/right, Y = altitude depth → azimuth = angle from +Y toward ±X.
+    private float AzimuthOf(Transform marker)
+    {
+        Vector3 offset = marker.position - playerViewpoint.position;
+        return Mathf.Atan2(offset.x, offset.y) * Mathf.Rad2Deg;
+    }
+
+    // Converts an elevation/azimuth pair, as seen from playerViewpoint, into a world
+    // position at the given Y altitude. Coordinate convention: X = screen left/right,
+    // Z = screen up/down, Y = altitude (camera looks up along +Y).
+    private Vector3 DomeToWorldPosition(float elevationDeg, float azimuthDeg, float worldY)
+    {
+        // Clamp to avoid tan() singularity; allow negative elevation for screen-bottom clouds.
+        float elevationRad = Mathf.Clamp(elevationDeg, -88f, 88f) * Mathf.Deg2Rad;
+        float azimuthRad   = Mathf.Clamp(azimuthDeg,   -88f, 88f) * Mathf.Deg2Rad;
+
+        // Y-depth: how far above the player the cloud sits.
+        float yOffset = worldY - playerViewpoint.position.y;
+
+        // Project angles onto the XZ plane at altitude worldY.
+        // tan(azimuth)  = X / Y  →  X = Y * tan(azimuth)
+        // tan(elevation) = Z / Y  →  Z = Y * tan(elevation)
+        float xOffset = yOffset * Mathf.Tan(azimuthRad);
+        float zOffset = yOffset * Mathf.Tan(elevationRad);
+
+        return new Vector3(
+            playerViewpoint.position.x + xOffset,
+            worldY,
+            playerViewpoint.position.z + zOffset
+        );
+    }
+
+    // Angular radius (degrees), as seen from playerViewpoint, that a cloud of the given
+    // world-unit radius at the given world position appears to subtend.
+    private float AngularRadiusDeg(Vector3 worldPos, float radius)
+    {
+        float distance = Vector3.Distance(worldPos, playerViewpoint.position);
+        if (distance < 0.01f) return 90f;
+        return Mathf.Atan2(radius, distance) * Mathf.Rad2Deg;
+    }
+
+    // How much angular room (degrees) is left between a candidate cloud and its closest
+    // neighbor in `others`, after each cloud's own angular radius is accounted for.
+    // Positive means clear of a "major" overlap (by allowedOverlapFraction); negative
+    // means the two clouds are overlapping into each other's visual extent. Returns a
+    // large positive value if there's nothing to compare against.
+    private float MinAngularClearanceDeg(Vector3 candidateWorldPos, float candidateRadius, List<(Vector3 pos, float radius)> others)
+    {
+        if (others.Count == 0) return float.MaxValue;
+
+        float minClearance = float.MaxValue;
+        Vector3 dirA = (candidateWorldPos - playerViewpoint.position).normalized;
+        float candidateAngularRadius = AngularRadiusDeg(candidateWorldPos, candidateRadius);
+
+        foreach (var (pos, radius) in others)
+        {
+            Vector3 dirB = (pos - playerViewpoint.position).normalized;
+            float gap = Vector3.Angle(dirA, dirB);
+            float otherAngularRadius = AngularRadiusDeg(pos, radius);
+            float requiredGap = (candidateAngularRadius + otherAngularRadius) * (1f - allowedOverlapFraction);
+
+            float clearance = gap - requiredGap;
+            if (clearance < minClearance) minClearance = clearance;
+        }
+        return minClearance;
+    }
+
+    // Called by CloudShape when respawning after a wind-wrap, to pick a fresh position
+    // within the marker-defined sky region — the same grid-cell-confined dome sampling
+    // the initial layout uses — so respawned clouds land back in their own cell instead
+    // of drifting via the old world-space wind-conveyor bounds
+    // (leftExitX/rightSpawnX/zMin/zMax), which are anchored to the CloudManager's
+    // transform rather than the player's. Falls back to the cloud's current position if
+    // the sky region isn't fully configured or it was never assigned a cell.
+    public Vector3 PickDomeRespawnPosition(CloudShape self)
+    {
+        if (playerViewpoint == null || topMarker == null || bottomMarker == null
+            || leftMarker == null || rightMarker == null
+            || self.elevationBand < 0 || self.azimuthBand < 0)
+            return self.transform.position;
+
+        // Recompute the same grid dimensions used at initial layout, so respawns land
+        // back in the same cell (rows/cols are deterministic from Clouds.Count alone, so
+        // this matches as long as the cloud count didn't change mid-game).
+        ComputeGridDimensions(out int rows, out int cols);
+
+        var others = new List<(Vector3 pos, float radius)>(Clouds.Count);
+        foreach (var cloud in Clouds)
+            if (cloud != null && cloud != self)
+                others.Add((cloud.transform.position, cloud.EstimateVisualRadius()));
+
+        return PickDomePositionInCell(self, rows, cols, others);
     }
 
     public void GetClickedCloud(GameObject c) //from Raycaster
@@ -260,4 +462,16 @@ public class MainCloudManager : MonoBehaviour
         }
     }
 
+    // Draws a ray from playerViewpoint to each assigned marker, so the sky region can be
+    // positioned by eye in the Scene view against the tree canopy.
+    private void OnDrawGizmosSelected()
+    {
+        if (playerViewpoint == null) return;
+
+        Gizmos.color = Color.cyan;
+        if (topMarker != null) Gizmos.DrawLine(playerViewpoint.position, topMarker.position);
+        if (bottomMarker != null) Gizmos.DrawLine(playerViewpoint.position, bottomMarker.position);
+        if (leftMarker != null) Gizmos.DrawLine(playerViewpoint.position, leftMarker.position);
+        if (rightMarker != null) Gizmos.DrawLine(playerViewpoint.position, rightMarker.position);
+    }
 }

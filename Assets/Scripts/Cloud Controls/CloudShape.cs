@@ -48,6 +48,11 @@ public class CloudShape : MonoBehaviour
     public bool isTarget; //cloudManager checks this to see if the cloud is a target shape, i.e. a shape of something, not just a generic cloud
     public float timeLeft;
     //public GameObject outline;
+    // Assigned once by MainCloudManager: this cloud's cell in the (elevation x azimuth)
+    // grid over the sky region, so both top-to-bottom AND left-to-right coverage stay
+    // even across both initial placement and later respawns.
+    [HideInInspector] public int elevationBand = -1;
+    [HideInInspector] public int azimuthBand = -1;
 
     [Header("Variable Timings and Scales")]
     [SerializeField]
@@ -57,11 +62,16 @@ public class CloudShape : MonoBehaviour
 
     [Tooltip("default was 10.0f")]
     public float minScale = 8;
-    public float maxScale = 8;
+    public float maxScale = 12;
     public float scale = 8;
     public float currScale;
     [SerializeField]
     public Vector3 scaleRatio;
+
+    [Header("Particle Start Size")]
+    [Tooltip("Particle system startSize range (random between two constants) at the reference transform scale (minScale). Scales up proportionately as the cloud's randomized transform scale grows toward maxScale.")]
+    public float particleStartSizeMin = 20f;
+    public float particleStartSizeMax = 30f;
 
     [SerializeField]
     [Tooltip("visible sky bounds = ")]
@@ -80,6 +90,10 @@ public class CloudShape : MonoBehaviour
     private bool _narratorSpeaking = false;
     public bool keepDebugObjectsVisible = false;
     private Coroutine _changeCoroutine;
+    private MainCloudManager _cloudManager;
+    // leftExitX/rightSpawnX/zMin/zMax are authored as local offsets from the CloudManager
+    // parent; these are the resolved world-space bounds actually used at runtime.
+    private float _worldLeftExitX, _worldRightSpawnX, _worldZMin, _worldZMax;
 
     [Header("Sky Orientation")]
     [Tooltip("Clouds orient their top toward this point. Create an empty GameObject high in the sky above the scene centre and assign it here. Leave unset to default to (0, 1000, 0).")]
@@ -92,15 +106,15 @@ public class CloudShape : MonoBehaviour
     public Vector3 windDirection = Vector3.left;
     [Tooltip("Multiplier on the WindZone's main speed.")]
     public float windSpeedMultiplier = 1f;
-    [Tooltip("World X at which the cloud is considered off-screen to the left and triggers a respawn.")]
+    [Tooltip("X at which the cloud is considered off-screen to the left and triggers a respawn. Local offset from the CloudManager parent transform, not a world coordinate — so the whole rig can be repositioned without retuning these.")]
     public float leftExitX = -70f;
-    [Tooltip("World X at which the cloud reappears after wrapping around.")]
+    [Tooltip("X at which the cloud reappears after wrapping around. Local offset from the CloudManager parent transform.")]
     public float rightSpawnX = 210f;
     [Tooltip("How quickly the cloud rotates to face the camera as it drifts. Higher = snappier.")]
     [Range(0.1f, 10f)] public float rotationSpeed = 3f;
     [Tooltip("Seconds for the cloud to fade out before wrapping, and fade in after respawning.")]
     [Range(0.5f, 30f)] public float cloudFadeDuration = 5f;
-    [Tooltip("Z range for cloud placement. Randomized at startup and on each respawn to vary depth.")]
+    [Tooltip("Z range for cloud placement, as a local offset from the CloudManager parent transform. Randomized on each respawn to vary depth.")]
     public float zMin = -30f;
     public float zMax = 30f;
 
@@ -119,7 +133,7 @@ public class CloudShape : MonoBehaviour
         Actions.InactivateCloud += inactivateCloud;
         Actions.Speak += OnNarratorSpeak;
         Actions.ConversationEnded += OnConversationEnded;
-        //Actions.SetRandomScale += scaleMe;
+        Actions.SetRandomScale += scaleMe;
         //_fadeObject.ResetCloudPos += ResetCloudPos;
     }
 
@@ -137,7 +151,7 @@ public class CloudShape : MonoBehaviour
         Actions.InactivateCloud -= inactivateCloud;
         Actions.Speak -= OnNarratorSpeak;
         Actions.ConversationEnded -= OnConversationEnded;
-        //Actions.SetRandomScale -= scaleMe;
+        Actions.SetRandomScale -= scaleMe;
         //_fadeObject.ResetCloudPos -= ResetCloudPos; 
     }
 
@@ -149,13 +163,25 @@ public class CloudShape : MonoBehaviour
         psShape.texture = defaultShape;
         currentShape = psShape.texture;
         _fadeObject = GetComponentInChildren<FadeObjectInOut>();
+
+        _cloudManager = GetComponentInParent<MainCloudManager>();
+        Transform origin = transform.parent != null ? transform.parent : transform;
+        _worldLeftExitX = origin.position.x + leftExitX;
+        _worldRightSpawnX = origin.position.x + rightSpawnX;
+        _worldZMin = origin.position.z + zMin;
+        _worldZMax = origin.position.z + zMax;
+
+        // Done in Awake (not Start) so transform.localScale is already final by the time
+        // MainCloudManager.Start() runs its placement pass — it reads EstimateVisualRadius()
+        // (which depends on this scale) to keep clouds from overlapping, and Unity
+        // guarantees every object's Awake() completes before any object's Start() runs.
+        scaleMe(Random.Range(minScale, maxScale));
     }
 
     //In start we look at the camera and
     //We set the collider reference
     private void Start()
     {
-        //scaleMe(5f);
         ps.Play(); //start particle system
         //set collider size
         Highlighter.GetComponent<Renderer>().bounds = matchBounds(ps.shape, Highlighter);
@@ -176,7 +202,7 @@ public class CloudShape : MonoBehaviour
         _startX = transform.position.x;
         _wrapCooldown = 1f; // prevent wrap check from firing on the very first frame
 
-        Debug.Log($"[CloudShape] {name}: Start pos.x={_startX:F1}  leftExitX={leftExitX}  fadeObject={(_fadeObject != null ? _fadeObject.gameObject.name : "NULL")}");
+        Debug.Log($"[CloudShape] {name}: Start pos.x={_startX:F1}  leftExitX(world)={_worldLeftExitX:F1}  fadeObject={(_fadeObject != null ? _fadeObject.gameObject.name : "NULL")}");
 
         //transform.LookAt(camera, Vector3.back);
         //adjustScaleRatio();
@@ -254,7 +280,7 @@ public class CloudShape : MonoBehaviour
         if (windZone == null) return;
         if (_wrapCooldown > 0f) { _wrapCooldown -= Time.deltaTime; return; }
 
-        if (transform.position.x <= leftExitX)
+        if (transform.position.x <= _worldLeftExitX)
         {
             Debug.Log($"[CloudShape] {name}: Respawn triggered. pos.x={transform.position.x:F1}");
             _cloudIsBusyResetting = true;
@@ -273,13 +299,14 @@ public class CloudShape : MonoBehaviour
         if (psRenderer != null)
             yield return StartCoroutine(FadeCloudAlpha(psRenderer, 1f, 0f, cloudFadeDuration));
 
-        // Teleport by the full cycle width and pick a non-overlapping Z position.
-        float cycleWidth = rightSpawnX - leftExitX;
-        Vector3 pos = transform.position;
-        pos.x += cycleWidth;
-        pos.z = PickNonOverlappingZ(pos.x);
-        transform.position = pos;
-        _startX = pos.x;
+        // Reposition within the marker-defined sky region — the same dome sampling the
+        // initial layout uses — rather than the old flat world-space wind-conveyor
+        // teleport, so respawned clouds land back in the intended visible area instead
+        // of drifting toward wherever leftExitX/rightSpawnX/zMin/zMax happen to point.
+        transform.position = _cloudManager != null
+            ? _cloudManager.PickDomeRespawnPosition(this)
+            : FallbackRespawnPosition();
+        _startX = transform.position.x;
 
         lookatcamera(Camera.main);
 
@@ -291,23 +318,30 @@ public class CloudShape : MonoBehaviour
         _cloudIsBusyResetting = false;
     }
 
-    private float PickNonOverlappingZ(float atX)
+    // Used only if no MainCloudManager reference is available (e.g. this cloud isn't
+    // parented under one): the original flat world-space wind-conveyor teleport, with a
+    // local physics overlap check standing in for the manager's angular-gap check.
+    private Vector3 FallbackRespawnPosition()
     {
+        float cycleWidth = _worldRightSpawnX - _worldLeftExitX;
+        Vector3 pos = transform.position;
+        pos.x += cycleWidth;
+
         Vector3 halfExtents = cloudCollider.bounds.extents;
-        float atY = transform.position.y;
         for (int attempt = 0; attempt < 10; attempt++)
         {
-            float z = Random.Range(zMin, zMax);
-            Collider[] hits = Physics.OverlapBox(new Vector3(atX, atY, z), halfExtents, Quaternion.identity);
+            float z = Random.Range(_worldZMin, _worldZMax);
+            Collider[] hits = Physics.OverlapBox(new Vector3(pos.x, pos.y, z), halfExtents, Quaternion.identity);
             bool overlapping = false;
             foreach (Collider hit in hits)
             {
                 if (hit.transform.root != transform.root)
                 { overlapping = true; break; }
             }
-            if (!overlapping) return z;
+            if (!overlapping) { pos.z = z; return pos; }
         }
-        return Random.Range(zMin, zMax); // fallback if no clear spot found after 10 tries
+        pos.z = Random.Range(_worldZMin, _worldZMax); // fallback if no clear spot found after 10 tries
+        return pos;
     }
 
     public IEnumerator FadeOutAndDeactivate(float duration)
@@ -339,15 +373,36 @@ public class CloudShape : MonoBehaviour
         final.a = to;
         psRenderer.material.color = final;
     }
-    /*
+    
     public void scaleMe(float scaleNum)
     {
         Debug.Log("Scaling_me: " + scaleNum);
-        //ps.
         Vector3 newScale = new Vector3(scaleNum, scaleNum, 2f);
         transform.localScale = newScale;
+
+        // Keep particle startSize proportionate to the transform scale, using minScale
+        // as the 1x reference point (so bigger clouds get proportionately bigger particles).
+        float sizeRatio = scaleNum / minScale;
+        var particleMain = ps.main;
+        particleMain.startSize = new MinMaxCurve(
+            particleStartSizeMin * sizeRatio,
+            particleStartSizeMax * sizeRatio
+        );
     }
-*/
+
+    // Rough estimate of this cloud's visual radius in world units — the shape-fit spawn
+    // volume plus the overhang of its largest particles — used by MainCloudManager to
+    // keep clouds from overlapping enough to obscure their shapes. Requires scaleMe() to
+    // have already run (it's called from Awake, so transform.localScale is final by the
+    // time anything reads this in Start-order code).
+    public float EstimateVisualRadius()
+    {
+        float shapeRadius = scale * 0.5f * transform.localScale.x;
+        float sizeRatio = transform.localScale.x / Mathf.Max(0.01f, minScale);
+        float particleRadius = particleStartSizeMax * sizeRatio * 0.5f;
+        return shapeRadius + particleRadius;
+    }
+
     private void lookatcamera(Camera c)
     {
         if (c == null) return;

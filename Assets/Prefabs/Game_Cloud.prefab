@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8130767965992377511}
   m_Layer: 3
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Cloud
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,7 +156,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.99, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4001077985832519558}
@@ -191,13 +191,17 @@ MonoBehaviour:
   ready: 1
   isTarget: 0
   timeLeft: 0
+  elevationBand: -1
+  azimuthBand: -1
   changeTimeMin: 70
   changeTimeMax: 100
-  minScale: 5
-  maxScale: 8
+  minScale: 7
+  maxScale: 9
   scale: 8
   currScale: 1
   scaleRatio: {x: 0, y: 0, z: 0}
+  particleStartSizeMin: 20
+  particleStartSizeMax: 30
   cloudVisX: -80
   shapeRenderer: {fileID: 4001077985846721382}
   isGameLoop: 0
@@ -206,12 +210,12 @@ MonoBehaviour:
   windZone: {fileID: 0}
   windDirection: {x: -1, y: 0, z: 0}
   windSpeedMultiplier: 1
-  leftExitX: -600
-  rightSpawnX: 125
+  leftExitX: -550
+  rightSpawnX: -5
   rotationSpeed: 3
   cloudFadeDuration: 10
-  zMin: 157
-  zMax: 410
+  zMin: -94
+  zMax: 139
 --- !u!54 &857159031385798982
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -279,7 +283,7 @@ GameObject:
   - component: {fileID: 7433909663605435073}
   m_Layer: 3
   m_Name: Highlight
-  m_TagString: Untagged
+  m_TagString: Cloud
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -293,7 +297,7 @@ Transform:
   m_GameObject: {fileID: 4283325264062887905}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -404,8 +408,8 @@ PrefabInstance:
       value: CloudSystem
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_TagString
+      value: Cloud
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -446,62 +450,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: NoiseModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.rotation3D
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: ExternalForcesModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.maxNumParticles
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: ExternalForcesModule.influenceMask.m_Bits
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.startColor.maxGradient.key0.b
-      value: 0.9577252
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.startColor.maxGradient.key0.g
-      value: 0.9577252
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.startColor.maxGradient.key0.r
-      value: 0.9622642
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: InitialModule.startColor.maxGradient.m_ColorSpace
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19900000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: m_RenderMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19900000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: m_ShadowBias
-      value: 38
-      objectReference: {fileID: 0}
-    - target: {fileID: 19900000, guid: 58f60aff4d3f9524ba4afc859b1c1e89, type: 3}
-      propertyPath: m_MaxParticleSize
-      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

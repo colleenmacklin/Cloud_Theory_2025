@@ -9,6 +9,9 @@ Shader "Custom/InvertSpriteColor"
         _Threshold ("Cloud Threshold", Range(0.01, 1.0)) = 0.5
         _Feather ("Edge Feather", Range(0.0, 0.5)) = 0.1
         [Toggle] _FillMode ("Fill Mode", Float) = 0
+        [Toggle] _CycleRainbow ("Cycle Rainbow", Float) = 1
+        _RainbowIntensity ("Rainbow Intensity", Range(0, 1)) = 0.2
+        _RainbowCycleSpeed ("Rainbow Cycle Speed", Range(0.1, 5)) = 1.0
     }
 
     SubShader
@@ -60,6 +63,9 @@ Shader "Custom/InvertSpriteColor"
                 float _Threshold;
                 float _Feather;
                 float _FillMode;
+                float _CycleRainbow;
+                float _RainbowIntensity;
+                float _RainbowCycleSpeed;
             CBUFFER_END
 
             // Returns soft 0-1 presence value — smoothstep creates a gradient at the shape boundary.
@@ -67,6 +73,15 @@ Shader "Custom/InvertSpriteColor"
             {
                 half4 s = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
                 return smoothstep(max(0.0, _Threshold - _Feather), min(1.0, _Threshold + _Feather), s.a);
+            }
+
+            // hue in [0,1) -> RGB, fully saturated and at full value
+            half3 HueToRGB(half hue)
+            {
+                half r = abs(hue * 6.0 - 3.0) - 1.0;
+                half g = 2.0 - abs(hue * 6.0 - 2.0);
+                half b = 2.0 - abs(hue * 6.0 - 4.0);
+                return saturate(half3(r, g, b));
             }
 
             Varyings vert(Attributes v)
@@ -97,8 +112,14 @@ Shader "Custom/InvertSpriteColor"
                 half outlineMask = (1.0 - current) * maxNearby;
                 half mask = lerp(outlineMask, current, _FillMode);
 
+                // Subtle cycling rainbow tint — same low-intensity blend used on the eye pupil,
+                // mixed into the glow color rather than replacing it outright.
+                half hue = frac(_Time.y * _RainbowCycleSpeed);
+                half3 rainbow = HueToRGB(hue);
+                half3 tintedGlow = lerp(_GlowColor.rgb, rainbow, _RainbowIntensity * _CycleRainbow);
+
                 half4 result;
-                result.rgb = _GlowColor.rgb;
+                result.rgb = tintedGlow;
                 result.a = mask * _GlowColor.a;
                 return result;
             }

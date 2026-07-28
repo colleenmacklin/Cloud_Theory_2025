@@ -166,10 +166,10 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -178,16 +178,16 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxAngleX: 45
-  maxAngleY: 90
-  initialEulerAngle: {x: 0, y: 0, z: 0}
+  maxAngleX: 40
+  maxAngleY: 75
+  initialEulerAngle: {x: 80, y: 0, z: 0}
   followSpeed: 0.2
 --- !u!114 &7517663885565728766
 MonoBehaviour:
@@ -299,14 +299,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1526136193120433192}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.6427876, y: 0, z: 0, w: 0.7660445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4957810526149956177}
   m_Father: {fileID: 1913775266736010647}
-  m_LocalEulerAnglesHint: {x: -80, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6440150855991710245
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -461,12 +461,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StandUpController
   playerCamera: {fileID: 4957810526149956177}
   gazeController: {fileID: 8703613829395222031}
-  walkController: {fileID: 20769021842306223}
   mouseRay: {fileID: 8920914227884744409}
+  lyingDownRig: {fileID: 4967009404034918139}
+  walkingPlayer: {fileID: 0}
   delayBeforeStanding: 3
   standUpDuration: 2.5
   standingEyeHeight: 1.7
   standingYaw: 0
+  debugTriggerNow: 0
 --- !u!114 &20769021842306223
 MonoBehaviour:
   m_ObjectHideFlags: 0
