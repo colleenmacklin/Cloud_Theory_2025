@@ -53,10 +53,14 @@ public class EyeReticule : MonoBehaviour
     [Tooltip("How fast the rainbow hue cycles while focused.")]
     [Range(0.1f, 5f)]
     public float rainbowCycleSpeed = 1f;
+    [Tooltip("Test toggle: also cycle the rainbow tint while the narrator is speaking, independent of hover focus.")]
+    public bool cycleRainbowWhileNarrating = false;
 
     private float _targetOpenValue = 0f;
     private bool _isFocused = false;
+    private bool _narratorSpeaking = false;
     private float _focusBlend = 0f;
+    private float _rainbowBlend = 0f;
     private float _hue = 0f;
     private Quaternion[] _eyeBaseRotations;
     private Vector3 _pupilBaseScale;
@@ -109,6 +113,7 @@ public class EyeReticule : MonoBehaviour
         Actions.OnHoverExit            += OnHoverExit;
         Actions.GetClickedCloud        += OnClicked;
         Actions.ConversationEnded      += OnConversationEnded;
+        Actions.Speak                  += OnNarratorSpeak;
     }
 
     private void OnDisable()
@@ -117,6 +122,7 @@ public class EyeReticule : MonoBehaviour
         Actions.OnHoverExit            -= OnHoverExit;
         Actions.GetClickedCloud        -= OnClicked;
         Actions.ConversationEnded      -= OnConversationEnded;
+        Actions.Speak                  -= OnNarratorSpeak;
     }
 
     // Runs after FEyesAnimator (execution order 200 > 16).
@@ -127,6 +133,10 @@ public class EyeReticule : MonoBehaviour
         AnimateOpenClose();
 
         _focusBlend = Mathf.MoveTowards(_focusBlend, _isFocused ? 1f : 0f, Time.deltaTime * focusBlendSpeed);
+
+        bool rainbowActive = _isFocused || (cycleRainbowWhileNarrating && _narratorSpeaking);
+        _rainbowBlend = Mathf.MoveTowards(_rainbowBlend, rainbowActive ? 1f : 0f, Time.deltaTime * focusBlendSpeed);
+
         AnimateBlinkFrequency();
         AnimatePupilDilation();
         AnimateRainbowTint();
@@ -189,11 +199,11 @@ public class EyeReticule : MonoBehaviour
     {
         if (_pupilMat == null) return;
 
-        if (_focusBlend > 0f)
+        if (_rainbowBlend > 0f)
             _hue = Mathf.Repeat(_hue + Time.deltaTime * rainbowCycleSpeed, 1f);
 
         Color rainbow = Color.HSVToRGB(_hue, 1f, 1f);
-        float blend = rainbowIntensity * _focusBlend;
+        float blend = rainbowIntensity * _rainbowBlend;
 
         _pupilMat.SetColor("_BaseColor", Color.Lerp(_pupilBaseColor, rainbow, blend));
         _pupilMat.SetColor("_EmissionColor", Color.Lerp(_pupilBaseEmission, rainbow, blend));
@@ -218,9 +228,12 @@ public class EyeReticule : MonoBehaviour
         eyesAnimator.ForceBlink();
     }
 
+    private void OnNarratorSpeak() => _narratorSpeaking = true;
+
     private void OnConversationEnded()
     {
         _targetOpenValue = 0f;
         _isFocused = false;
+        _narratorSpeaking = false;
     }
 }

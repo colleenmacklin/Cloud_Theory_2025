@@ -9020,6 +9020,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 317135704}
     m_Modifications:
     - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: zMax
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: zMin
+      value: 167
+      objectReference: {fileID: 0}
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
       propertyPath: windZone
       value: 
       objectReference: {fileID: 27817954}
@@ -9027,6 +9035,14 @@ PrefabInstance:
       propertyPath: SkyCenter
       value: 
       objectReference: {fileID: 1350702777}
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: leftExitX
+      value: -550
+      objectReference: {fileID: 0}
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: rightSpawnX
+      value: 115
+      objectReference: {fileID: 0}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -10860,6 +10876,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4055571998922016943, guid: baab2c6cc48d21b47bc6c4965fcefccd,
         type: 3}
+      propertyPath: m_moonOpacity
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4055571998922016943, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
       propertyPath: m_rayleighColor.g
       value: 0.90761256
       objectReference: {fileID: 0}
@@ -10985,6 +11006,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
         type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[1].m_propertyDataList.Array.data[4].m_floatData
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
       propertyPath: m_propertyGroupDataList.Array.data[2].m_propertyDataList.Array.data[0].m_floatData
       value: 1484.25
       objectReference: {fileID: 0}
@@ -11007,6 +11033,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[1].m_gradientData.ctime5
       value: 45489
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[1].time
+      value: 5.5999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[6].time
+      value: 18.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[0].value
+      value: 0.4500061
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[1].value
+      value: 0.39522704
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[6].value
+      value: 0.39284667
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810380819494943827, guid: baab2c6cc48d21b47bc6c4965fcefccd,
+        type: 3}
+      propertyPath: m_propertyGroupDataList.Array.data[3].m_propertyDataList.Array.data[0].m_curveData.m_Curve.Array.data[7].value
+      value: 0.45952758
       objectReference: {fileID: 0}
     - target: {fileID: 7953403546012018190, guid: baab2c6cc48d21b47bc6c4965fcefccd,
         type: 3}
@@ -12405,6 +12466,7 @@ MonoBehaviour:
   focusBlendSpeed: 4
   rainbowIntensity: 0.2
   rainbowCycleSpeed: 1
+  cycleRainbowWhileNarrating: 0
 --- !u!33 &8252293787267594751
 MeshFilter:
   m_ObjectHideFlags: 0
