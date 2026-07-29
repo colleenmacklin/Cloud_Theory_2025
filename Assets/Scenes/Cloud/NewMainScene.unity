@@ -4170,7 +4170,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4220,7 +4220,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    maxLights: 20
+    maxLights: 100
   TrailModule:
     enabled: 0
     mode: 0
@@ -8397,7 +8397,7 @@ Transform:
   m_GameObject: {fileID: 1086320921}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6, y: 120, z: 319}
+  m_LocalPosition: {x: 0, y: 120, z: 319}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9371,6 +9371,10 @@ PrefabInstance:
       propertyPath: SkyCenter
       value: 
       objectReference: {fileID: 1350702777}
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: cloudVisX
+      value: -200
+      objectReference: {fileID: 0}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name
@@ -9798,6 +9802,10 @@ PrefabInstance:
       propertyPath: SkyCenter
       value: 
       objectReference: {fileID: 1350702777}
+    - target: {fileID: 1732193966, guid: 47466df784a8446dcb08284b843ca859, type: 3}
+      propertyPath: leftExitX
+      value: -200
+      objectReference: {fileID: 0}
     - target: {fileID: 4001077985798978744, guid: 47466df784a8446dcb08284b843ca859,
         type: 3}
       propertyPath: m_Name

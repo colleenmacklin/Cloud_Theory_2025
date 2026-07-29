@@ -38,6 +38,8 @@ public class MainCloudManager : MonoBehaviour
     [Range(0f, 1f)] public float allowedOverlapFraction = 0.35f;
     [Tooltip("How many candidate positions to try before settling for the least-overlapping one found.")]
     public int placementAttempts = 30;
+    [Tooltip("Fraction of the total azimuth range, measured in from rightMarker's edge, that respawning clouds are placed within — mimicking a conveyor belt where clouds drift left and exit, then re-enter from the right. Small values (e.g. 0.25) keep respawns close to the right edge; 1 allows anywhere in the region.")]
+    [Range(0.05f, 1f)] public float respawnAzimuthZoneFraction = 0.3f;
 
     [Header("Sky Time Progression")]
     [Tooltip("Azure Core System to advance when clouds are selected.")]
@@ -311,31 +313,72 @@ public class MainCloudManager : MonoBehaviour
         return minClearance;
     }
 
-    // Called by CloudShape when respawning after a wind-wrap, to pick a fresh position
-    // within the marker-defined sky region — the same grid-cell-confined dome sampling
-    // the initial layout uses — so respawned clouds land back in their own cell instead
-    // of drifting via the old world-space wind-conveyor bounds
-    // (leftExitX/rightSpawnX/zMin/zMax), which are anchored to the CloudManager's
-    // transform rather than the player's. Falls back to the cloud's current position if
-    // the sky region isn't fully configured or it was never assigned a cell.
+    // Called by CloudShape when respawning after a wind-wrap. Wind only ever drags
+    // clouds toward -X (left) regardless of a cloud's assigned azimuthBand, so a cloud
+    // whose band happens to sit on the left of the region would keep reappearing on the
+    // left forever if respawn reused PickDomePositionInCell (its original band) — leaving
+    // the right side empty and clumping clouds back near where they'd just disappeared.
+    // Respawn instead reappears near rightMarker's edge, like a scrolling conveyor belt.
+    // Elevation still uses the cloud's original elevationBand row, so vertical
+    // stratification holds over time; only azimuth is re-picked. Falls back to the
+    // cloud's current position if the sky region isn't fully configured or it was never
+    // assigned a band.
     public Vector3 PickDomeRespawnPosition(CloudShape self)
     {
         if (playerViewpoint == null || topMarker == null || bottomMarker == null
-            || leftMarker == null || rightMarker == null
-            || self.elevationBand < 0 || self.azimuthBand < 0)
+            || leftMarker == null || rightMarker == null || self.elevationBand < 0)
             return self.transform.position;
 
-        // Recompute the same grid dimensions used at initial layout, so respawns land
-        // back in the same cell (rows/cols are deterministic from Clouds.Count alone, so
-        // this matches as long as the cloud count didn't change mid-game).
-        ComputeGridDimensions(out int rows, out int cols);
+        ComputeGridDimensions(out int rows, out _);
 
         var others = new List<(Vector3 pos, float radius)>(Clouds.Count);
         foreach (var cloud in Clouds)
             if (cloud != null && cloud != self)
                 others.Add((cloud.transform.position, cloud.EstimateVisualRadius()));
 
-        return PickDomePositionInCell(self, rows, cols, others);
+        return PickRightEdgeRespawnPosition(self, rows, others);
+    }
+
+    // Picks an elevation/azimuth pair for a respawning cloud: elevation confined to the
+    // cloud's own elevationBand row (as at initial layout), azimuth confined to the
+    // rightmost respawnAzimuthZoneFraction slice of the region (measured in from
+    // rightMarker's actual azimuth — not azimuthCenter + azimuthRange/2, which edge that
+    // is depends on which side of the wraparound the markers happen to sit on).
+    // Rejection-sampled against `others` for angular clearance, same as initial layout.
+    private Vector3 PickRightEdgeRespawnPosition(CloudShape cloud, int rows, List<(Vector3 pos, float radius)> others)
+    {
+        GetSkyRegionBounds(out float minElevation, out float maxElevation, out float azimuthCenter, out float azimuthRange);
+
+        float rowHeight = (maxElevation - minElevation) / rows;
+        int row = Mathf.Clamp(cloud.elevationBand, 0, rows - 1);
+        float bandMinElev = minElevation + row * rowHeight;
+        float bandMaxElev = bandMinElev + rowHeight;
+
+        float azRightEdge = AzimuthOf(rightMarker);
+        float inward = Mathf.Sign(Mathf.DeltaAngle(azRightEdge, azimuthCenter));
+        float zoneWidth = azimuthRange * respawnAzimuthZoneFraction;
+        float azimuthA = azRightEdge;
+        float azimuthB = azRightEdge + inward * zoneWidth;
+        float bandMinAz = Mathf.Min(azimuthA, azimuthB);
+        float bandMaxAz = Mathf.Max(azimuthA, azimuthB);
+
+        float candidateRadius = cloud.EstimateVisualRadius();
+
+        Vector3 best = playerViewpoint.position + Vector3.forward;
+        float bestClearance = float.MinValue;
+
+        for (int attempt = 0; attempt < placementAttempts; attempt++)
+        {
+            float elevation = Random.Range(bandMinElev, bandMaxElev);
+            float azimuth = Random.Range(bandMinAz, bandMaxAz);
+            Vector3 candidate = DomeToWorldPosition(elevation, azimuth, cloud.transform.position.y);
+
+            float clearance = MinAngularClearanceDeg(candidate, candidateRadius, others);
+            if (clearance >= 0f) return candidate;
+            if (clearance > bestClearance) { bestClearance = clearance; best = candidate; }
+        }
+
+        return best;
     }
 
     public void GetClickedCloud(GameObject c) //from Raycaster

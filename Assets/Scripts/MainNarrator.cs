@@ -99,7 +99,7 @@ public class MainNarrator : MonoBehaviour
                 _tracery = TraceryEngine.FromTextAsset(traceryGrammar);
             }
             // Use the last seen cloud as shapeName context; fall back to "clouds".
-            string context = cloudHistory.Count > 0 ? cloudHistory[cloudHistory.Count - 1] : "clouds";
+            string context = cloudHistory.Count > 0 ? parseName(cloudHistory[^1]) : "clouds";
             string result = _tracery.Generate("climax", context);
             StartNarration(result);
         }

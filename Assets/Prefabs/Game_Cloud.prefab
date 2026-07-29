@@ -210,8 +210,8 @@ MonoBehaviour:
   windZone: {fileID: 0}
   windDirection: {x: -1, y: 0, z: 0}
   windSpeedMultiplier: 1
-  leftExitX: -550
-  rightSpawnX: -5
+  leftExitX: -200
+  rightSpawnX: 5
   rotationSpeed: 3
   cloudFadeDuration: 10
   zMin: -94
