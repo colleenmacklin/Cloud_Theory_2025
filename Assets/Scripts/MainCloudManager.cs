@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AzureSky;
+using FMODUnity;
 
 public class MainCloudManager : MonoBehaviour
 {
@@ -53,6 +54,13 @@ public class MainCloudManager : MonoBehaviour
 
     private float _startTimeline;
     private bool _climaxEntered = false;
+    private bool _cricketsCued = false;
+
+    [Header("Ambient Sound")]
+    [Tooltip("FMOD event for the nighttime cricket ambiance.")]
+    public EventReference cricketsEvent;
+    [Tooltip("How far through the day arc (0–1) before the birds cross-fade to crickets. 0.5 = halfway.")]
+    [Range(0f, 1f)] public float cricketsCrossoverPoint = 0.5f;
 
     private Queue<Texture2D> _remainingTargets = new Queue<Texture2D>();
 
@@ -456,6 +464,12 @@ public class MainCloudManager : MonoBehaviour
         float targetTimeline = Mathf.Lerp(_startTimeline, sunsetTimeline, t);
 
         skySystem.timeSystem.StartTimelineTransition(targetTimeline, transitionDuration);
+
+        if (!_cricketsCued && t >= cricketsCrossoverPoint && !cricketsEvent.IsNull && AudioManager.instance != null)
+        {
+            _cricketsCued = true;
+            AudioManager.instance.swapTrack(cricketsEvent);
+        }
     }
 
     private void OnNarratorSpeak()

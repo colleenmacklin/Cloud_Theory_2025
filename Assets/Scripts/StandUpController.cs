@@ -14,6 +14,8 @@ public class StandUpController : MonoBehaviour
     public SimpleCameraController gazeController;
     [Tooltip("MouseRay cloud-selection script to stop before animating.")]
     public MouseRay mouseRay;
+    [Tooltip("The 'Reticule' root GameObject (FollowCursor, the glass-ball reticule, and the EyeReticule eye rig all live under it) — deactivated before animating, since mouse-based cloud selection is over once standing begins.")]
+    public GameObject reticule;
     [Tooltip("The root GameObject to deactivate after standing. Usually 'this' — drag in this object.")]
     public GameObject lyingDownRig;
 
@@ -134,5 +136,8 @@ public class StandUpController : MonoBehaviour
                 c.StopAllCoroutines();
                 c.enabled = false;
             }
+
+        if (reticule != null)
+            reticule.SetActive(false);
     }
 }

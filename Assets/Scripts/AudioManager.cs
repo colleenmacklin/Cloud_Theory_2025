@@ -5,8 +5,7 @@ using FMOD.Studio;
 
 public class AudioManager : MonoBehaviour
 {
-    [EventRef]
-    public string defaultAmbiance;
+    public EventReference defaultAmbiance;
     public static AudioManager instance;
 
     private EventInstance _trackA;
@@ -21,13 +20,13 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        if (string.IsNullOrEmpty(defaultAmbiance)) return;
+        if (defaultAmbiance.IsNull) return;
         _trackA = RuntimeManager.CreateInstance(defaultAmbiance);
         _trackA.setVolume(1f);
         _trackA.start();
     }
 
-    public void swapTrack(string newEvent)
+    public void swapTrack(EventReference newEvent)
     {
         StopAllCoroutines();
         StartCoroutine(CrossFade(newEvent));
@@ -38,7 +37,7 @@ public class AudioManager : MonoBehaviour
         swapTrack(defaultAmbiance);
     }
 
-    private IEnumerator CrossFade(string newEvent)
+    private IEnumerator CrossFade(EventReference newEvent)
     {
         float timeToFade = 2.25f;
         float elapsed = 0f;

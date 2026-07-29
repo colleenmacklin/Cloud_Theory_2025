@@ -42,7 +42,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Environment.assets.bank
   Name: Environment.assets
   StudioPath: bank:/Environment.assets
-  lastModified: 639161880043609329
+  lastModified: 639208695198748383
   FileSizes: []
   Exists: 1
 --- !u!114 &-7835260304542791820
@@ -88,7 +88,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.assets.bank
   Name: Master.assets
   StudioPath: bank:/Master.assets
-  lastModified: 639193185467392519
+  lastModified: 639208695199306418
   FileSizes: []
   Exists: 1
 --- !u!114 &-7699958840671564738
@@ -235,33 +235,6 @@ MonoBehaviour:
     Data4: 1702511477
   Banks:
   - {fileID: -3744055800434566604}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-5253186898940104489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Environment/New Event
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/Environment/New Event
-  Guid:
-    Data1: -1496492846
-    Data2: 1298210678
-    Data3: -1839692636
-    Data4: -1782243796
-  Banks:
-  - {fileID: 936427358818151606}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -665,10 +638,8 @@ MonoBehaviour:
   - {fileID: -7822586158578280218}
   - {fileID: 5120415391666884255}
   EditorEvents:
-  - {fileID: 8300391102367994556}
   - {fileID: -2724346746837101138}
   - {fileID: -2753367376821258866}
-  - {fileID: -5253186898940104489}
   - {fileID: -4697901741179949579}
   - {fileID: -7330823879048831837}
   - {fileID: -7835260304542791820}
@@ -684,52 +655,51 @@ MonoBehaviour:
   - {fileID: 8518272808290123305}
   - {fileID: 1655403546461985781}
   - {fileID: -3821621073557257618}
+  - {fileID: 8528143758684215268}
   EditorParameters: []
   MasterBanks:
   - {fileID: 8848480231496342160}
   StringsBanks:
   - {fileID: 1134484694525158492}
   cacheVersion: 131859
-  cacheTime: 639193199139851447
+  cacheTime: 639208695199310074
   SerializableEventsDict:
-  - key: event:/Environment/New Event 2
-    index: 0
   - key: event:/Environment/Birds
-    index: 1
+    index: 0
   - key: event:/Environment/ambiance
-    index: 2
-  - key: event:/Environment/New Event
-    index: 3
+    index: 1
   - key: event:/Instruments/SynthNote
-    index: 4
+    index: 2
   - key: event:/Instruments/MultiInstrument
-    index: 5
+    index: 3
   - key: event:/Instruments/SynthNote2
-    index: 6
+    index: 4
   - key: event:/Instruments/PlatterSnap
-    index: 7
+    index: 5
   - key: event:/Instruments/PlatterKick
-    index: 8
+    index: 6
   - key: event:/Instruments/PlatterHihats
-    index: 9
+    index: 7
   - key: event:/Instruments/PlatterSnare
-    index: 10
+    index: 8
   - key: event:/Instruments/PlatterRim
-    index: 11
+    index: 9
   - key: event:/Instruments/BearKick
-    index: 12
+    index: 10
   - key: event:/Instruments/SynthNote_blend
-    index: 13
+    index: 11
   - key: event:/Instruments/Drone3
-    index: 14
+    index: 12
   - key: event:/Instruments/Drone1
-    index: 15
+    index: 13
   - key: event:/Instruments/Drone2
-    index: 16
+    index: 14
   - key: event:/Instruments/Drone5
-    index: 17
+    index: 15
   - key: event:/Instruments/Drone4
-    index: 18
+    index: 16
+  - key: event:/Environment/Peepers
+    index: 17
 --- !u!114 &183528295010630767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,7 +733,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Environment.bank
   Name: Environment
   StudioPath: bank:/Environment
-  lastModified: 639161880043459676
+  lastModified: 639208695190373234
   FileSizes: []
   Exists: 1
 --- !u!114 &1030264609208752923
@@ -808,10 +778,10 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639193185467404889
+  lastModified: 639208695199310074
   FileSizes:
   - Name: 
-    Value: 2168
+    Value: 2160
   Exists: 1
 --- !u!114 &1202106710892654856
 MonoBehaviour:
@@ -917,7 +887,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.bank
   Name: Instruments
   StudioPath: bank:/Instruments
-  lastModified: 639193199139554724
+  lastModified: 639208695198938342
   FileSizes: []
   Exists: 1
 --- !u!114 &2220986955537619405
@@ -935,7 +905,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.assets.bank
   Name: Instruments.assets
   StudioPath: bank:/Instruments.assets
-  lastModified: 639193199139851447
+  lastModified: 639208695199202798
   FileSizes: []
   Exists: 1
 --- !u!114 &2856251056417772967
@@ -1211,33 +1181,6 @@ MonoBehaviour:
   lastModified: 639156045324093812
   FileSizes: []
   Exists: 1
---- !u!114 &8300391102367994556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Environment/New Event 2
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/Environment/New Event 2
-  Guid:
-    Data1: -213373370
-    Data2: 1100450742
-    Data3: 331195046
-    Data4: -284257360
-  Banks:
-  - {fileID: 936427358818151606}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
 --- !u!114 &8518272808290123305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1261,6 +1204,33 @@ MonoBehaviour:
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8528143758684215268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Environment/Peepers
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Environment/Peepers
+  Guid:
+    Data1: -213373370
+    Data2: 1100450742
+    Data3: 331195046
+    Data4: -284257360
+  Banks:
+  - {fileID: 936427358818151606}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -1307,7 +1277,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639193185467390556
+  lastModified: 639208695199302599
   FileSizes: []
   Exists: 1
 --- !u!114 &8915606884590502789
