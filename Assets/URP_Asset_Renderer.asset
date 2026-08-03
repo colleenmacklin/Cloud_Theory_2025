@@ -26,8 +26,9 @@ MonoBehaviour:
     probeSamplingDebugMesh: {fileID: 0}
     probeSamplingDebugTexture: {fileID: 0}
     probeVolumeBlendStatesCS: {fileID: 0}
-  m_RendererFeatures: []
-  m_RendererFeatureMap: 
+  m_RendererFeatures:
+  - {fileID: 2904199870555400436}
+  m_RendererFeatureMap: f4a8302965ca4d28
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -56,3 +57,19 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &2904199870555400436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f44c99f39cf5a4e9cd4cd047b1e2b2, type: 3}
+  m_Name: AzureFogScatteringFeature
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::UnityEngine.AzureSky.AzureFogScatteringFeature
+  m_Active: 1
+  m_fogRenderPassEvent: 350
+  m_fogRendererMaterial: {fileID: 2100000, guid: 7c44f023cdb4c0143a67ffa79e3be149,
+    type: 2}

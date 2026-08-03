@@ -35,7 +35,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   filter:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   downscale:
     m_OverrideState: 0
@@ -108,13 +108,13 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 35.26
+    m_Value: 50
   aperture:
     m_OverrideState: 1
-    m_Value: 4.8
+    m_Value: 2.5
   focalLength:
     m_OverrideState: 1
-    m_Value: 59
+    m_Value: 65
   bladeCount:
     m_OverrideState: 1
     m_Value: 5
