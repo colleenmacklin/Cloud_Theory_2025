@@ -192,13 +192,15 @@ public class Raycaster : MonoBehaviour
                 break;
 
             case MouseState.READING:
-
-                //if (gameState.Gameloop)
-                //{
-                    StopGazeTracking();
-                //}
-                    //textBoxControl.Check();//bad mutation management.
-                
+                // Narration is in progress — block all cloud interaction.
+                // Actions.Speak already called StopGazeTracking() once to start
+                // LookAtSelection and disable the gaze mover.
+                // Actions.ConversationEnded will call StartGazeTracking() to
+                // return to EMPTY when narration finishes.
+                // Do NOT call StopGazeTracking() here every frame — it chains
+                // through ReadingMode() → StartGazeTracking() which resets state
+                // to EMPTY on every Update tick, allowing cloud re-selection
+                // during narration and breaking the second-cloud selection flow.
                 break;
         }
         Debug.DrawRay(origin, direction * rayLength, Color.red);

@@ -67,6 +67,7 @@ public class MainNarrator : MonoBehaviour
     }
     public void LookAtCloud(string s)
     {
+        if (isNarrating) return; // guard against re-entry while already speaking
         cloudHistory.Add(s);
         chosenCloud = parseName(s);
         respondToShape(s);
@@ -146,6 +147,7 @@ public class MainNarrator : MonoBehaviour
                 lines.Enqueue(line);
         }
 
+        isNarrating = true;
         Actions.Speak?.Invoke();
         SpeakNextLine();
     }
