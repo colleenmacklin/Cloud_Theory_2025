@@ -58,6 +58,12 @@ public static class Actions
     public static Action Climax;
     public static Action StartClimaxNarration; // narrator speaks freely about all clouds seen
     public static Action StandUp;              // fires after clouds fade; triggers stand-up
+    // Set alongside StandUp's invoke. StandUp itself is a transient event — anything that
+    // loads (e.g. the Forest scene) after it already fired in Cloud would never receive
+    // it, since the Cloud scene (and whatever would re-invoke it) is unloaded by then.
+    // This flag survives scene loads (it's a plain static field, not scene-bound), so
+    // late-loading listeners can check it directly instead of only waiting on the event.
+    public static bool HasStoodUp = false;
 
     // inter-actions
     public static Action Highlight;

@@ -90,6 +90,10 @@ namespace Forest
             try
             {
                 var inst = RuntimeManager.CreateInstance(noteEvent);
+                // Required once the event has a spatializer: sets 3D attributes immediately
+                // and keeps them updated as the animal hops, so distance-based volume/pan
+                // tracks it correctly instead of FMOD warning and playing unpositioned.
+                RuntimeManager.AttachInstanceToGameObject(inst, transform);
                 inst.setParameterByName(midiNoteParam, midiNote);
                 inst.setVolume(noteVolume);
                 inst.start();

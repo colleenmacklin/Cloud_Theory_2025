@@ -7872,7 +7872,7 @@ MonoBehaviour:
         m_targetMaterial: {fileID: 0}
         m_targetComponentName: AzureSkyRenderer
         m_targetPropertyName: sunOpacity
-    - m_floatData: 1
+    - m_floatData: 0.8
       m_colorData: {r: 1, g: 1, b: 1, a: 1}
       m_curveData:
         serializedVersion: 2
@@ -8024,7 +8024,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_name: Outer Space
   - m_propertyDataList:
-    - m_floatData: 1500
+    - m_floatData: 1484.25
       m_colorData: {r: 1, g: 1, b: 1, a: 1}
       m_curveData:
         serializedVersion: 2
@@ -9047,7 +9047,7 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.35
+          value: 0.4500061
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -9055,8 +9055,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 5.5
-          value: 0.35
+          time: 5.5999985
+          value: 0.39522704
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -9101,7 +9101,7 @@ MonoBehaviour:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 18.5
-          value: 0.35
+          value: 0.39284667
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -9110,7 +9110,7 @@ MonoBehaviour:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 24
-          value: 0.35
+          value: 0.45952758
           inSlope: 0
           outSlope: 0
           tangentMode: 1
@@ -9311,11 +9311,11 @@ MonoBehaviour:
         key6: {r: 0.15917587, g: 0.27900153, b: 0.46226418, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 11372
-        ctime1: 17694
-        ctime2: 27756
+        ctime1: 19275
+        ctime2: 25636
         ctime3: 33539
-        ctime4: 39128
-        ctime5: 47841
+        ctime4: 39321
+        ctime5: 45489
         ctime6: 52621
         ctime7: 0
         atime0: 0
@@ -12804,7 +12804,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509639894520734616}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6672808, y: 0.21484612, z: -0.21039286, w: 0.6814047}
+  m_LocalRotation: {x: 0.14302585, y: 0.29730517, z: -0.045095887, w: 0.9429314}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -12835,7 +12835,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1590880602106836547}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.21039289, y: -0.68140477, z: -0.6672808, w: 0.2148461}
+  m_LocalRotation: {x: -0.045095902, y: -0.9429315, z: -0.14302586, w: 0.29730517}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -25313,22 +25313,22 @@ MonoBehaviour:
     m_timeMode: 0
     m_timeDirection: 0
     m_timeLoop: 0
-    m_timeline: 11.92
+    m_timeline: 7.15
     m_latitude: 0
     m_longitude: 0
     m_utc: 0
-    m_day: 21
+    m_day: 25
     m_month: 7
-    m_year: 2025
+    m_year: 2026
     m_startTime: 6.5
     m_dayLength: 24
     m_minLightAltitude: 0
     m_dawnTime: 6
     m_duskTime: 18
-    m_timeOfDay: 11.92
-    m_hour: 11
-    m_minute: 55
-    m_evaluationTime: 11.92
+    m_timeOfDay: 7.15
+    m_hour: 7
+    m_minute: 9
+    m_evaluationTime: 7.15
     m_timeLengthCurve:
       serializedVersion: 2
       m_Curve:
@@ -25375,6 +25375,7 @@ MonoBehaviour:
     m_dayNumberList:
     - 
     - 
+    - 
     - 1
     - 2
     - 3
@@ -25414,8 +25415,7 @@ MonoBehaviour:
     - 
     - 
     - 
-    - 
-    m_selectedCalendarDay: 22
+    m_selectedCalendarDay: 27
   m_weatherSystem:
     m_weatherPropertyGroupList:
     - m_name: Scattering
@@ -28721,8 +28721,8 @@ MonoBehaviour:
       m_position: {x: 0, y: 0, z: 0}
     m_currentWeatherPreset: {fileID: 6810380819494943827}
     m_weatherZoneTrigger: {fileID: 0}
-    m_evaluationTime: 11.92
-    m_evaluationTimeGradient: 0.49666667
+    m_evaluationTime: 7.15
+    m_evaluationTimeGradient: 0.29791668
     m_weatherTransitionProgress: 0
   m_eventSystem:
     m_onMinuteChangeEvent:
@@ -28833,13 +28833,13 @@ MonoBehaviour:
   m_scattering: 15
   m_skyLuminance: 0.1
   m_exposure: 2
-  m_rayleighColor: {r: 1, g: 1, b: 1, a: 1}
-  m_mieColor: {r: 0.9993696, g: 0.9952969, b: 0.9886786, a: 1}
+  m_rayleighColor: {r: 0.7970276, g: 0.90761256, b: 1, a: 1}
+  m_mieColor: {r: 0.9622642, g: 0.71845603, b: 0.32226774, a: 1}
   m_sunSize: 1
   m_sunOpacity: 1
   m_sunColor: {r: 1, g: 1, b: 1, a: 1}
   m_moonSize: 1
-  m_moonOpacity: 1
+  m_moonOpacity: 0.8
   m_moonColor: {r: 1, g: 1, b: 1, a: 1}
   m_moonRotationOffset: {x: 0, y: 0, z: 0}
   m_starsIntensity: 0
@@ -28850,7 +28850,7 @@ MonoBehaviour:
   m_constellationColor: {r: 0, g: 0.2784314, b: 1, a: 1}
   m_starfieldRotationOffset: {x: 0, y: 90, z: 0}
   m_mieDistance: 0.5
-  m_globalFogDistance: 1500
+  m_globalFogDistance: 1484.25
   m_globalFogSmoothStep: 0.25
   m_globalFogDensity: 1
   m_heightFogDistance: 500
@@ -28859,13 +28859,13 @@ MonoBehaviour:
   m_heightFogStartAltitude: 0
   m_heightFogEndAltitude: 50
   m_fogBluishIntensity: 0.15
-  m_heightFogScatteringMultiplier: 0.5
+  m_heightFogScatteringMultiplier: 0.11652659
   m_dynamicCloudAltitude: 7.5
   m_dynamicCloudDirection: 0
   m_dynamicCloudSpeed: 0.1
   m_dynamicCloudDensity: 0.75
-  m_dynamicCloudColor1: {r: 0.4217128, g: 0.50172997, b: 0.73529416, a: 1}
-  m_dynamicCloudColor2: {r: 1, g: 1, b: 1, a: 1}
+  m_dynamicCloudColor1: {r: 0.41562858, g: 0.49977133, b: 0.73277485, a: 1}
+  m_dynamicCloudColor2: {r: 1, g: 0.82233804, b: 0.63198596, a: 1}
   m_updateMode: 1
   m_cloudMode: 0
 --- !u!114 &-5809132258814154861
@@ -46286,7 +46286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4380352413285918650}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000030583266, y: 0.7144731, z: -0.69966286, w: -0.00000003123064}
+  m_LocalRotation: {x: -0.0000000065552546, y: 0.98869103, z: -0.14996675, w: -0.000000043217057}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -46303,8 +46303,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 1, g: 0.8835168, b: 0.89609283, a: 1}
-  m_Intensity: 0.5766364
+  m_Color: {r: 1, g: 0.22022325, b: 0.025786271, a: 1}
+  m_Intensity: 0.38885078
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -46343,10 +46343,10 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0.5
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -80266,7 +80266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7983001508026348327}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6672808, y: 0.21484613, z: -0.21039286, w: 0.68140477}
+  m_LocalRotation: {x: 0.14302586, y: 0.2973052, z: -0.045095894, w: 0.9429315}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -84900,7 +84900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4791347190383301350}
   - component: {fileID: 6071653429691241620}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: WindZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

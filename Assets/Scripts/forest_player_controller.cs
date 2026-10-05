@@ -70,7 +70,7 @@ public class SimpleFPSController : MonoBehaviour
     // Returns true if the player is on (or very close to) the terrain.
     private bool SnapToTerrain()
     {
-        Terrain terrain = Terrain.activeTerrain;
+        Terrain terrain = TerrainAt(transform.position);
         if (terrain == null) return false;
 
         float groundY  = terrain.SampleHeight(transform.position) + terrain.transform.position.y;
@@ -83,5 +83,21 @@ public class SimpleFPSController : MonoBehaviour
         pos.y = targetY;
         transform.position = pos;
         return true;
+    }
+
+    // Terrain.activeTerrain is unreliable when multiple Terrain tiles are active at once
+    // (this project bundles Cloud/Rave/Forest tiles in one shared prefab, all active
+    // together in the Forest scene) — it can resolve to a tile that doesn't cover this
+    // XZ position at all. Find the tile whose bounds actually contain pos instead.
+    private static Terrain TerrainAt(Vector3 pos)
+    {
+        foreach (Terrain t in Terrain.activeTerrains)
+        {
+            Vector3 local = pos - t.transform.position;
+            Vector3 size = t.terrainData.size;
+            if (local.x >= 0f && local.x <= size.x && local.z >= 0f && local.z <= size.z)
+                return t;
+        }
+        return Terrain.activeTerrain;
     }
 }

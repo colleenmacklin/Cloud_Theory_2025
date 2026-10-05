@@ -450,6 +450,7 @@ public class MainCloudManager : MonoBehaviour
                 StartCoroutine(cloud.FadeOutAndDeactivate(endingFadeDuration));
 
         yield return new WaitForSeconds(endingFadeDuration);
+        Actions.HasStoodUp = true;
         Actions.StandUp?.Invoke();
     }
 

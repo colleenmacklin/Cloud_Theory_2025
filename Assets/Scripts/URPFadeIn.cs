@@ -23,10 +23,26 @@ public class URPFadeIn : MonoBehaviour
         public Color    targetColor; // original color at full alpha
     }
 
+    [Header("Debug")]
+    [Tooltip("Tick in Play mode to force the fade-in immediately, without waiting for Actions.StandUp or Actions.HasStoodUp.")]
+    public bool debugTriggerNow = false;
+
     private List<RendererEntry> _entries = new List<RendererEntry>();
+    private bool _triggered = false;
 
     private void OnEnable()  => Actions.StandUp += Trigger;
     private void OnDisable() => Actions.StandUp -= Trigger;
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (debugTriggerNow)
+        {
+            debugTriggerNow = false;
+            Trigger();
+        }
+#endif
+    }
 
     private void Awake()
     {
@@ -36,12 +52,32 @@ public class URPFadeIn : MonoBehaviour
             Color original = mat.HasProperty(BaseColor) ? mat.GetColor(BaseColor) : mat.color;
             _entries.Add(new RendererEntry { renderer = r, targetColor = original });
 
+            Debug.Log($"[URPFadeIn] {name}: found renderer '{r.gameObject.name}' ({r.GetType().Name}), " +
+                      $"material '{mat.name}', targetColor={original}, hasBaseColor={mat.HasProperty(BaseColor)}");
+
             // Hide by disabling the renderer — works regardless of Surface Type.
             r.enabled = false;
         }
+        Debug.Log($"[URPFadeIn] {name}: found {_entries.Count} Renderer(s) to fade. " +
+                  "If this is 0, this object has nothing for URPFadeIn to act on (e.g. a Light isn't a Renderer).");
     }
 
-    public void Trigger() => StartCoroutine(FadeInCoroutine());
+    // Actions.StandUp is a transient event fired once in the Cloud scene. If this object
+    // instead lives in a scene that loads afterward (e.g. Forest), that event has already
+    // fired and gone and will never come again — so also check the persistent flag that's
+    // set alongside it, in case standing up already happened before this object existed.
+    private void Start()
+    {
+        if (Actions.HasStoodUp) Trigger();
+    }
+
+    public void Trigger()
+    {
+        Debug.Log($"[URPFadeIn] {name}: Trigger() called (already triggered: {_triggered}).");
+        if (_triggered) return;
+        _triggered = true;
+        StartCoroutine(FadeInCoroutine());
+    }
 
     private IEnumerator FadeInCoroutine()
     {

@@ -68,6 +68,11 @@ namespace Forest
         private float _lastPlayerDistance = Mathf.Infinity;
         private Vector3 _playerPosAtLastBar;
         private bool _havePlayerPosAtLastBar;
+        // Set the first time the player is spotted (see UpdateWary). The stand-still
+        // reward-hop is gated on this rather than distance (see OnBar) so the animal
+        // stays put at spawn instead of creeping toward a player who hasn't approached
+        // it yet — it only starts reacting once it's actually been startled once.
+        private bool _hasBeenSpotted;
 
         private void OnEnable()
         {
@@ -110,9 +115,16 @@ namespace Forest
         public void Retreat()
         {
             if (Mood == AnimalMood.Retreating) return;
-            Mood = AnimalMood.Retreating;
+            SetMood(AnimalMood.Retreating);
             StopAllCoroutines();
             StartCoroutine(RetreatSequence());
+        }
+
+        private void SetMood(AnimalMood newMood)
+        {
+            if (Mood == newMood) return;
+            Debug.Log($"[AnimalHopController] {name}: {Mood} -> {newMood}");
+            Mood = newMood;
         }
 
         private void Update()
@@ -131,23 +143,60 @@ namespace Forest
                     UpdateFollowing(distance);
                     break;
             }
-
-            _lastPlayerDistance = distance;
         }
 
+        // Compares distance against a baseline that only rises when the player backs off
+        // (or resets right after a flee-hop) rather than every frame, so "measurably
+        // closer" accumulates across frames instead of requiring a single-frame delta
+        // bigger than approachEpsilon — at high frame rates a normal walk speed moves
+        // less than approachEpsilon per frame, which silently never triggered a flee.
         private void UpdateWary(float distance)
         {
+            if (distance > _lastPlayerDistance)
+                _lastPlayerDistance = distance;
+
             if (distance <= fleeTriggerRadius
                 && distance < _lastPlayerDistance - approachEpsilon
                 && sequencer.IsReady)
             {
-                Vector3 away = (transform.position - player.position);
+                _hasBeenSpotted = true;
+                StartCoroutine(FleeToRetreatPoint());
+                _lastPlayerDistance = distance;
+            }
+        }
+
+        // Fires the first time the player is spotted (measurably closer, within
+        // fleeTriggerRadius) while Wary — covers the ground to retreatPoint in one go,
+        // in the same bouncing multi-hop style as RetreatSequence(), rather than the
+        // single small fleeHopDistance step used elsewhere. Stays Wary throughout (no
+        // mood change, no deactivation) so the stillness/follow mechanics still apply
+        // once the animal has settled at the retreat point. Falls back to a single
+        // fleeHopDistance hop directly away from the player when no retreatPoint is set.
+        private IEnumerator FleeToRetreatPoint()
+        {
+            if (retreatPoint == null)
+            {
+                Vector3 away = transform.position - player.position;
                 away.y = 0f;
                 if (away.sqrMagnitude < 0.0001f) away = -transform.forward; // player is right on top of us; pick any direction
                 Vector3 target = transform.position + away.normalized * fleeHopDistance;
 
                 sequencer.PlayNextForward();
-                StartCoroutine(HopTo(target));
+                yield return HopTo(target);
+                yield break;
+            }
+
+            while (true)
+            {
+                Vector3 toPoint = retreatPoint.position - transform.position;
+                toPoint.y = 0f;
+                float remaining = toPoint.magnitude;
+                if (remaining < 0.05f) yield break; // arrived
+
+                Vector3 target = transform.position + toPoint.normalized * Mathf.Min(retreatHopDistance, remaining);
+
+                sequencer.PlayNextForward();
+                yield return HopTo(target);
             }
         }
 
@@ -182,8 +231,14 @@ namespace Forest
                 float moved = Vector3.Distance(player.position, _playerPosAtLastBar);
                 float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-                if (moved <= stillnessMoveThreshold
-                    && distanceToPlayer <= fleeTriggerRadius
+                // No distance gate here on purpose: FleeToRetreatPoint() can send the
+                // animal far outside fleeTriggerRadius (all the way to retreatPoint), and
+                // "stand still to lure it back" needs to work no matter how far away that
+                // left it — otherwise it can strand itself out of reward range entirely.
+                // Gated on _hasBeenSpotted instead, so the animal stays put at spawn
+                // until the player has actually approached it once.
+                if (_hasBeenSpotted
+                    && moved <= stillnessMoveThreshold
                     && !_isHopping
                     && sequencer.IsReady)
                 {
@@ -196,7 +251,7 @@ namespace Forest
                         {
                             Vector3 target = transform.position + toward.normalized * step;
                             sequencer.PlayNextReverse();
-                            StartCoroutine(HopTo(target, afterHop: CheckStartedFollowing));
+                            StartCoroutine(HopTo(target, afterHop: OnRewardHopLanded));
                         }
                     }
                 }
@@ -206,11 +261,22 @@ namespace Forest
             _havePlayerPosAtLastBar = true;
         }
 
+        // Runs right after a reward-hop (hop closer) lands. Resyncs the flee baseline to
+        // the animal's own new position first — otherwise the distance drop caused by the
+        // animal's own hop looks identical to "the player got closer" and the very next
+        // Update() spuriously fires a flee-hop, undoing the reward.
+        private void OnRewardHopLanded()
+        {
+            if (player != null)
+                _lastPlayerDistance = Vector3.Distance(transform.position, player.position);
+            CheckStartedFollowing();
+        }
+
         private void CheckStartedFollowing()
         {
             if (player == null) return;
             if (Vector3.Distance(transform.position, player.position) <= followDistance + followSlack)
-                Mood = AnimalMood.Following;
+                SetMood(AnimalMood.Following);
         }
 
         private IEnumerator RetreatSequence()
@@ -268,10 +334,27 @@ namespace Forest
 
         private static Vector3 SnapToGround(Vector3 pos)
         {
-            Terrain terrain = Terrain.activeTerrain;
+            Terrain terrain = TerrainAt(pos);
             if (terrain != null)
                 pos.y = terrain.SampleHeight(pos) + terrain.transform.position.y;
             return pos;
+        }
+
+        // Terrain.activeTerrain is unreliable here: this project bundles multiple Terrain
+        // tiles (Cloud/Rave/Forest) in one shared prefab, all active at once in the Forest
+        // scene, and it can resolve to a tile that doesn't cover this XZ position at all —
+        // sampling the wrong tile's height, which is what made hops land mid-air. Find the
+        // tile whose bounds actually contain pos instead.
+        private static Terrain TerrainAt(Vector3 pos)
+        {
+            foreach (Terrain t in Terrain.activeTerrains)
+            {
+                Vector3 local = pos - t.transform.position;
+                Vector3 size = t.terrainData.size;
+                if (local.x >= 0f && local.x <= size.x && local.z >= 0f && local.z <= size.z)
+                    return t;
+            }
+            return Terrain.activeTerrain;
         }
     }
 }
