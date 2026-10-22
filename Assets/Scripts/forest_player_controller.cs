@@ -87,10 +87,30 @@ public class SimpleFPSController : MonoBehaviour
 
     // Terrain.activeTerrain is unreliable when multiple Terrain tiles are active at once
     // (this project bundles Cloud/Rave/Forest tiles in one shared prefab, all active
-    // together in the Forest scene) — it can resolve to a tile that doesn't cover this
-    // XZ position at all. Find the tile whose bounds actually contain pos instead.
+    // together in the Forest scene). Picking a tile by bounds alone isn't enough either —
+    // these tiles are only 1000 units apart but each is wider than that, so their bounds
+    // genuinely overlap, and a bounds check can match more than one tile for the same XZ
+    // position, silently sampling CloudTerrain's or RaveTerrain's height instead of the
+    // ground actually under the player. This controller only ever runs in the Forest
+    // scene, so go straight for the tile named "ForestTerrain" instead of guessing; fall
+    // back to the old bounds heuristic only if that tile can't be found (e.g. renamed).
+    private static Terrain _forestTerrain;
+
     private static Terrain TerrainAt(Vector3 pos)
     {
+        if (_forestTerrain == null)
+        {
+            foreach (Terrain t in Terrain.activeTerrains)
+            {
+                if (t.name == "ForestTerrain")
+                {
+                    _forestTerrain = t;
+                    break;
+                }
+            }
+        }
+        if (_forestTerrain != null) return _forestTerrain;
+
         foreach (Terrain t in Terrain.activeTerrains)
         {
             Vector3 local = pos - t.transform.position;

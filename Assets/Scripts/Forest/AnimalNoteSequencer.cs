@@ -5,17 +5,13 @@ using Synthic;
 
 namespace Forest
 {
-    // One note in an animal's hop sequence: which pitch to play, and how long that note
-    // rhythmically holds before the animal is allowed to hop (and play the next note)
-    // again. Mixing durations is what gives each animal's hop pattern its own groove —
-    // a quick 16th lets it hop again almost immediately, a half or whole note makes it
-    // pause.
+    // One note in an animal's hop sequence. Every note in the sequence lasts the
+    // animal's noteValue (see AnimalNoteSequencer), which is set by body size.
     [System.Serializable]
     public struct SequencedNote
     {
         [Tooltip("MIDI note number (e.g. 60 = middle C). Matches the FMOD event's MidiNote parameter range (36-84).")]
         [Range(36, 84)] public int midiNote;
-        public NoteDuration duration;
     }
 
     // Plays a per-animal sequence of notes through FMOD, one note per hop, walking the
@@ -29,6 +25,8 @@ namespace Forest
         [Header("Sequence")]
         [Tooltip("This animal's note pattern, in the order played while fleeing (forward). Hopping closer plays the same list backward.")]
         public List<SequencedNote> notes = new();
+        [Tooltip("How long each note lasts before the animal may hop (and play) again. Set per animal by body size: whole notes for the largest animals, 16ths for the smallest. The hop's airtime is a fraction of this.")]
+        public NoteDuration noteValue = NoteDuration.Quarter;
 
         [Header("FMOD")]
         [Tooltip("FMOD event for a single synth note. Must expose a MidiNote parameter (range 36-84), same convention as FMODChordPlayer.")]
@@ -47,6 +45,23 @@ namespace Forest
         // own rhythm.
         public bool IsReady => Time.time >= _readyTime;
         public float TimeUntilReady => Mathf.Max(0f, _readyTime - Time.time);
+
+        // Length of noteValue in seconds at the master clock's current tempo (falls back
+        // to 120 BPM if no clock exists in the scene yet).
+        public float NoteSeconds => RhythmicMasterClock.Instance != null
+            ? RhythmicMasterClock.Instance.SecondsForDuration(noteValue)
+            : FallbackBeats(noteValue) * 0.5f;
+
+        private static float FallbackBeats(NoteDuration d) => d switch
+        {
+            NoteDuration.ThirtySecond => 0.125f,
+            NoteDuration.Sixteenth    => 0.25f,
+            NoteDuration.Eighth       => 0.5f,
+            NoteDuration.Quarter      => 1f,
+            NoteDuration.Half         => 2f,
+            NoteDuration.Whole        => 4f,
+            _ => 1f
+        };
 
         public void ResetToStart() => _index = -1;
 
@@ -73,10 +88,7 @@ namespace Forest
             SequencedNote note = notes[_index];
             PlayNote(note.midiNote);
 
-            float cooldown = RhythmicMasterClock.Instance != null
-                ? RhythmicMasterClock.Instance.SecondsForDuration(note.duration)
-                : 0.25f; // sensible fallback if no clock exists in the scene yet
-            _readyTime = Time.time + cooldown;
+            _readyTime = Time.time + NoteSeconds;
         }
 
         private void PlayNote(int midiNote)

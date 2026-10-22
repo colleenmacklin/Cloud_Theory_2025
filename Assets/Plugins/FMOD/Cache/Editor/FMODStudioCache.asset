@@ -112,7 +112,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.assets.bank
   Name: Master.assets
   StudioPath: bank:/Master.assets
-  lastModified: 639238955863434332
+  lastModified: 639268904972710082
   FileSizes: []
   Exists: 1
 --- !u!114 &-7699958840671564738
@@ -422,6 +422,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 211
+--- !u!114 &-3204372232648810728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ForestSounds/Pluck
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/ForestSounds/Pluck
+  Guid:
+    Data1: -40732165
+    Data2: 1307548136
+    Data3: 1859776403
+    Data4: -1828482824
+  Banks:
+  - {fileID: 2097028504677321105}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 8568848052571357350}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 301
 --- !u!114 &-3115990869172545601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706,13 +734,14 @@ MonoBehaviour:
   - {fileID: 8528143758684215268}
   - {fileID: 2526613499477024848}
   - {fileID: 1783527852441861362}
+  - {fileID: -3204372232648810728}
   EditorParameters: []
   MasterBanks:
   - {fileID: 8848480231496342160}
   StringsBanks:
   - {fileID: 1134484694525158492}
   cacheVersion: 131859
-  cacheTime: 639238955863437261
+  cacheTime: 639268904972714007
   SerializableEventsDict:
   - key: event:/Environment/Birds
     index: 0
@@ -754,6 +783,8 @@ MonoBehaviour:
     index: 18
   - key: event:/ForestSounds/Deer
     index: 19
+  - key: event:/ForestSounds/Pluck
+    index: 20
 --- !u!114 &183528295010630767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,10 +863,10 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639238955863437261
+  lastModified: 639268904972714007
   FileSizes:
   - Name: 
-    Value: 2256
+    Value: 2292
   Exists: 1
 --- !u!114 &1202106710892654856
 MonoBehaviour:
@@ -969,7 +1000,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.bank
   Name: Instruments
   StudioPath: bank:/Instruments
-  lastModified: 639238955862930186
+  lastModified: 639268904972194069
   FileSizes: []
   Exists: 1
 --- !u!114 &2220986955537619405
@@ -987,7 +1018,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Instruments.assets.bank
   Name: Instruments.assets
   StudioPath: bank:/Instruments.assets
-  lastModified: 639238955863329081
+  lastModified: 639268904972602122
   FileSizes: []
   Exists: 1
 --- !u!114 &2526613499477024848
@@ -1372,6 +1403,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &8568848052571357350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Pluck/MidiNote
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: MidiNote
+  StudioPath: 
+  Min: 36
+  Max: 84
+  Default: 84
+  ID:
+    data1: 856185609
+    data2: 3396004625
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &8848480231496342160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1387,7 +1442,7 @@ MonoBehaviour:
   Path: Assets/FMOD/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639238955863405388
+  lastModified: 639268904972705987
   FileSizes: []
   Exists: 1
 --- !u!114 &8915606884590502789
