@@ -2266,6 +2266,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
         type: 3}
+      propertyPath: stepPattern
+      value: 3 4 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
+        type: 3}
+      propertyPath: hopsPerCycle
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
+        type: 3}
+      propertyPath: octaveOffset
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
+        type: 3}
       propertyPath: noteEvent.Path
       value: event:/ForestSounds/Pluck
       objectReference: {fileID: 0}
@@ -5603,6 +5618,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0df161dcc07c04b01ae953a98610d985, type: 3}
+--- !u!1 &1433332882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1433332884}
+  - component: {fileID: 1433332883}
+  m_Layer: 0
+  m_Name: MusicalKey
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1433332883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433332882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed9145775a7c746c1a1f5d0109cc43b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Synthic.Patterns.MusicalKey
+  root: 2
+  mode: 0
+  octave: 4
+--- !u!4 &1433332884
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433332882}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1082.2346, y: -0, z: 734.6024}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1442975845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9467,6 +9529,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
         type: 3}
+      propertyPath: stepPattern
+      value: 0 2 4 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
+        type: 3}
+      propertyPath: octaveOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738839152853430213, guid: e11f5313353a848e7b676adbb309965e,
+        type: 3}
       propertyPath: noteEvent.Path
       value: event:/ForestSounds/Pluck
       objectReference: {fileID: 0}
@@ -9543,3 +9615,4 @@ SceneRoots:
   - {fileID: 62019234}
   - {fileID: 1148043176}
   - {fileID: 1338188016}
+  - {fileID: 1433332884}
